@@ -1,4 +1,4 @@
-# actas-frontedn
+# actas-frontend
 Aplicación Web para el procesamiento de actas para la Universidad nacional de Colombia. Utiliza el Framework ReactJS (+AntDesign). 
 
 ### `yarn start`
