@@ -1,9 +1,9 @@
 import React from "react";
-import { Form, Icon, Input, Button, Checkbox, Typography } from "antd";
+import { Form, Icon, Input, Button, Checkbox, Typography, Modal } from "antd";
 import { Row, Col } from 'antd';
-
 import { withRouter } from "react-router-dom"
 import auth from "../../../auth"
+import BackEndUrl from '../../../backendurl'
 
 import "./Login.css";
 import "antd/dist/antd.css";
@@ -11,20 +11,59 @@ import "antd/dist/antd.css";
 const { Title, Text } = Typography;
 
 class NormalLoginForm extends React.Component {
+
+  constructor(props){ 
+    super(props);
+    this.state = {
+      username: '',
+      password: ''
+    }; 
+  } 
+
+
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
-        
-        auth.login(() => {
-          console.log(this.props)
-          this.props.history.push('/home');
-        })
-
+        this.performLogin()
       }
     });
   };
+
+  performLogin = () => {
+    fetch(BackEndUrl + 'login', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: this.state.username,
+          password: this.state.password,
+        })
+    }).then(async response => {
+        if (response.status === 403) {
+          Modal.error({
+            title: 'Acceso restringido',
+            content: 'Su usuario no tiene permiso para acceder a la aplicación.',
+          });
+          auth.authenticated = false;
+        } else if (response.status === 404) {
+          Modal.error({
+            title: 'Contraseña incorrecta',
+            content: 'Por favor verifique e intente nuevamente.',
+          });
+          auth.authenticated = false;
+        } else if (response.status === 200) {
+          let res = await response.json()
+          auth.login(() => {return});
+          auth.setToken(res['token'])
+          this.props.history.push('/home');
+        }
+      }).catch(error => {
+        console.log(error)
+      })
+  }
 
   render() {
     const { getFieldDecorator } = this.props.form;
@@ -36,7 +75,6 @@ class NormalLoginForm extends React.Component {
         Inicio
       </a>
     </div>
-
       <Row>
       <Col xs={4} sm={4} md={6} lg={8} xl={8}></Col>
       <Col xs={16} sm={16} md={12} lg={8} xl={8}>
@@ -53,7 +91,7 @@ class NormalLoginForm extends React.Component {
             })(
               <Input
                 prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                placeholder="Usuario SIA"
+                placeholder="Usuario SIA" onChange={(text) => {this.setState({username:text.target.value})}}
               />,
             )}
           </Form.Item>
@@ -63,8 +101,7 @@ class NormalLoginForm extends React.Component {
             })(
               <Input
                 prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                type="password"
-                placeholder="Contraseña"
+                type="password" placeholder="Contraseña" onChange={(text) => {this.setState({password:text.target.value})}}
               />,
             )}
           </Form.Item>

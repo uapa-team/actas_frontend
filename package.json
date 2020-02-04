@@ -6,6 +6,7 @@
     "antd": "^3.25.1",
     "jquery": "^3.4.1",
     "react": "^16.11.0",
+    "react-cookie": "^4.0.3",
     "react-dom": "^16.11.0",
     "react-favicon": "0.0.17",
     "react-router-dom": "^5.1.2",
