@@ -1,5 +1,5 @@
 import React from "react";
-import { Form, Icon, Input, Button, Checkbox, Typography, Modal } from "antd";
+import { Form, Icon, Input, Button, Checkbox, Typography, Modal, message } from "antd";
 import { Row, Col } from 'antd';
 import { withRouter } from "react-router-dom"
 import auth from "../../../auth"
@@ -31,6 +31,8 @@ class NormalLoginForm extends React.Component {
   };
 
   performLogin = () => {
+    const key = 'updatable';
+    message.loading({content: 'Iniciando sesión',key});
     fetch(BackEndUrl + 'login', {
         method: 'POST',
         headers: {
@@ -43,25 +45,28 @@ class NormalLoginForm extends React.Component {
         })
     }).then(async response => {
         if (response.status === 403) {
-          Modal.error({
-            title: 'Acceso restringido',
-            content: 'Su usuario no tiene permiso para acceder a la aplicación.',
-          });
+          message.error({content: 'Acceso restringido',key});
           auth.authenticated = false;
         } else if (response.status === 404) {
-          Modal.error({
-            title: 'Contraseña incorrecta',
-            content: 'Por favor verifique e intente nuevamente.',
-          });
+          message.error({content: 'Contraseña incorrecta',key});
           auth.authenticated = false;
         } else if (response.status === 200) {
+          message.success({content: 'Inicio de sesión exitoso',key});
           let res = await response.json()
           auth.login(() => {return});
           auth.setToken(res['token'])
           this.props.history.push('/home');
+        } else {
+          message.error({
+            content: 'Error en Login', key,
+          });
+          console.log('Login Error: Backend HTTP code ' + response.status);
         }
-      }).catch(error => {
-        console.log(error)
+    }).catch(error => {
+      message.error({
+        content: 'Error en Login', key,
+      });
+        console.log('Login Error: ' + error);
       })
   }
 
