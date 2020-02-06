@@ -27,7 +27,8 @@ class CaseTable extends React.Component {
       {
         title: 'Editar', key: 'edit', width: '8%', render: (text, record) => (
           <span>
-            <a href={'edit/' + record.id}>Editar</a><br/>
+            {/* eslint-disable-next-line */}
+            <a onClick={() => this.props.history.push('/edit/'+record.id)}>Editar</a><br/>
             <a href='delete'>Anular</a><br/>
             <a href='preview'>Vista previa</a>
           </span>

@@ -16,6 +16,7 @@ class Edit extends React.Component {
                 </Row>
                 <Row>
                     Aquí van los componentes
+                    {console.log(this.props.match.params.id)}
                 </Row>
                 <Divider />
             </div>
