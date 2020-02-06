@@ -1,5 +1,5 @@
 import React from "react";
-import { Table, Divider } from 'antd';
+import { Table } from 'antd';
 import auth from "../../../auth"
 import { withRouter } from "react-router-dom"
 import BackEndUrl from '../../../backendurl'
@@ -27,9 +27,9 @@ class CaseTable extends React.Component {
       {
         title: 'Editar', key: 'edit', width: '8%', render: (text, record) => (
           <span>
-            <a>Editar</a>
-            <Divider type="vertical" />
-            <a>Anular</a>
+            <a href={'edit/' + record.id}>Editar</a><br/>
+            <a href='delete'>Anular</a><br/>
+            <a href='preview'>Vista previa</a>
           </span>
         )}
     ]
@@ -50,4 +50,4 @@ class CaseTable extends React.Component {
   }
 }
 
-export default withRouter(CaseTable)
+export default withRouter(CaseTable);

@@ -3,7 +3,7 @@ import { Route, Redirect } from 'react-router-dom'
 import auth from '../auth'
 
 export const ProtectedRoute = ({ component: Component, ...rest }) => {
-    var PrRoutes = ["/home", "/admin_users", "/admin_programs", "/generate_report", "/rec_format"]
+    var PrRoutes = ["/home", "/admin_users", "/admin_programs", "/generate_report", "/rec_format", "/edit/:id"]
     return (
         <Route
             {...rest}

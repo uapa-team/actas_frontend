@@ -1,5 +1,5 @@
 import React from "react";
-import { Form, Icon, Input, Button, Checkbox, Typography, Modal, message } from "antd";
+import { Form, Icon, Input, Button, Checkbox, Typography, message } from "antd";
 import { Row, Col } from 'antd';
 import { withRouter } from "react-router-dom"
 import auth from "../../../auth"

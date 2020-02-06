@@ -1,22 +1,21 @@
 import React from "react";
 import { withRouter } from "react-router-dom"
-import CaseTable from "../CaseTable/CaseTable"
 import { Typography, Row, Divider } from "antd";
 
 const { Title } = Typography;
 
-class Home extends React.Component {
+class Edit extends React.Component {
     render() {
         return (
-            <div style={{marginHorizontal: '50px'}}>
+            <div>
                 <Divider />
                 <Row>
                     <Title>
-                        Casos Estudiantiles
+                        Edición de solicitud
                     </Title>
                 </Row>
                 <Row>
-                    <CaseTable />
+                    Aquí van los componentes
                 </Row>
                 <Divider />
             </div>
@@ -24,4 +23,4 @@ class Home extends React.Component {
     }
 }
 
-export default withRouter(Home)
+export default withRouter(Edit)

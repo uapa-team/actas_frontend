@@ -183,8 +183,8 @@ class UnalCanvas extends Component {
     </div>
     <div id="bs-navbar" className="navbar-collapse collapse navigation">
       <div className="site-url">
-        <a href="https://www.ingenieria.bogota.unal.edu.co/uapapp/">
-          ingenieria.bogota.unal.edu.co/uapapp/
+        <a href="https://www.ingenieria.bogota.unal.edu.co/actas/">
+          ingenieria.bogota.unal.edu.co/actas/
         </a>
       </div>
       <div className="buscador">
@@ -240,7 +240,7 @@ class UnalCanvas extends Component {
     </div>
   </header>  
 
-  <main className="detalle">
+  <main className="detalle" style={{marginLeft: '50px', marginRight: '50px'}}>
      {this.props.children} 
   </main>
   </div>
