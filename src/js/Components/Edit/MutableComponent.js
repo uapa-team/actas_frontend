@@ -1,10 +1,19 @@
 import React from "react";
-import { Form, Input, Checkbox, Typography, DatePicker, Select } from "antd";
+import {
+  Form,
+  Input,
+  Checkbox,
+  Typography,
+  DatePicker,
+  Select,
+  InputNumber
+} from "antd";
 import { Row } from "antd";
 import { withRouter } from "react-router-dom";
 
 const { Text } = Typography;
 const { Option } = Select;
+const children = [];
 
 class MutableComponent extends React.Component {
   constructor(props) {
@@ -73,18 +82,24 @@ class MutableComponent extends React.Component {
           </Row>
         );
       }
-    } else if (
-      this.props.metadata.type === "Integer" ||
-      this.props.metadata.type === "Float"
-    ) {
+    } else if (this.props.metadata.type === "Integer") {
       return (
         <Row>
           <Text>{this.props.metadata.display}</Text>
           <Form.Item>
-            {getFieldDecorator(this.props.fieldName, {
-              rules: [{ validator: this.checkNumber }],
-              initialValue: this.props.metadata.default
-            })(<Input placeholder={this.props.metadata.display} />)}
+            <InputNumber defaultValue={this.props.metadata.default} />
+          </Form.Item>
+        </Row>
+      );
+    } else if (this.props.metadata.type === "Float") {
+      return (
+        <Row>
+          <Text>{this.props.metadata.display}</Text>
+          <Form.Item>
+            <InputNumber
+              defaultValue={this.props.metadata.default}
+              step={0.1}
+            />
           </Form.Item>
         </Row>
       );
@@ -111,6 +126,14 @@ class MutableComponent extends React.Component {
         </Row>
       );
     } else if (this.props.metadata.type === "List:String") {
+      return (
+        <Row>
+          <Text>{this.props.metadata.display}</Text>
+          <Select mode="tags" style={{ width: "100%" }} tokenSeparators={[","]}>
+            {children}
+          </Select>
+        </Row>
+      );
     } else {
       return (
         <Row>
