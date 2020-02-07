@@ -1,53 +1,91 @@
 import React from "react";
-import { Table } from 'antd';
-import auth from "../../../auth"
-import { withRouter } from "react-router-dom"
-import BackEndUrl from '../../../backendurl'
+import { Table } from "antd";
+import { withRouter } from "react-router-dom";
+import auth from "../../../auth";
+import BackEndUrl from "../../../backendurl";
 
 class CaseTable extends React.Component {
-  constructor(props){ 
+  constructor(props) {
     super(props);
     this.state = {
-      dataSource: [],
-    }; 
-  } 
+      dataSource: []
+    };
+  }
   render() {
     var columns = [
-      { title: 'Tipo', dataIndex: '_cls_display', key: '_cls_display', },
-      { title: 'DNI', dataIndex: 'student_dni', key: 'student_dni', },
-      { title: 'Nombres', dataIndex: 'student_name', key: 'student_name', },
-      { title: 'Plan', dataIndex: 'academic_program', key: 'academic_program', },
-      { title: 'Creación', dataIndex: 'date_stamp', key: 'date_stamp',  width: '10%'},
-      { title: 'Radicación', dataIndex: 'date', key: 'date',  width: '10%'},
-      { title: 'Número', dataIndex: 'consecutive_minute', key: 'consecutive_minute', },
-      { title: 'Año', dataIndex: 'year', key: 'year', },
-      { title: 'Periodo', dataIndex: 'academic_period', key: 'academic_period',  width: '8%'},
-      { title: 'Rta CF', dataIndex: 'approval_status', key: 'approval_status',  width: '8%'},
-      { title: 'Rta CA', dataIndex: 'advisor_response', key: 'advisor_response', width: '8%' },
+      { title: "Tipo", dataIndex: "_cls_display", key: "_cls_display" },
+      { title: "DNI", dataIndex: "student_dni", key: "student_dni" },
+      { title: "Nombres", dataIndex: "student_name", key: "student_name" },
+      { title: "Plan", dataIndex: "academic_program", key: "academic_program" },
       {
-        title: 'Editar', key: 'edit', width: '8%', render: (text, record) => (
+        title: "Creación",
+        dataIndex: "date_stamp",
+        key: "date_stamp",
+        width: "10%"
+      },
+      { title: "Radicación", dataIndex: "date", key: "date", width: "10%" },
+      {
+        title: "Número",
+        dataIndex: "consecutive_minute",
+        key: "consecutive_minute"
+      },
+      { title: "Año", dataIndex: "year", key: "year" },
+      {
+        title: "Periodo",
+        dataIndex: "academic_period",
+        key: "academic_period",
+        width: "8%"
+      },
+      {
+        title: "Rta CF",
+        dataIndex: "approval_status",
+        key: "approval_status",
+        width: "8%"
+      },
+      {
+        title: "Rta CA",
+        dataIndex: "advisor_response",
+        key: "advisor_response",
+        width: "8%"
+      },
+      {
+        title: "Editar",
+        key: "edit",
+        width: "8%",
+        render: (text, record) => (
           <span>
             {/* eslint-disable-next-line */}
-            <a onClick={() => this.props.history.push('/edit/'+record.id)}>Editar</a><br/>
-            <a href='delete'>Anular</a><br/>
-            <a href='preview'>Vista previa</a>
+            <a
+              onClick={() =>
+                this.props.history.push({
+                  pathname: "/edit/" + record.id,
+                  state: { _cls: record._cls }
+                })
+              }
+            >
+              Editar
+            </a>
+            <br />
+            <a href="delete">Anular</a>
+            <br />
+            <a href="preview">Vista previa</a>
           </span>
-        )}
-    ]
-    return (
-      <Table dataSource={this.state.dataSource} columns={columns} />
-    );
+        )
+      }
+    ];
+    return <Table dataSource={this.state.dataSource} columns={columns} />;
   }
   componentDidMount() {
-    fetch(BackEndUrl + 'case', {
-      method: 'GET',
+    fetch(BackEndUrl + "case", {
+      method: "GET",
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': 'Token ' + auth.getToken(),
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: "Token " + auth.getToken()
       }
-    }).then(response => response.json())
-      .then(data => this.setState({ dataSource: data['cases'] }))
+    })
+      .then(response => response.json())
+      .then(data => this.setState({ dataSource: data["cases"] }));
   }
 }
 
