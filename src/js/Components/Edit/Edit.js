@@ -4,6 +4,7 @@ import { Form, Row, Divider, Typography } from "antd";
 import MutableComponent from "./MutableComponent";
 import auth from "../../../auth";
 import BackEndUrl from "../../../backendurl";
+import Columns from "react-columns";
 
 const { Title } = Typography;
 
@@ -31,7 +32,9 @@ class Edit extends React.Component {
           <Title>Edición de solicitud</Title>
         </Row>
         <Row>
-          <Form>{this.createInputs()}</Form>
+          <Form>
+            <Columns columns="2">{this.createInputs()}</Columns>
+          </Form>
         </Row>
         <Divider />
       </div>
