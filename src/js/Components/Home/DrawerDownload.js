@@ -1,25 +1,51 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
+import auth from "../../../auth";
+import BackEndUrl from "../../../backendurl";
 import {
   Drawer,
   Form,
   Button,
   Col,
   Row,
-  Input,
   Select,
-  DatePicker
+  Radio,
+  InputNumber
 } from "antd";
-
 const { Option } = Select;
-
 class DrawerDownload extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      councilNumber: 0,
+      councliYear: 0,
+      isPre: true,
+      target: "",
+      allowed: []
+    };
+  }
+  radioStyle = {
+    display: "block",
+    height: "30px",
+    lineHeight: "30px"
+  };
+  menuJS = () => {
+    console.log(this.state.allowed);
+    return this.state.allowed.map(this.radioBtn);
+  };
+  radioBtn = value => {
+    return (
+      <Radio style={this.radioStyle} value={value[1].filter}>
+        {value[1].display}
+      </Radio>
+    );
+  };
   render() {
     const { getFieldDecorator } = this.props.form;
     return (
       <Drawer
-        title="Generar acta del Consejo de Facultad o Comité Asesor"
-        width={720}
+        title="Generar Acta del Consejo de Facultad o Comité Asesor"
+        width={420}
         onClose={e => this.props.onClose(e, "Download")}
         visible={this.props.visible}
         bodyStyle={{ paddingBottom: 80 }}
@@ -27,22 +53,20 @@ class DrawerDownload extends React.Component {
         <Form layout="vertical" hideRequiredMark>
           <Row gutter={16}>
             <Col span={12}>
-              <Form.Item label="Name">
-                {getFieldDecorator("name", {
-                  rules: [{ required: true, message: "Please enter user name" }]
-                })(<Input placeholder="Please enter user name" />)}
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item label="Url">
-                {getFieldDecorator("url", {
-                  rules: [{ required: true, message: "Please enter url" }]
+              <Form.Item label="Número del Acta">
+                {getFieldDecorator("number", {
+                  initialValue: 1,
+                  rules: [
+                    {
+                      required: true,
+                      message: "Por favor seleccione un número"
+                    }
+                  ]
                 })(
-                  <Input
-                    style={{ width: "100%" }}
-                    addonBefore="http://"
-                    addonAfter=".com"
-                    placeholder="Please enter url"
+                  <InputNumber
+                    placeholder="Número de acta"
+                    onChange={value => this.setState({ councilNumber: value })}
+                    min={0}
                   />
                 )}
               </Form.Item>
@@ -50,55 +74,20 @@ class DrawerDownload extends React.Component {
           </Row>
           <Row gutter={16}>
             <Col span={12}>
-              <Form.Item label="Owner">
-                {getFieldDecorator("owner", {
-                  rules: [{ required: true, message: "Please select an owner" }]
-                })(
-                  <Select placeholder="Please select an owner">
-                    <Option value="xiao">Xiaoxiao Fu</Option>
-                    <Option value="mao">Maomao Zhou</Option>
-                  </Select>
-                )}
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item label="Type">
-                {getFieldDecorator("type", {
-                  rules: [{ required: true, message: "Please choose the type" }]
-                })(
-                  <Select placeholder="Please choose the type">
-                    <Option value="private">Private</Option>
-                    <Option value="public">Public</Option>
-                  </Select>
-                )}
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item label="Approver">
-                {getFieldDecorator("approver", {
+              <Form.Item label="Año">
+                {getFieldDecorator("year", {
+                  initialValue: 2020,
                   rules: [
-                    { required: true, message: "Please choose the approver" }
+                    {
+                      required: true,
+                      message: "Por favor seleccione un año"
+                    }
                   ]
                 })(
-                  <Select placeholder="Please choose the approver">
-                    <Option value="jack">Jack Ma</Option>
-                    <Option value="tom">Tom Liu</Option>
-                  </Select>
-                )}
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item label="DateTime">
-                {getFieldDecorator("dateTime", {
-                  rules: [
-                    { required: true, message: "Please choose the dateTime" }
-                  ]
-                })(
-                  <DatePicker.RangePicker
-                    style={{ width: "100%" }}
-                    getPopupContainer={trigger => trigger.parentNode}
+                  <InputNumber
+                    placeholder="Número de acta"
+                    onChange={value => this.setState({ councliYear: value })}
+                    min={2000}
                   />
                 )}
               </Form.Item>
@@ -106,19 +95,34 @@ class DrawerDownload extends React.Component {
           </Row>
           <Row gutter={16}>
             <Col span={24}>
-              <Form.Item label="Description">
-                {getFieldDecorator("description", {
-                  rules: [
-                    {
-                      required: true,
-                      message: "please enter url description"
-                    }
-                  ]
+              <Form.Item label="Tipo de Acta">
+                {getFieldDecorator("owner", {
+                  rules: [{ required: true, message: "Seleccione un valor" }],
+                  initialValue: true
                 })(
-                  <Input.TextArea
-                    rows={4}
-                    placeholder="please enter url description"
-                  />
+                  <Radio.Group
+                    onChange={v => this.setState({ isPre: v.target.value })}
+                  >
+                    <Radio.Button value={false}>
+                      Consejo de Facultad
+                    </Radio.Button>
+                    <Radio.Button value={true}>Comité Asesor</Radio.Button>
+                  </Radio.Group>
+                )}
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={24}>
+              <Form.Item label="Solicitudes a generar">
+                {getFieldDecorator("generate", {
+                  rules: [{ required: true, message: "Seleccione una opción" }]
+                })(
+                  <Radio.Group
+                    onChange={v => this.setState({ target: v.target.value })}
+                  >
+                    {this.menuJS()}
+                  </Radio.Group>
                 )}
               </Form.Item>
             </Col>
@@ -146,11 +150,23 @@ class DrawerDownload extends React.Component {
             onClick={e => this.props.onClose(e, "Download")}
             type="primary"
           >
-            Submit
+            Generar
           </Button>
         </div>
       </Drawer>
     );
+  }
+  componentDidMount() {
+    fetch(BackEndUrl + "allow_generate", {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: "Token " + auth.getToken()
+      }
+    })
+      .then(response => response.json())
+      .then(data => this.setState({ allowed: Object.entries(data) }));
   }
 }
 

@@ -46,7 +46,6 @@ class Home extends React.Component {
   };
   closeDrawer = (e, drw) => {
     e.preventDefault();
-    console.log(drw);
     if (drw === "Create") {
       this.setState({
         createDrawerVisible: false
@@ -112,20 +111,20 @@ class Home extends React.Component {
       </div>
     );
   }
-  componentDidMount() {
-    fetch(BackEndUrl + "case", {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        Authorization: "Token " + auth.getToken()
-      }
-    })
-      .then(response => response.json())
-      .then(data => {
-        this.setState({ dataSource: data["cases"] });
-      });
-  }
+  //   componentDidMount() {
+  //     fetch(BackEndUrl + "case", {
+  //       method: "GET",
+  //       headers: {
+  //         Accept: "application/json",
+  //         "Content-Type": "application/json",
+  //         Authorization: "Token " + auth.getToken()
+  //       }
+  //     })
+  //       .then(response => response.json())
+  //       .then(data => {
+  //         this.setState({ dataSource: data["cases"] });
+  //       });
+  //   }
 }
 
 export default withRouter(Home);
