@@ -3,9 +3,6 @@ import { Table } from "antd";
 import { withRouter } from "react-router-dom";
 
 class CaseTable extends React.Component {
-  constructor(props) {
-    super(props);
-  }
   render() {
     var columns = [
       { title: "Tipo", dataIndex: "_cls_display", key: "_cls_display" },
@@ -68,7 +65,9 @@ class CaseTable extends React.Component {
         )
       }
     ];
-    return <Table dataSource={this.props.dataSource} columns={columns} />;
+    return (
+      <Table dataSource={this.props.dataSource} columns={columns} rowKey="id" />
+    );
   }
 }
 

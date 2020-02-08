@@ -1,6 +1,6 @@
 {
-  "short_name": "UAPAPP",
-  "name": "UAPAPP: Universidad Nacional de Colombia",
+  "short_name": "ActasApp",
+  "name": "ActasApp: Universidad Nacional de Colombia",
   "icons": [
     {
       "src": "./images/favicon.ico",

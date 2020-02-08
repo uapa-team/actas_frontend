@@ -38,7 +38,7 @@ class UnalCanvas extends Component {
         <link type="text/css" href="../css/phone.css" media="all" />
         <link type="text/css" href="../css/small.css" media="all" />
         <link type="text/css" href="../css/printer.css" media="print" />
-        <title>UAPAPP: Universidad Nacional de Colombia</title>
+        <title>ActasApp: Universidad Nacional de Colombia</title>
         <div id="footfix">
           <div id="services">
             <div className="indicator hidden-xs" />
