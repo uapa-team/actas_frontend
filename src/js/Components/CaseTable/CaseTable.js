@@ -1,15 +1,10 @@
 import React from "react";
 import { Table } from "antd";
 import { withRouter } from "react-router-dom";
-import auth from "../../../auth";
-import BackEndUrl from "../../../backendurl";
 
 class CaseTable extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      dataSource: []
-    };
   }
   render() {
     var columns = [
@@ -73,19 +68,7 @@ class CaseTable extends React.Component {
         )
       }
     ];
-    return <Table dataSource={this.state.dataSource} columns={columns} />;
-  }
-  componentDidMount() {
-    fetch(BackEndUrl + "case", {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        Authorization: "Token " + auth.getToken()
-      }
-    })
-      .then(response => response.json())
-      .then(data => this.setState({ dataSource: data["cases"] }));
+    return <Table dataSource={this.props.dataSource} columns={columns} />;
   }
 }
 
