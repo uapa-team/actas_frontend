@@ -18,13 +18,14 @@ class Home extends React.Component {
     };
   }
   performSearch = keyTerm => {
+    this.setState({ searchTerm: keyTerm });
     let matches = [];
     this.state.dataSource.forEach(i => {
-      if (i.student_dni.includes(this.state.searchTerm)) {
+      if (i.student_dni.includes(keyTerm)) {
         matches.push(i);
       }
     });
-    this.setState({ searchTerm: keyTerm, dataMatches: matches });
+    this.setState({ dataMatches: matches });
   };
   render() {
     return (
