@@ -5,8 +5,12 @@ import { Table, Popconfirm, message } from "antd";
 import { withRouter } from "react-router-dom";
 
 class CaseTable extends React.Component {
-  confirmCancel = () => {
-    message.success("Solicitud anulada exitosamente");
+  confirmCancel = archiveType => {
+    if (archiveType) {
+      message.success("Solicitud anulada exitosamente");
+    } else {
+      message.success("Solicitud desistida exitosamente");
+    }
   };
   generateCouncil = (isPre, recordId) => {
     fetch(BackEndUrl + `generate?pre=${isPre}&id=${recordId}`, {
@@ -83,26 +87,27 @@ class CaseTable extends React.Component {
               Editar
             </a>
             <br />
-            {/* eslint-disable-next-line */}
             <Popconfirm
-              title="¿Está seguro que desea anular la solicitud?"
-              onConfirm={this.confirmCancel}
-              okText="Sí"
-              cancelText="No"
+              title="¿Qué acción desea tomar con la solicitud?"
+              onConfirm={() => this.confirmCancel(true)}
+              onCancel={() => this.confirmCancel(false)}
+              okText="Anular"
+              cancelText="Desistir"
               placement="left"
             >
-              <a>Anular</a>
+              {/* eslint-disable-next-line */}
+              <a>Archivar</a>
             </Popconfirm>
             <br />
-            {/* eslint-disable-next-line */}
             <Popconfirm
-              title="¿Qué tipo de vista previa desea?"
+              title="¿Qué tipo de vista previa desea generar?"
               onConfirm={() => this.generateCouncil(false, record.id)}
               onCancel={() => this.generateCouncil(true, record.id)}
               okText="Consejo"
               cancelText="Comité"
               placement="left"
             >
+              {/* eslint-disable-next-line */}
               <a>Vista Previa</a>
             </Popconfirm>
           </span>

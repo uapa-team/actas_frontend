@@ -62,11 +62,12 @@ class Home extends React.Component {
       <div style={{ marginHorizontal: "50px" }}>
         <Divider />
         <Row>
-          <Col span={12}>
+          <Col span={8}>
             <Title>Casos Estudiantiles</Title>
           </Col>
           <Col span={4}>
             <Button
+              block
               type="primary"
               icon="download"
               onClick={e => this.showDrawer(e, "Download")}
@@ -78,8 +79,10 @@ class Home extends React.Component {
               onClose={this.closeDrawer}
             />
           </Col>
+          <Col span={2} />
           <Col span={4}>
             <Button
+              block
               type="primary"
               icon="plus"
               onClick={e => this.showDrawer(e, "Create")}
@@ -91,6 +94,7 @@ class Home extends React.Component {
               onClose={this.closeDrawer}
             />
           </Col>
+          <Col span={2} />
           <Col span={4}>
             <Search
               placeholder="Documento"
