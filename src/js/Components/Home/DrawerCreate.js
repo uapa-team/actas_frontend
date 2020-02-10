@@ -23,7 +23,8 @@ class DrawerCreate extends React.Component {
     super(props);
     this.state = {
       programs: [],
-      cases: []
+      cases: [],
+      periods: []
     };
   }
 
@@ -100,6 +101,10 @@ class DrawerCreate extends React.Component {
 
   menuJSPrograms = () => {
     return this.state.programs.map(this.selectItem);
+  };
+
+  menuJSPperiods = () => {
+    return this.state.periods.map(this.selectItem);
   };
 
   menuJSCases = () => {
@@ -236,12 +241,23 @@ class DrawerCreate extends React.Component {
               <Form.Item label="Periodo académico">
                 {getFieldDecorator("academic_period", {
                   initialValue:
-                    moment().year() + (moment().month() < 6 ? "-01" : "-03")
+                    moment().year() + (moment().month() < 6 ? "-1S" : "-2S")
                 })(
-                  <Input
-                    placeholder="Ingrese el periodo académico"
+                  <Select
+                    showSearch
+                    placeholder="Escoja el plan de estudios"
                     key="academic_period"
-                  />
+                    filterOption={(input, option) =>
+                      option.props.children.toLowerCase().indexOf(
+                        input
+                          .toLowerCase()
+                          .normalize("NFD")
+                          .replace(/[\u0300-\u036f]/g, "")
+                      ) >= 0
+                    }
+                  >
+                    {this.menuJSPperiods()}
+                  </Select>
                 )}
               </Form.Item>
             </Col>
@@ -337,7 +353,7 @@ class DrawerCreate extends React.Component {
     );
   }
   componentDidMount() {
-    fetch(BackEndUrl + "programs", {
+    fetch(BackEndUrl + "details", {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -348,6 +364,7 @@ class DrawerCreate extends React.Component {
       .then(response => response.json())
       .then(data => {
         this.setState({ programs: data.programs });
+        this.setState({ periods: data.periods });
       });
     fetch(BackEndUrl + "infocase", {
       method: "GET",
