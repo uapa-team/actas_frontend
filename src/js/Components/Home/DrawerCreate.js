@@ -18,7 +18,7 @@ class DrawerCreate extends React.Component {
     const { getFieldDecorator } = this.props.form;
     return (
       <Drawer
-        title="Create a new account"
+        title="Crear un nuevo caso"
         width={720}
         onClose={e => this.props.onClose(e, "Create")}
         visible={this.props.visible}

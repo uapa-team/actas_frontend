@@ -17,7 +17,7 @@ import DrawerCreate from "./DrawerCreate";
 import auth from "../../../auth";
 import BackEndUrl from "../../../backendurl";
 
-const { Title, Text } = Typography;
+const { Title } = Typography;
 
 class Home extends React.Component {
   constructor(props) {
@@ -29,13 +29,14 @@ class Home extends React.Component {
       searchTerm: "",
       downloadDrawerVisible: false,
       createDrawerVisible: false,
-      filterByMinute: true,
+      filterByMinute: false,
       minuteSearch: 1,
       yearSearch: 2020
     };
   }
   performSearch = keyTerm => {
     this.setState({ searchTerm: keyTerm });
+    this.setState({ filterByMinute: false });
     let matches = [];
     this.state.dataSource.forEach(i => {
       if (i.student_dni.includes(keyTerm)) {
@@ -43,6 +44,26 @@ class Home extends React.Component {
       }
     });
     this.setState({ dataMatches: matches });
+  };
+  filerByMinute = (checked, minute, year) => {
+    this.setState({ filterByMinute: checked });
+    this.setState({ minuteSearch: minute });
+    this.setState({ yearSearch: year });
+    this.setState({ searchTerm: "" });
+    let newMatches = [];
+    if (checked) {
+      this.state.dataSource.forEach(i => {
+        if (
+          // eslint-disable-next-line
+          i.consecutive_minute == minute &&
+          // eslint-disable-next-line
+          i.year == year
+        ) {
+          newMatches.push(i);
+        }
+      });
+      this.setState({ dataMatches: newMatches });
+    }
   };
   showDrawer = (e, drw) => {
     e.preventDefault();
@@ -115,8 +136,14 @@ class Home extends React.Component {
           <Col span={2} style={{ textAlignLast: "center" }}>
             <Tooltip title="Filtar por número de acta">
               <Switch
-                defaultChecked
-                onChange={checked => this.setState({ filterByMinute: checked })}
+                checked={this.state.filterByMinute}
+                onChange={checked =>
+                  this.filerByMinute(
+                    checked,
+                    this.state.minuteSearch,
+                    this.state.yearSearch
+                  )
+                }
               />
             </Tooltip>
           </Col>
@@ -125,7 +152,13 @@ class Home extends React.Component {
               disabled={!this.state.filterByMinute}
               min={0}
               defaultValue={1}
-              onChange={value => this.setState({ minuteSearch: value })}
+              onChange={value =>
+                this.filerByMinute(
+                  this.state.filterByMinute,
+                  value,
+                  this.state.yearSearch
+                )
+              }
             />
           </Col>
           <Col span={2}>
@@ -133,20 +166,28 @@ class Home extends React.Component {
               disabled={!this.state.filterByMinute}
               min={2000}
               defaultValue={2020}
-              onChange={value => this.setState({ yearSearch: value })}
+              onChange={value =>
+                this.filerByMinute(
+                  this.state.filterByMinute,
+                  this.state.minuteSearch,
+                  value
+                )
+              }
             />
           </Col>
           <Col span={4}>
             <Search
               placeholder="Documento"
-              onSearch={v => this.performSearch(v)}
+              onChange={v => this.performSearch(v.target.value)}
+              value={this.state.searchTerm}
+              enterButton
             />
           </Col>
         </Row>
         <Row>
           <CaseTable
             dataSource={
-              this.state.searchTerm === ""
+              this.state.searchTerm === "" && !this.state.filterByMinute
                 ? this.state.dataSource
                 : this.state.dataMatches
             }
