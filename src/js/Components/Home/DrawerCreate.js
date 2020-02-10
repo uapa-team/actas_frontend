@@ -31,51 +31,44 @@ class DrawerCreate extends React.Component {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        console.log(values);
+        values.date = values.date.utc().format();
         this.props.onClose(e, "Create");
-        // const key = "updatable";
-        // message.loading({ content: "Guardando caso", key });
-        // fetch(BackEndUrl + "login", {
-        //   method: "POST",
-        //   headers: {
-        //     Accept: "application/json",
-        //     "Content-Type": "application/json"
-        //   },
-        //   body: JSON.stringify({
-        //     "items": [
-        //     ]
-        //   })
-        // })
-        //   .then(async response => {
-        //     if (response.status === 403) {
-        //       message.error({ content: "Acceso restringido", key });
-        //       auth.authenticated = false;
-        //     } else if (response.status === 404) {
-        //       message.error({ content: "Contraseña incorrecta", key });
-        //       auth.authenticated = false;
-        //     } else if (response.status === 200) {
-        //       message.success({ content: "Inicio de sesión exitoso", key });
-        //       let res = await response.json();
-        //       auth.login(() => {
-        //         return;
-        //       });
-        //       auth.setToken(res["token"]);
-        //       this.props.history.push("/home");
-        //     } else {
-        //       message.error({
-        //         content: "Error en Login",
-        //         key
-        //       });
-        //       console.log("Login Error: Backend HTTP code " + response.status);
-        //     }
-        //   })
-        //   .catch(error => {
-        //     message.error({
-        //       content: "Error en Login",
-        //       key
-        //     });
-        //     console.log("Login Error: " + error);
-        //   });
+        const key = "updatable";
+        message.loading({ content: "Guardando caso", key });
+        fetch(BackEndUrl + "case", {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: "Token " + auth.getToken()
+          },
+          body: JSON.stringify({
+            items: [values]
+          })
+        })
+          .then(async response => {
+            if (response.status === 200) {
+              message.success({ content: "Caso guardado!", key });
+            } else if (response.status === 401) {
+              message.error({
+                content: "Usuario sin autorización para guardar casos!",
+                key
+              });
+            } else {
+              message.error({
+                content: "Error en guardando el caso",
+                key
+              });
+              console.log("Login Error: Backend HTTP code " + response.status);
+            }
+          })
+          .catch(error => {
+            message.error({
+              content: "Error en guardando el caso",
+              key
+            });
+            console.log("Error en guardando el caso" + error);
+          });
       }
     });
   };
@@ -92,7 +85,15 @@ class DrawerCreate extends React.Component {
   selectItem = i => {
     return (
       <Option value={i} key={i}>
-        {i.normalize("NFD").replace(/[\u0300-\u036f]/g, "")}
+        {i}
+      </Option>
+    );
+  };
+
+  selectItemCase = i => {
+    return (
+      <Option value={i.code} key={i.code}>
+        {i.name}
       </Option>
     );
   };
@@ -102,7 +103,7 @@ class DrawerCreate extends React.Component {
   };
 
   menuJSCases = () => {
-    return this.state.cases.map(this.selectItem);
+    return this.state.cases.map(this.selectItemCase);
   };
 
   render() {
@@ -186,12 +187,16 @@ class DrawerCreate extends React.Component {
                     placeholder="Por favor, escoja el tipo de caso"
                     key="_cls"
                     filterOption={(input, option) =>
-                      option.props.children.toLowerCase().indexOf(
-                        input
-                          .toLowerCase()
-                          .normalize("NFD")
-                          .replace(/[\u0300-\u036f]/g, "")
-                      ) >= 0
+                      option.props.children
+                        .toLowerCase()
+                        .normalize("NFD")
+                        .replace(/[\u0300-\u036f]/g, "")
+                        .indexOf(
+                          input
+                            .toLowerCase()
+                            .normalize("NFD")
+                            .replace(/[\u0300-\u036f]/g, "")
+                        ) >= 0
                     }
                   >
                     {this.menuJSCases()}
@@ -354,7 +359,7 @@ class DrawerCreate extends React.Component {
     })
       .then(response => response.json())
       .then(data => {
-        this.setState({ cases: data.cases.map(i => i.name) });
+        this.setState({ cases: data.cases });
       });
   }
 }
