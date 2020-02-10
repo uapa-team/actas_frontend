@@ -9,11 +9,13 @@ import {
   Input,
   InputNumber,
   Select,
-  DatePicker
+  DatePicker,
+  message
 } from "antd";
 import moment from "moment";
 import auth from "../../../auth";
 import BackEndUrl from "../../../backendurl";
+import { LabelSD } from "./DrawerCreateStyles";
 const { Option } = Select;
 
 class DrawerCreate extends React.Component {
@@ -24,6 +26,69 @@ class DrawerCreate extends React.Component {
       cases: []
     };
   }
+
+  handleSaveAndEdit = e => {
+    e.preventDefault();
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        console.log(values);
+        this.props.onClose(e, "Create");
+        // const key = "updatable";
+        // message.loading({ content: "Guardando caso", key });
+        // fetch(BackEndUrl + "login", {
+        //   method: "POST",
+        //   headers: {
+        //     Accept: "application/json",
+        //     "Content-Type": "application/json"
+        //   },
+        //   body: JSON.stringify({
+        //     "items": [
+        //     ]
+        //   })
+        // })
+        //   .then(async response => {
+        //     if (response.status === 403) {
+        //       message.error({ content: "Acceso restringido", key });
+        //       auth.authenticated = false;
+        //     } else if (response.status === 404) {
+        //       message.error({ content: "Contraseña incorrecta", key });
+        //       auth.authenticated = false;
+        //     } else if (response.status === 200) {
+        //       message.success({ content: "Inicio de sesión exitoso", key });
+        //       let res = await response.json();
+        //       auth.login(() => {
+        //         return;
+        //       });
+        //       auth.setToken(res["token"]);
+        //       this.props.history.push("/home");
+        //     } else {
+        //       message.error({
+        //         content: "Error en Login",
+        //         key
+        //       });
+        //       console.log("Login Error: Backend HTTP code " + response.status);
+        //     }
+        //   })
+        //   .catch(error => {
+        //     message.error({
+        //       content: "Error en Login",
+        //       key
+        //     });
+        //     console.log("Login Error: " + error);
+        //   });
+      }
+    });
+  };
+
+  handleSave = e => {
+    e.preventDefault();
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        this.props.onClose(e, "Create");
+      }
+    });
+  };
+
   selectItem = i => {
     return (
       <Option value={i} key={i}>
@@ -50,7 +115,7 @@ class DrawerCreate extends React.Component {
         visible={this.props.visible}
         bodyStyle={{ paddingBottom: 80, paddingRight: 60 }}
       >
-        <Form layout="vertical" hideRequiredMark>
+        <Form onSubmit={this.handleSubmit} layout="vertical">
           <Row>
             <Col>
               <Form.Item label="Documento Estudiante">
@@ -58,27 +123,34 @@ class DrawerCreate extends React.Component {
                   "student_dni",
                   {}
                 )(
-                  <Input
-                    addonBefore={
-                      <Select
-                        defaultValue="Cédula de Ciudadanía colombiana"
-                        style={{ width: "5em" }}
-                        key="student_dni_type"
-                      >
-                        <Option value="Cédula de Ciudadanía colombiana">
-                          CC
-                        </Option>
-                        <Option value="Tarjeta de Identidad colombiana">
-                          TI
-                        </Option>
-                        <Option value="Cédula de extranjería">CE</Option>
-                        <Option value="Pasaporte">PS</Option>
-                        <Option value="Otro">OT</Option>
-                      </Select>
-                    }
-                    placeholder="Ingrese el documento del estudiante"
-                    key="student_dni"
-                  />
+                  <LabelSD>
+                    <Input
+                      addonBefore={
+                        <Form.Item>
+                          {getFieldDecorator("student_dni_type", {
+                            initialValue: "CC"
+                          })(
+                            <Select
+                              style={{ width: "5em" }}
+                              key="student_dni_type"
+                            >
+                              <Option value="Cédula de Ciudadanía colombiana">
+                                CC
+                              </Option>
+                              <Option value="Tarjeta de Identidad colombiana">
+                                TI
+                              </Option>
+                              <Option value="Cédula de extranjería">CE</Option>
+                              <Option value="Pasaporte">PS</Option>
+                              <Option value="Otro">OT</Option>
+                            </Select>
+                          )}
+                        </Form.Item>
+                      }
+                      placeholder="Ingrese el documento del estudiante"
+                      key="student_dni"
+                    />
+                  </LabelSD>
                 )}
               </Form.Item>
             </Col>
@@ -101,7 +173,7 @@ class DrawerCreate extends React.Component {
           <Row>
             <Col>
               <Form.Item label="Tipo de caso">
-                {getFieldDecorator("type", {
+                {getFieldDecorator("_cls", {
                   rules: [
                     {
                       required: true,
@@ -132,7 +204,7 @@ class DrawerCreate extends React.Component {
             <Col>
               <Form.Item label="Plan de estudios">
                 {getFieldDecorator(
-                  "Plan",
+                  "academic_program",
                   {}
                 )(
                   <Select
@@ -157,7 +229,7 @@ class DrawerCreate extends React.Component {
           <Row>
             <Col>
               <Form.Item label="Periodo académico">
-                {getFieldDecorator("name", {
+                {getFieldDecorator("academic_period", {
                   initialValue:
                     moment().year() + (moment().month() < 6 ? "-01" : "-03")
                 })(
@@ -172,7 +244,7 @@ class DrawerCreate extends React.Component {
           <Row>
             <Col>
               <Form.Item label="Fecha de radicación">
-                {getFieldDecorator("name", {
+                {getFieldDecorator("date", {
                   initialValue: moment()
                 })(<DatePicker key="date" style={{ width: "100%" }} />)}
               </Form.Item>
@@ -181,24 +253,44 @@ class DrawerCreate extends React.Component {
           <Row>
             <Col span={12}>
               <Form.Item label="Número del Acta">
-                <InputNumber
-                  placeholder="Número de acta"
-                  min={0}
-                  key="council_minute"
-                  defaultValue="1"
-                  style={{ width: "75%" }}
-                />
+                {getFieldDecorator("council_minute", {
+                  initialValue: 1,
+                  rule: [
+                    {
+                      min: 0,
+                      message: "El número mínimo del acta es 0"
+                    }
+                  ]
+                })(
+                  <InputNumber
+                    placeholder="Número de acta"
+                    key="council_minute"
+                    style={{ width: "75%" }}
+                  />
+                )}
               </Form.Item>
             </Col>
             <Col span={12}>
               <Form.Item label="Año">
-                <InputNumber
-                  placeholder="Número de acta"
-                  min={2000}
-                  defaultValue="2020"
-                  key="year"
-                  style={{ width: "75%", parginRight: 8 }}
-                />
+                {getFieldDecorator("council_minute", {
+                  initialValue: 2020,
+                  rule: [
+                    {
+                      min: 2000,
+                      message: "El mínimo año para acta"
+                    },
+                    {
+                      min: 2100,
+                      message: "El máximo año del acta es 0"
+                    }
+                  ]
+                })(
+                  <InputNumber
+                    placeholder="Número de acta"
+                    key="year"
+                    style={{ width: "75%", parginRight: 8 }}
+                  />
+                )}
               </Form.Item>
             </Col>
           </Row>
@@ -223,14 +315,14 @@ class DrawerCreate extends React.Component {
           </Button>
           <Button
             type="primary"
-            onClick={e => this.props.onClose(e, "Create")}
+            onClick={e => this.handleSave(e)}
             style={{ marginRight: 8 }}
           >
             Guardar
           </Button>
           <Button
             type="primary"
-            onClick={e => this.props.onClose(e, "Create")}
+            onClick={e => this.handleSaveAndEdit(e)}
             style={{ marginRight: 8 }}
           >
             Guardar y editar
