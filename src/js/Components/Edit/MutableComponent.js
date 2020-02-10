@@ -16,12 +16,6 @@ const { Option } = Select;
 const children = [];
 
 class MutableComponent extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      defaultDropDown: ""
-    };
-  }
   checkNumber = (rule, value, callback) => {
     if (value.number > 0) {
       return callback();
