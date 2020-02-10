@@ -1,3 +1,7 @@
 .ant-radio {
   align-self: center !important;
 }
+/* #2d2656!important */
+.ant-switch {
+  background-color: #2d2656 !important;
+}

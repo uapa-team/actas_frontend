@@ -1,14 +1,23 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
 import CaseTable from "../CaseTable/CaseTable";
-import { Typography, Row, Divider, Col, Button } from "antd";
+import {
+  Typography,
+  Row,
+  Divider,
+  Col,
+  Button,
+  Switch,
+  InputNumber,
+  Tooltip
+} from "antd";
 import Search from "antd/lib/input/Search";
 import DrawerDownload from "./DrawerDownload";
 import DrawerCreate from "./DrawerCreate";
 import auth from "../../../auth";
 import BackEndUrl from "../../../backendurl";
 
-const { Title } = Typography;
+const { Title, Text } = Typography;
 
 class Home extends React.Component {
   constructor(props) {
@@ -19,7 +28,10 @@ class Home extends React.Component {
       dataMatches: [],
       searchTerm: "",
       downloadDrawerVisible: false,
-      createDrawerVisible: false
+      createDrawerVisible: false,
+      filterByMinute: true,
+      minuteSearch: 1,
+      yearSearch: 2020
     };
   }
   performSearch = keyTerm => {
@@ -56,16 +68,22 @@ class Home extends React.Component {
       });
     }
   };
-
   render() {
     return (
       <div style={{ marginHorizontal: "50px" }}>
-        <Divider />
-        <Row>
-          <Col span={8}>
-            <Title>Casos Estudiantiles</Title>
+        <Divider style={{ background: "#ffffff00" }} />
+        <Row
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            marginBottom: "10px"
+          }}
+        >
+          <Col span={7}>
+            <Title style={{ marginBottom: "0px" }}>Casos Estudiantiles</Title>
           </Col>
-          <Col span={4}>
+          <Col span={3}>
             <Button
               block
               type="primary"
@@ -79,8 +97,8 @@ class Home extends React.Component {
               onClose={this.closeDrawer}
             />
           </Col>
-          <Col span={2} />
-          <Col span={4}>
+          <Col span={1} />
+          <Col span={3}>
             <Button
               block
               type="primary"
@@ -94,7 +112,30 @@ class Home extends React.Component {
               onClose={this.closeDrawer}
             />
           </Col>
-          <Col span={2} />
+          <Col span={2} style={{ textAlignLast: "center" }}>
+            <Tooltip title="Filtar por número de acta">
+              <Switch
+                defaultChecked
+                onChange={checked => this.setState({ filterByMinute: checked })}
+              />
+            </Tooltip>
+          </Col>
+          <Col span={2}>
+            <InputNumber
+              disabled={!this.state.filterByMinute}
+              min={0}
+              defaultValue={1}
+              onChange={value => this.setState({ minuteSearch: value })}
+            />
+          </Col>
+          <Col span={2}>
+            <InputNumber
+              disabled={!this.state.filterByMinute}
+              min={2000}
+              defaultValue={2020}
+              onChange={value => this.setState({ yearSearch: value })}
+            />
+          </Col>
           <Col span={4}>
             <Search
               placeholder="Documento"
@@ -111,7 +152,7 @@ class Home extends React.Component {
             }
           />
         </Row>
-        <Divider />
+        <Divider style={{ background: "#ffffff00" }} />
       </div>
     );
   }

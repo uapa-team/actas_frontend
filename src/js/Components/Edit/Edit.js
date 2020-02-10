@@ -27,7 +27,7 @@ class Edit extends React.Component {
   render() {
     return (
       <div>
-        <Divider />
+        <Divider style={{ background: "#ffffff00" }} />
         <Row>
           <Title>Edición de solicitud</Title>
         </Row>

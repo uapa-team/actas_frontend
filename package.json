@@ -5,6 +5,7 @@
   "dependencies": {
     "antd": "^3.25.1",
     "jquery": "^3.4.1",
+    "less-loader": "^5.0.0",
     "react": "^16.11.0",
     "react-columns": "^1.2.1",
     "react-cookie": "^4.0.3",
