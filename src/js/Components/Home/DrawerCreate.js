@@ -7,119 +7,198 @@ import {
   Col,
   Row,
   Input,
+  InputNumber,
   Select,
   DatePicker
 } from "antd";
-
+import moment from "moment";
+import auth from "../../../auth";
+import BackEndUrl from "../../../backendurl";
 const { Option } = Select;
 
 class DrawerCreate extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      programs: [],
+      cases: []
+    };
+  }
+  selectItem = i => {
+    return (
+      <Option value={i} key={i}>
+        {i.normalize("NFD").replace(/[\u0300-\u036f]/g, "")}
+      </Option>
+    );
+  };
+
+  menuJSPrograms = () => {
+    return this.state.programs.map(this.selectItem);
+  };
+
+  menuJSCases = () => {
+    return this.state.cases.map(this.selectItem);
+  };
+
   render() {
     const { getFieldDecorator } = this.props.form;
     return (
       <Drawer
         title="Crear un nuevo caso"
-        width={720}
+        width={"40%"}
         onClose={e => this.props.onClose(e, "Create")}
         visible={this.props.visible}
-        bodyStyle={{ paddingBottom: 80 }}
+        bodyStyle={{ paddingBottom: 80, paddingRight: 60 }}
       >
         <Form layout="vertical" hideRequiredMark>
-          <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item label="Name">
-                {getFieldDecorator("name", {
-                  rules: [{ required: true, message: "Please enter user name" }]
-                })(<Input placeholder="Please enter user name" />)}
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item label="Url">
-                {getFieldDecorator("url", {
-                  rules: [{ required: true, message: "Please enter url" }]
-                })(
+          <Row>
+            <Col>
+              <Form.Item label="Documento Estudiante">
+                {getFieldDecorator(
+                  "student_dni",
+                  {}
+                )(
                   <Input
-                    style={{ width: "100%" }}
-                    addonBefore="http://"
-                    addonAfter=".com"
-                    placeholder="Please enter url"
+                    addonBefore={
+                      <Select
+                        defaultValue="Cédula de Ciudadanía colombiana"
+                        style={{ width: "5em" }}
+                        key="student_dni_type"
+                      >
+                        <Option value="Cédula de Ciudadanía colombiana">
+                          CC
+                        </Option>
+                        <Option value="Tarjeta de Identidad colombiana">
+                          TI
+                        </Option>
+                        <Option value="Cédula de extranjería">CE</Option>
+                        <Option value="Pasaporte">PS</Option>
+                        <Option value="Otro">OT</Option>
+                      </Select>
+                    }
+                    placeholder="Ingrese el documento del estudiante"
+                    key="student_dni"
                   />
                 )}
               </Form.Item>
             </Col>
           </Row>
-          <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item label="Owner">
-                {getFieldDecorator("owner", {
-                  rules: [{ required: true, message: "Please select an owner" }]
-                })(
-                  <Select placeholder="Please select an owner">
-                    <Option value="xiao">Xiaoxiao Fu</Option>
-                    <Option value="mao">Maomao Zhou</Option>
-                  </Select>
+          <Row>
+            <Col>
+              <Form.Item label="Nombre Estudiante">
+                {getFieldDecorator(
+                  "student_name",
+                  {}
+                )(
+                  <Input
+                    placeholder="Ingrese el nombre del estudiante"
+                    key="student_name"
+                  />
                 )}
               </Form.Item>
             </Col>
-            <Col span={12}>
-              <Form.Item label="Type">
+          </Row>
+          <Row>
+            <Col>
+              <Form.Item label="Tipo de caso">
                 {getFieldDecorator("type", {
-                  rules: [{ required: true, message: "Please choose the type" }]
-                })(
-                  <Select placeholder="Please choose the type">
-                    <Option value="private">Private</Option>
-                    <Option value="public">Public</Option>
-                  </Select>
-                )}
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item label="Approver">
-                {getFieldDecorator("approver", {
-                  rules: [
-                    { required: true, message: "Please choose the approver" }
-                  ]
-                })(
-                  <Select placeholder="Please choose the approver">
-                    <Option value="jack">Jack Ma</Option>
-                    <Option value="tom">Tom Liu</Option>
-                  </Select>
-                )}
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item label="DateTime">
-                {getFieldDecorator("dateTime", {
-                  rules: [
-                    { required: true, message: "Please choose the dateTime" }
-                  ]
-                })(
-                  <DatePicker.RangePicker
-                    style={{ width: "100%" }}
-                    getPopupContainer={trigger => trigger.parentNode}
-                  />
-                )}
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={16}>
-            <Col span={24}>
-              <Form.Item label="Description">
-                {getFieldDecorator("description", {
                   rules: [
                     {
                       required: true,
-                      message: "please enter url description"
+                      message: "Por favor, escoja el tipo de caso"
                     }
                   ]
                 })(
-                  <Input.TextArea
-                    rows={4}
-                    placeholder="please enter url description"
+                  <Select
+                    showSearch
+                    placeholder="Por favor, escoja el tipo de caso"
+                    key="_cls"
+                    filterOption={(input, option) =>
+                      option.props.children.toLowerCase().indexOf(
+                        input
+                          .toLowerCase()
+                          .normalize("NFD")
+                          .replace(/[\u0300-\u036f]/g, "")
+                      ) >= 0
+                    }
+                  >
+                    {this.menuJSCases()}
+                  </Select>
+                )}
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <Form.Item label="Plan de estudios">
+                {getFieldDecorator(
+                  "Plan",
+                  {}
+                )(
+                  <Select
+                    showSearch
+                    placeholder="Escoja el plan de estudios"
+                    key="academic_program"
+                    filterOption={(input, option) =>
+                      option.props.children.toLowerCase().indexOf(
+                        input
+                          .toLowerCase()
+                          .normalize("NFD")
+                          .replace(/[\u0300-\u036f]/g, "")
+                      ) >= 0
+                    }
+                  >
+                    {this.menuJSPrograms()}
+                  </Select>
+                )}
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <Form.Item label="Periodo académico">
+                {getFieldDecorator("name", {
+                  initialValue:
+                    moment().year() + (moment().month() < 6 ? "-01" : "-03")
+                })(
+                  <Input
+                    placeholder="Ingrese el periodo académico"
+                    key="academic_period"
                   />
                 )}
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <Form.Item label="Fecha de radicación">
+                {getFieldDecorator("name", {
+                  initialValue: moment()
+                })(<DatePicker key="date" style={{ width: "100%" }} />)}
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={12}>
+              <Form.Item label="Número del Acta">
+                <InputNumber
+                  placeholder="Número de acta"
+                  min={0}
+                  key="council_minute"
+                  defaultValue="1"
+                  style={{ width: "75%" }}
+                />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item label="Año">
+                <InputNumber
+                  placeholder="Número de acta"
+                  min={2000}
+                  defaultValue="2020"
+                  key="year"
+                  style={{ width: "75%", parginRight: 8 }}
+                />
               </Form.Item>
             </Col>
           </Row>
@@ -140,14 +219,51 @@ class DrawerCreate extends React.Component {
             onClick={e => this.props.onClose(e, "Create")}
             style={{ marginRight: 8 }}
           >
-            Cancel
+            Cancelar
           </Button>
-          <Button onClick={e => this.props.onClose(e, "Create")} type="primary">
-            Submit
+          <Button
+            type="primary"
+            onClick={e => this.props.onClose(e, "Create")}
+            style={{ marginRight: 8 }}
+          >
+            Guardar
+          </Button>
+          <Button
+            type="primary"
+            onClick={e => this.props.onClose(e, "Create")}
+            style={{ marginRight: 8 }}
+          >
+            Guardar y editar
           </Button>
         </div>
       </Drawer>
     );
+  }
+  componentDidMount() {
+    fetch(BackEndUrl + "programs", {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: "Token " + auth.getToken()
+      }
+    })
+      .then(response => response.json())
+      .then(data => {
+        this.setState({ programs: data.programs });
+      });
+    fetch(BackEndUrl + "infocase", {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: "Token " + auth.getToken()
+      }
+    })
+      .then(response => response.json())
+      .then(data => {
+        this.setState({ cases: data.cases.map(i => i.name) });
+      });
   }
 }
 
