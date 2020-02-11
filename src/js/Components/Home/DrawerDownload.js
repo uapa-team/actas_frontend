@@ -112,7 +112,7 @@ class DrawerDownload extends React.Component {
             <Row gutter={16}>
               <Col span={24}>
                 <Form.Item label="Tipo de Acta">
-                  {getFieldDecorator("owner", {
+                  {getFieldDecorator("isPre", {
                     rules: [{ required: true, message: "Seleccione un valor" }],
                     initialValue: this.state.isPre
                   })(
