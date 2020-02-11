@@ -1,17 +1,9 @@
 import React from "react";
-import {
-  Form,
-  Input,
-  Checkbox,
-  Typography,
-  DatePicker,
-  Select,
-  InputNumber
-} from "antd";
-import { Row, Col } from "antd";
+import moment from "moment";
+import { Form, Input, DatePicker, Select, InputNumber, Radio } from "antd";
 import { withRouter } from "react-router-dom";
+import { StyledFormItem } from "./EditStyles";
 
-const { Text } = Typography;
 const { Option } = Select;
 const children = [];
 
@@ -25,7 +17,7 @@ class MutableComponent extends React.Component {
 
   selectItem = i => {
     return (
-      <Option value={i}>
+      <Option value={i} key={i}>
         {i.normalize("NFD").replace(/[\u0300-\u036f]/g, "")}
       </Option>
     );
@@ -42,12 +34,14 @@ class MutableComponent extends React.Component {
     if (this.props.metadata.type === "String") {
       if (Object.keys(this.props.metadata).includes("choices")) {
         return (
-          <Row type="flex" align="middle">
-            <Col span={12} style={{ textAlign: "right", paddingRight: "10px" }}>
-              <Text>{this.props.metadata.display}</Text>
-            </Col>
-            <Col span={12}>
-              <Form.Item style={{ marginBottom: "0px", paddingLeft: "10px" }}>
+          <StyledFormItem>
+            <Form.Item
+              label={this.props.metadata.display}
+              // style={{ marginBottom: "0px", paddingLeft: "10px" }}
+            >
+              {getFieldDecorator(this.props.fieldName, {
+                initialValue: this.props.metadata.default
+              })(
                 <Select
                   showSearch
                   placeholder={this.props.metadata.display}
@@ -63,94 +57,92 @@ class MutableComponent extends React.Component {
                 >
                   {this.menuJS()}
                 </Select>
-              </Form.Item>
-            </Col>
-          </Row>
+              )}
+            </Form.Item>
+          </StyledFormItem>
         );
       } else {
         return (
-          <Row type="flex" align="middle">
-            <Col span={12} style={{ textAlign: "right", paddingRight: "10px" }}>
-              <Text>{this.props.metadata.display}</Text>
-            </Col>
-            <Col span={12}>
-              <Form.Item style={{ marginBottom: "0px", paddingLeft: "10px" }}>
-                <Input
-                  placeholder={this.props.metadata.display}
-                  defaultValue={this.props.metadata.default}
-                />
-              </Form.Item>
-            </Col>
-          </Row>
+          <StyledFormItem>
+            <Form.Item
+              label={this.props.metadata.display}
+              // style={{ marginBottom: "0px", paddingLeft: "10px" }}
+            >
+              {getFieldDecorator(this.props.fieldName, {
+                initialValue: this.props.metadata.default
+              })(<Input placeholder={this.props.metadata.display} />)}
+            </Form.Item>
+          </StyledFormItem>
         );
       }
     } else if (this.props.metadata.type === "Integer") {
       return (
-        <Row type="flex" align="middle">
-          <Col span={12} style={{ textAlign: "right", paddingRight: "10px" }}>
-            <Text>{this.props.metadata.display}</Text>
-          </Col>
-          <Col span={12}>
-            <Form.Item style={{ marginBottom: "0px", paddingLeft: "10px" }}>
-              <InputNumber defaultValue={this.props.metadata.default} />
-            </Form.Item>
-          </Col>
-        </Row>
+        <StyledFormItem>
+          <Form.Item
+            label={this.props.metadata.display}
+            // style={{ marginBottom: "0px", paddingLeft: "10px" }}
+          >
+            {getFieldDecorator(this.props.fieldName, {
+              initialValue: this.props.metadata.default
+            })(<InputNumber />)}
+          </Form.Item>
+        </StyledFormItem>
       );
     } else if (this.props.metadata.type === "Float") {
       return (
-        <Row type="flex" align="middle">
-          <Col span={12} style={{ textAlign: "right", paddingRight: "10px" }}>
-            <Text>{this.props.metadata.display}</Text>
-          </Col>
-          <Col span={12}>
-            <Form.Item style={{ marginBottom: "0px", paddingLeft: "10px" }}>
-              <InputNumber
-                defaultValue={this.props.metadata.default}
-                step={0.1}
-              />
-            </Form.Item>
-          </Col>
-        </Row>
+        <StyledFormItem>
+          <Form.Item
+            label={this.props.metadata.display}
+            // style={{ marginBottom: "0px", paddingLeft: "10px" }}
+          >
+            {getFieldDecorator(this.props.fieldName, {
+              initialValue: this.props.metadata.default
+            })(<InputNumber step={0.1} />)}
+          </Form.Item>
+        </StyledFormItem>
       );
     } else if (this.props.metadata.type === "Date") {
       return (
-        <Row type="flex" align="middle">
-          <Col span={12} style={{ textAlign: "right", paddingRight: "10px" }}>
-            <Text>{this.props.metadata.display}</Text>
-          </Col>
-          <Col span={12}>
-            <Form.Item style={{ marginBottom: "0px", paddingLeft: "10px" }}>
-              {getFieldDecorator(this.props.fieldName)(
-                <DatePicker placeholder="Seleccione fecha" />
-              )}
-            </Form.Item>
-          </Col>
-        </Row>
+        <StyledFormItem>
+          <Form.Item
+            label={this.props.metadata.display}
+            // style={{ marginBottom: "0px", paddingLeft: "10px" }}
+          >
+            {getFieldDecorator(this.props.fieldName, {
+              initialValue: moment(this.props.metadata.default, "YYYY-MM-DD")
+            })(<DatePicker placeholder="Seleccione fecha" />)}
+          </Form.Item>
+        </StyledFormItem>
       );
     } else if (this.props.metadata.type === "Boolean") {
       return (
-        <Row type="flex" align="middle">
-          <Col span={12} style={{ textAlign: "right", paddingRight: "10px" }}>
-            <Text>{this.props.metadata.display}</Text>
-          </Col>
-          <Col span={12}>
-            <Form.Item style={{ marginBottom: "0px", paddingLeft: "10px" }}>
-              {getFieldDecorator(this.props.fieldName)(
-                <Checkbox defaultChecked={this.props.metadata.default} />
-              )}
-            </Form.Item>
-          </Col>
-        </Row>
+        <StyledFormItem>
+          <Form.Item
+            label={this.props.metadata.display}
+            // style={{ marginBottom: "0px", paddingLeft: "10px" }}
+          >
+            {getFieldDecorator(this.props.fieldName, {
+              initialValue: this.props.metadata.default
+            })(
+              <Radio.Group buttonStyle="solid">
+                <Radio.Button value={true}>Sí</Radio.Button>
+                <Radio.Button value={false}>No</Radio.Button>
+              </Radio.Group>
+            )}
+          </Form.Item>
+        </StyledFormItem>
       );
     } else if (this.props.metadata.type === "List:String") {
       return (
-        <Row type="flex" align="middle">
-          <Col span={12} style={{ textAlign: "right", paddingRight: "10px" }}>
-            <Text>{this.props.metadata.display}</Text>
-          </Col>
-          <Col span={12}>
-            <Form.Item style={{ marginBottom: "0px", paddingLeft: "10px" }}>
+        <StyledFormItem>
+          <Form.Item
+            label={this.props.metadata.display}
+            // style={{ marginBottom: "0px", paddingLeft: "10px" }}
+          >
+            {getFieldDecorator(
+              this.props.fieldName,
+              {}
+            )(
               <Select
                 mode="tags"
                 style={{ width: "100%" }}
@@ -158,22 +150,20 @@ class MutableComponent extends React.Component {
               >
                 {children}
               </Select>
-            </Form.Item>
-          </Col>
-        </Row>
+            )}
+          </Form.Item>
+        </StyledFormItem>
       );
     } else {
       return (
-        <Row type="flex" align="middle">
-          <Col span={12}>
-            <Text>{this.props.metadata.display}</Text>
-          </Col>
-          <Col span={12}>
-            <Form.Item style={{ marginBottom: "0px", paddingLeft: "10px" }}>
-              <Input placeholder={this.props.fieldName} />
-            </Form.Item>
-          </Col>
-        </Row>
+        <StyledFormItem>
+          <Form.Item
+            label={this.props.metadata.display}
+            // style={{ marginBottom: "0px", paddingLeft: "10px" }}
+          >
+            {getFieldDecorator(this.props.fieldName)(<Input />)}
+          </Form.Item>
+        </StyledFormItem>
       );
     }
   }

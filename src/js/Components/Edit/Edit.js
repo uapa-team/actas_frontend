@@ -22,7 +22,7 @@ class Edit extends React.Component {
     return this.state.fields.map(this.createInput);
   };
   createInput = i => {
-    return <MutableComponent fieldName={i[0]} metadata={i[1]} />;
+    return <MutableComponent key={i[0]} fieldName={i[0]} metadata={i[1]} />;
   };
   render() {
     return (
@@ -33,7 +33,9 @@ class Edit extends React.Component {
         </Row>
         <Row>
           <Form>
-            <Columns columns="2">{this.createInputs()}</Columns>
+            <Columns gap={"50px"} columns={2}>
+              {this.createInputs()}
+            </Columns>
           </Form>
         </Row>
         <Divider />
