@@ -2,6 +2,7 @@ import React from "react";
 import { withRouter } from "react-router-dom";
 import { Form, Row, Divider, Typography } from "antd";
 import MutableComponent from "./MutableComponent";
+import MutableTable from "./MutableTable";
 import Backend from "../../../serviceBackend";
 import Columns from "react-columns";
 
@@ -23,6 +24,14 @@ class Edit extends React.Component {
   createInput = i => {
     return <MutableComponent key={i[0]} fieldName={i[0]} metadata={i[1]} />;
   };
+  createTables = () => {
+    return this.state.fields.map(this.createTable);
+  };
+  createTable = i => {
+    if (i[1].type === "Table") {
+      return <MutableTable key={i[0]} fieldName={i[0]} metadata={i[1]} />;
+    }
+  };
   render() {
     return (
       <div>
@@ -35,6 +44,8 @@ class Edit extends React.Component {
             <Columns gap={"50px"} columns={2}>
               {this.createInputs()}
             </Columns>
+            <Divider style={{ background: "#ffffff00" }} />
+            {this.createTables()}
           </Form>
         </Row>
         <Divider />
