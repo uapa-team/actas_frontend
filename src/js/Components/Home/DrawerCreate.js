@@ -23,14 +23,15 @@ class DrawerCreate extends React.Component {
     this.state = {
       programs: [],
       cases: [],
-      periods: [],
-      student_name: ""
+      periods: []
     };
   }
   autofillName = dni => {
     Backend.sendRequest("POST", "autofill", { field: "name", student_dni: dni })
       .then(response => response.json())
-      .then(data => this.setState({ student_name: data.student_name }));
+      .then(data =>
+        this.props.form.setFieldsValue({ student_name: data.student_name })
+      );
   };
   handleSaveAndEdit = e => {
     e.preventDefault();
@@ -158,9 +159,10 @@ class DrawerCreate extends React.Component {
           <Row>
             <Col>
               <Form.Item label="Nombre Estudiante">
-                {getFieldDecorator("student_name", {
-                  initialValue: this.state.student_name
-                })(
+                {getFieldDecorator(
+                  "student_name",
+                  {}
+                )(
                   <Input
                     placeholder="Ingrese el nombre del estudiante"
                     key="student_name"
