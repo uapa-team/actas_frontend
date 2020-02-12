@@ -42,11 +42,7 @@ class Edit extends React.Component {
     );
   }
   componentDidMount() {
-    Backend.sendRequest(
-      "GET",
-      "infocase?cls=" + this.state.cls.split(".")[1],
-      {}
-    )
+    Backend.sendRequest("GET", "infocase?cls=" + this.state.cls.split(".")[1])
       .then(response => response.json())
       .then(data => {
         this.setState({ full_name: data.full_name });
