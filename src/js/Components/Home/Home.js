@@ -14,8 +14,7 @@ import {
 import Search from "antd/lib/input/Search";
 import DrawerDownload from "./DrawerDownload";
 import DrawerCreate from "./DrawerCreate";
-import auth from "../../../auth";
-import BackEndUrl from "../../../backendurl";
+import Backend from "../../../serviceBackend";
 
 const { Title } = Typography;
 
@@ -198,14 +197,7 @@ class Home extends React.Component {
     );
   }
   componentDidMount() {
-    fetch(BackEndUrl + "case", {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        Authorization: "Token " + auth.getToken()
-      }
-    })
+    Backend.sendRequest("GET", "case")
       .then(response => response.json())
       .then(data => {
         this.setState({ dataSource: data["cases"] });

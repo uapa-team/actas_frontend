@@ -13,8 +13,7 @@ import {
   message
 } from "antd";
 import moment from "moment";
-import auth from "../../../auth";
-import BackEndUrl from "../../../backendurl";
+import Backend from "../../../serviceBackend";
 import { LabelSD } from "./DrawerCreateStyles";
 const { Option } = Select;
 
@@ -36,16 +35,8 @@ class DrawerCreate extends React.Component {
         this.props.onClose(e, "Create");
         const key = "updatable";
         message.loading({ content: "Guardando caso", key });
-        fetch(BackEndUrl + "case", {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: "Token " + auth.getToken()
-          },
-          body: JSON.stringify({
-            items: [values]
-          })
+        Backend.sendRequest("POST", "case", {
+          items: [values]
         })
           .then(async response => {
             if (response.status === 200) {
@@ -353,27 +344,13 @@ class DrawerCreate extends React.Component {
     );
   }
   componentDidMount() {
-    fetch(BackEndUrl + "details", {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        Authorization: "Token " + auth.getToken()
-      }
-    })
+    Backend.getRequest("GET", "details")
       .then(response => response.json())
       .then(data => {
         this.setState({ programs: data.programs });
         this.setState({ periods: data.periods });
       });
-    fetch(BackEndUrl + "infocase", {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        Authorization: "Token " + auth.getToken()
-      }
-    })
+    Backend.getRequest("GET", "infocase")
       .then(response => response.json())
       .then(data => {
         this.setState({ cases: data.cases });

@@ -2,8 +2,7 @@ import React from "react";
 import { withRouter } from "react-router-dom";
 import { Form, Row, Divider, Typography } from "antd";
 import MutableComponent from "./MutableComponent";
-import auth from "../../../auth";
-import BackEndUrl from "../../../backendurl";
+import Backend from "../../../serviceBackend";
 import Columns from "react-columns";
 
 const { Title } = Typography;
@@ -43,14 +42,11 @@ class Edit extends React.Component {
     );
   }
   componentDidMount() {
-    fetch(BackEndUrl + "infocase?cls=" + this.state.cls.split(".")[1], {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        Authorization: "Token " + auth.getToken()
-      }
-    })
+    Backend.sendRequest(
+      "GET",
+      "infocase?cls=" + this.state.cls.split(".")[1],
+      {}
+    )
       .then(response => response.json())
       .then(data => {
         this.setState({ full_name: data.full_name });

@@ -1,6 +1,5 @@
 import React from "react";
-import auth from "../../../auth";
-import BackEndUrl from "../../../backendurl";
+import Backend from "../../../serviceBackend";
 import { Table, Popconfirm, message } from "antd";
 import { withRouter } from "react-router-dom";
 
@@ -13,18 +12,10 @@ class CaseTable extends React.Component {
     }
   };
   generateCouncil = (isPre, recordId) => {
-    fetch(BackEndUrl + `generate?pre=${isPre}&id=${recordId}`, {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        Authorization: "Token " + auth.getToken()
-      }
-    })
+    Backend.sendRequest("GET", `generate?pre=${isPre}&id=${recordId}`)
       .then(response => response.json())
       .then(data => {
-        let link = BackEndUrl + data.url;
-        window.open(link, "_blank");
+        Backend.openLink(data.url);
       });
     if (isPre) {
       message.success("Acta de Comité Asesor Generada exitosamente");

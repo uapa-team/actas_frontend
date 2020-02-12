@@ -3,7 +3,7 @@ import { Form, Icon, Input, Button, Checkbox, Typography, message } from "antd";
 import { Row, Col } from "antd";
 import { withRouter } from "react-router-dom";
 import auth from "../../../auth";
-import BackEndUrl from "../../../backendurl";
+import Backend from "../../../serviceBackend";
 
 import "./Login.css";
 import "antd/dist/antd.css";
@@ -18,7 +18,7 @@ class NormalLoginForm extends React.Component {
       password: ""
     };
   }
-
+  infocase;
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
@@ -31,17 +31,7 @@ class NormalLoginForm extends React.Component {
   performLogin = () => {
     const key = "updatable";
     message.loading({ content: "Iniciando sesión", key });
-    fetch(BackEndUrl + "login", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        username: this.state.username,
-        password: this.state.password
-      })
-    })
+    Backend.sendLogin(this.state.username, this.state.password)
       .then(async response => {
         if (response.status === 403) {
           message.error({ content: "Acceso restringido", key });

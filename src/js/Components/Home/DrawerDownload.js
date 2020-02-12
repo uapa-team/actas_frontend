@@ -1,7 +1,6 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
-import auth from "../../../auth";
-import BackEndUrl from "../../../backendurl";
+import Backend from "../../../serviceBackend";
 import { Drawer, Form, Button, Col, Row, Radio, InputNumber, Spin } from "antd";
 import "antd/dist/antd.css";
 import "./Home.css";
@@ -20,19 +19,11 @@ class DrawerDownload extends React.Component {
   handleGenerate = () => {
     this.setState({ spinning: true });
     let query = `pre=${this.state.isPre}&consecutive_minute=${this.state.councliYear}&year=${this.state.councliYear}&${this.state.target}`;
-    fetch(BackEndUrl + `generate?${query}`, {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        Authorization: "Token " + auth.getToken()
-      }
-    })
+    Backend.sendRequest("GET", `generate?${query}`, {})
       .then(response => response.json())
       .then(data => {
         this.setState({ spinning: false });
-        let link = BackEndUrl + data.url;
-        window.open(link, "_blank");
+        Backend.openLink(data.url);
       });
   };
   radioStyle = {
@@ -177,14 +168,7 @@ class DrawerDownload extends React.Component {
     );
   }
   componentDidMount() {
-    fetch(BackEndUrl + "allow_generate", {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        Authorization: "Token " + auth.getToken()
-      }
-    })
+    Backend.sendRequest("GET", "allow_generate")
       .then(response => response.json())
       .then(data => this.setState({ allowed: Object.entries(data) }));
   }
