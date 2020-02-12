@@ -23,10 +23,15 @@ class DrawerCreate extends React.Component {
     this.state = {
       programs: [],
       cases: [],
-      periods: []
+      periods: [],
+      student_name: ""
     };
   }
-
+  autofillName = dni => {
+    Backend.sendRequest("POST", "autofill", { field: "name", student_dni: dni })
+      .then(response => response.json())
+      .then(data => this.setState({ student_name: data.student_name }));
+  };
   handleSaveAndEdit = e => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
@@ -143,6 +148,7 @@ class DrawerCreate extends React.Component {
                       }
                       placeholder="Ingrese el documento del estudiante"
                       key="student_dni"
+                      onBlur={e => this.autofillName(e.target.value)}
                     />
                   </LabelSD>
                 )}
@@ -152,10 +158,9 @@ class DrawerCreate extends React.Component {
           <Row>
             <Col>
               <Form.Item label="Nombre Estudiante">
-                {getFieldDecorator(
-                  "student_name",
-                  {}
-                )(
+                {getFieldDecorator("student_name", {
+                  initialValue: this.state.student_name
+                })(
                   <Input
                     placeholder="Ingrese el nombre del estudiante"
                     key="student_name"
@@ -262,7 +267,7 @@ class DrawerCreate extends React.Component {
           <Row>
             <Col span={12}>
               <Form.Item label="Número del Acta">
-                {getFieldDecorator("council_minute", {
+                {getFieldDecorator("council_year", {
                   initialValue: 1,
                   rule: [
                     {
