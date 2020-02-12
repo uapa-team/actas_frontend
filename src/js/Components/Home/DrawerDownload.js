@@ -109,6 +109,7 @@ class DrawerDownload extends React.Component {
                   })(
                     <Radio.Group
                       onChange={v => this.setState({ isPre: v.target.value })}
+                      buttonStyle="solid"
                     >
                       <Radio.Button value={false}>
                         Consejo de Facultad

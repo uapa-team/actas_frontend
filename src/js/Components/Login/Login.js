@@ -2,6 +2,7 @@ import React from "react";
 import { Form, Icon, Input, Button, Checkbox, Typography, message } from "antd";
 import { Row, Col } from "antd";
 import { withRouter } from "react-router-dom";
+import { PrimButton } from "../Home/HomeStyles";
 import auth from "../../../auth";
 import Backend from "../../../serviceBackend";
 
@@ -152,13 +153,15 @@ class NormalLoginForm extends React.Component {
                   >
                     Olvidé mi contraseña
                   </a>
-                  <Button
-                    type="primary"
-                    htmlType="submit"
-                    className="login-form-button"
-                  >
-                    Ingresar
-                  </Button>
+                  <PrimButton>
+                    <Button
+                      type="primary"
+                      htmlType="submit"
+                      className="login-form-button"
+                    >
+                      Ingresar
+                    </Button>
+                  </PrimButton>
                   ¿No tiene un usuario? - <a href="/contact">Contáctenos</a>
                 </Form.Item>
               </Form>
