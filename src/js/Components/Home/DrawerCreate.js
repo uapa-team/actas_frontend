@@ -47,19 +47,16 @@ class DrawerCreate extends React.Component {
                 key
               });
             } else {
-              message.error({
-                content: "Error en guardando el caso",
-                key
-              });
-              console.log("Login Error: Backend HTTP code " + response.status);
+              message.error({ content: "Error en guardando el caso", key });
+              console.error(
+                "Login Error: Backend HTTP code " + response.status
+              );
             }
           })
           .catch(error => {
-            message.error({
-              content: "Error en guardando el caso",
-              key
-            });
-            console.log("Error en guardando el caso" + error);
+            message.error({ content: "Error en guardando el caso", key });
+            console.error("Error en guardando el caso");
+            console.error(error);
           });
       }
     });
@@ -344,13 +341,13 @@ class DrawerCreate extends React.Component {
     );
   }
   componentDidMount() {
-    Backend.getRequest("GET", "details")
+    Backend.sendRequest("GET", "details")
       .then(response => response.json())
       .then(data => {
         this.setState({ programs: data.programs });
         this.setState({ periods: data.periods });
       });
-    Backend.getRequest("GET", "infocase")
+    Backend.sendRequest("GET", "infocase")
       .then(response => response.json())
       .then(data => {
         this.setState({ cases: data.cases });
