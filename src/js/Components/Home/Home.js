@@ -180,12 +180,14 @@ class Home extends React.Component {
             />
           </Col>
           <Col span={4}>
-            <Search
-              placeholder="Documento"
-              onChange={v => this.performSearch(v.target.value)}
-              value={this.state.searchTerm}
-              enterButton
-            />
+            <PrimButton>
+              <Search
+                placeholder="Documento"
+                onChange={v => this.performSearch(v.target.value)}
+                value={this.state.searchTerm}
+                enterButton
+              />
+            </PrimButton>
           </Col>
         </Row>
         <Row>
