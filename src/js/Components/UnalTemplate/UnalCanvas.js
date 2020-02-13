@@ -10,6 +10,16 @@ import "../../../css/tablet.css";
 import "../../../css/unal.css";
 
 class UnalCanvas extends Component {
+  constructor(props) {
+    super(props);
+    this.handleSession = this.handleSession.bind(this);
+    this.state = {
+      logged: false
+    };
+  }
+  handleSession = logged => {
+    this.setState({ logged: logged });
+  };
   render() {
     return (
       <div>
@@ -216,6 +226,25 @@ class UnalCanvas extends Component {
                   </a>
                   <span className="caret-right" />
                 </div>
+                {(() => {
+                  if (localStorage.getItem("jwt")) {
+                    return (
+                      <div className="btn-group">
+                        {/*eslint-disable-next-line*/}
+                        <a
+                          onClick={() => {
+                            localStorage.removeItem("jwt");
+                            window.location.href = "/";
+                          }}
+                          className="btn btn-default dropdown-toggle"
+                        >
+                          Cerrar Sesión
+                        </a>
+                        <span className="caret-right" />
+                      </div>
+                    );
+                  }
+                })()}
                 <div className="btn-group">{/*Sedes*/}</div>
               </div>
               <div className="btn-group hidden-sm hidden-md hidden-lg hidden-print">
