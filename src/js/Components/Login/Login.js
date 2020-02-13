@@ -3,7 +3,6 @@ import { Form, Icon, Input, Button, Checkbox, Typography, message } from "antd";
 import { Row, Col } from "antd";
 import { withRouter } from "react-router-dom";
 import { PrimButton } from "../Home/HomeStyles";
-import auth from "../../../auth";
 import Backend from "../../../serviceBackend";
 
 import "./Login.css";
@@ -36,17 +35,12 @@ class NormalLoginForm extends React.Component {
       .then(async response => {
         if (response.status === 403) {
           message.error({ content: "Acceso restringido", key });
-          auth.authenticated = false;
         } else if (response.status === 404) {
           message.error({ content: "Contraseña incorrecta", key });
-          auth.authenticated = false;
         } else if (response.status === 200) {
           message.success({ content: "Inicio de sesión exitoso", key });
           let res = await response.json();
-          auth.login(() => {
-            return;
-          });
-          auth.setToken(res["token"]);
+          localStorage.setItem("jwt", res["token"]);
           this.props.history.push("/home");
         } else {
           message.error({

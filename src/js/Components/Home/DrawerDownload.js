@@ -2,8 +2,8 @@ import React from "react";
 import { withRouter } from "react-router-dom";
 import Backend from "../../../serviceBackend";
 import { Drawer, Form, Button, Col, Row, Radio, InputNumber, Spin } from "antd";
-import "antd/dist/antd.css";
-import "./Home.css";
+// import "antd/dist/antd.css";
+// import "./Home.css";
 class DrawerDownload extends React.Component {
   constructor(props) {
     super(props);

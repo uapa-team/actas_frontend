@@ -1,6 +1,6 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
-import CaseTable from "../CaseTable/CaseTable";
+import CaseTable from "./CaseTable";
 import {
   Typography,
   Row,

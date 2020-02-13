@@ -1,6 +1,7 @@
 import React from "react";
-import { Form, Input, Table, Popconfirm, Button } from "antd";
+import { Form, Input, Table, Popconfirm, Button, Icon } from "antd";
 import { withRouter } from "react-router-dom";
+import { PrimButton } from "../Home/HomeStyles";
 
 const EditableContext = React.createContext();
 
@@ -112,14 +113,17 @@ class MutableTable extends React.Component {
     this.columns.push({
       title: "Eliminar",
       dataIndex: "operation",
+      width: "7%",
       render: (text, record) =>
         this.state.dataSource.length >= 1 ? (
           <Popconfirm
             title="¿Está seguro?"
+            okText="Sí"
+            cancelText="No"
             onConfirm={() => this.handleDelete(record.key)}
           >
             {/* eslint-disable-next-line */}
-            <a>Eliminar</a>
+            <Icon type="delete" />
           </Popconfirm>
         ) : null
     });
@@ -213,20 +217,35 @@ class MutableTable extends React.Component {
     });
     return (
       <div>
-        <Button
-          onClick={this.handleAdd}
-          type="primary"
-          style={{ marginBottom: 16 }}
+        <div
+          style={{
+            position: "absolute",
+            display: "flex",
+            justifyContent: "flex-end",
+            width: "100%",
+            zIndex: "1"
+          }}
         >
-          Add a row
-        </Button>
-        <Table
-          components={components}
-          rowClassName={() => "editable-row"}
-          bordered
-          dataSource={dataSource}
-          columns={columns}
-        />
+          <PrimButton>
+            <Button
+              onClick={this.handleAdd}
+              type="primary"
+              style={{ marginBottom: 16 }}
+              icon="plus-circle"
+            >
+              {`Añadir ${this.props.metadata.display}`}
+            </Button>
+          </PrimButton>
+        </div>
+        <Form.Item label={this.props.metadata.display}>
+          <Table
+            components={components}
+            rowClassName={() => "editable-row"}
+            bordered
+            dataSource={dataSource}
+            columns={columns}
+          />
+        </Form.Item>
       </div>
     );
   }

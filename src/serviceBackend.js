@@ -1,5 +1,3 @@
-import auth from "./auth";
-
 export default class Backend {
   //backEndUrl = 'https://ingenieria.bogota.unal.edu.co/actasapp/';
   static backEndUrl = "http://127.0.0.1:8000/council_minutes/";
@@ -15,7 +13,7 @@ export default class Backend {
       {
         Accept: "application/json",
         "Content-Type": "application/json",
-        Authorization: "Token " + auth.getToken()
+        Authorization: "Token " + localStorage.getItem("jwt")
       },
       body
     );
