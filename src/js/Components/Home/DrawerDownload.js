@@ -2,8 +2,7 @@ import React from "react";
 import { withRouter } from "react-router-dom";
 import Backend from "../../../serviceBackend";
 import { Drawer, Form, Button, Col, Row, Radio, InputNumber, Spin } from "antd";
-// import "antd/dist/antd.css";
-// import "./Home.css";
+import { StyledRadio } from "./HomeStyles";
 class DrawerDownload extends React.Component {
   constructor(props) {
     super(props);
@@ -35,13 +34,15 @@ class DrawerDownload extends React.Component {
   };
   radioBtn = value => {
     return (
-      <Radio
-        style={this.radioStyle}
-        value={value[1].filter}
-        key={value[1].filter}
-      >
-        {value[1].display}
-      </Radio>
+      <StyledRadio>
+        <Radio
+          style={this.radioStyle}
+          value={value[1].filter}
+          key={value[1].filter}
+        >
+          {value[1].display}
+        </Radio>
+      </StyledRadio>
     );
   };
   render() {
@@ -174,9 +175,7 @@ class DrawerDownload extends React.Component {
       .then(data => this.setState({ allowed: Object.entries(data) }));
   }
 }
-
 const WrappedDownloadForm = Form.create({ name: "normal_download" })(
   DrawerDownload
 );
-
 export default withRouter(WrappedDownloadForm);

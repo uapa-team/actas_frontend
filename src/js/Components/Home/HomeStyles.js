@@ -8,4 +8,10 @@ const PrimButton = styled.a`
   }
 `;
 
-export { PrimButton };
+const StyledRadio = styled.a`
+  .ant-radio {
+    align-self: center !important;
+  }
+`;
+
+export { PrimButton, StyledRadio };

@@ -3,10 +3,8 @@ import { Form, Icon, Input, Button, Checkbox, Typography, message } from "antd";
 import { Row, Col } from "antd";
 import { withRouter } from "react-router-dom";
 import { PrimButton } from "../Home/HomeStyles";
+import { LoginFormForgot, LoginGeneral, LoginWelcome } from "./LoginStyled";
 import Backend from "../../../serviceBackend";
-
-import "./Login.css";
-import "antd/dist/antd.css";
 
 const { Title, Text } = Typography;
 
@@ -73,8 +71,8 @@ class NormalLoginForm extends React.Component {
         <Row>
           <Col xs={4} sm={4} md={6} lg={8} xl={8}></Col>
           <Col xs={16} sm={16} md={12} lg={8} xl={8}>
-            <div className="login-general">
-              <div className="login-welcome">
+            <LoginGeneral>
+              <LoginWelcome>
                 <Title>Aplicación de Actas</Title>
                 <Text>
                   Bienvenido a la apliación de actas de la Facultad de
@@ -84,7 +82,7 @@ class NormalLoginForm extends React.Component {
                   Para continuar, por favor, ingrese su usuario y contraseña
                   institucional.
                 </Text>
-              </div>
+              </LoginWelcome>
               <Form onSubmit={this.handleSubmit} className="login-form">
                 <Form.Item>
                   {getFieldDecorator("username", {
@@ -142,25 +140,21 @@ class NormalLoginForm extends React.Component {
                     },
                     ""
                   )(<Checkbox>Recuérdame</Checkbox>)}
-                  <a
+                  <LoginFormForgot
                     className="login-form-forgot"
                     href="https://cuenta.unal.edu.co/index.php?p=recoverPassword"
                   >
                     Olvidé mi contraseña
-                  </a>
+                  </LoginFormForgot>
                   <PrimButton>
-                    <Button
-                      type="primary"
-                      htmlType="submit"
-                      className="login-form-button"
-                    >
+                    <Button type="primary" htmlType="submit" block>
                       Ingresar
                     </Button>
                   </PrimButton>
                   ¿No tiene un usuario? - <a href="/contact">Contáctenos</a>
                 </Form.Item>
               </Form>
-            </div>
+            </LoginGeneral>
           </Col>
           <Col xs={4} sm={4} md={6} lg={8} xl={8}></Col>
         </Row>
