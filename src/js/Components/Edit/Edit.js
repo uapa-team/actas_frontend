@@ -15,7 +15,8 @@ class Edit extends React.Component {
       full_name: "",
       decision_maker: "",
       fields: [],
-      cls: this.props.history.location.state._cls
+      cls: "",
+      id: this.props.match.params.id
     };
   }
   createInputs = () => {
@@ -53,15 +54,38 @@ class Edit extends React.Component {
     );
   }
   componentDidMount() {
-    Backend.sendRequest("GET", "infocase?cls=" + this.state.cls.split(".")[1])
-      .then(response => response.json())
-      .then(data => {
-        this.setState({ full_name: data.full_name });
-        this.setState({ decision_maker: data.decision_maker });
-        delete data.full_name;
-        delete data.decision_maker;
-        this.setState({ fields: Object.entries(data) });
-      });
+    if (this.props.history.location.state) {
+      this.setState({ cls: this.props.history.location.state._cls });
+      Backend.sendRequest(
+        "GET",
+        `infocase?cls=${this.props.history.location.state._cls.split(".")[1]}`
+      )
+        .then(response => response.json())
+        .then(data => {
+          this.setState({ full_name: data.full_name });
+          this.setState({ decision_maker: data.decision_maker });
+          delete data.full_name;
+          delete data.decision_maker;
+          this.setState({ fields: Object.entries(data) });
+        });
+    } else {
+      Backend.sendRequest("GET", `case?id=${this.state.id}`)
+        .then(response => response.json())
+        .then(json => {
+          Backend.sendRequest(
+            "GET",
+            `infocase?cls=${json.cases[0]._cls.split(".")[1]}`
+          )
+            .then(response => response.json())
+            .then(data => {
+              this.setState({ full_name: data.full_name });
+              this.setState({ decision_maker: data.decision_maker });
+              delete data.full_name;
+              delete data.decision_maker;
+              this.setState({ fields: Object.entries(data) });
+            });
+        });
+    }
   }
 }
 
