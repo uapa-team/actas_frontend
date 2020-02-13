@@ -54,7 +54,6 @@ class Edit extends React.Component {
     );
   }
   componentDidMount() {
-    var reqClass = "";
     if (this.props.history.location.state) {
       this.setState({ cls: this.props.history.location.state._cls });
       Backend.sendRequest(
