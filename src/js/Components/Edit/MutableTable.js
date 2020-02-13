@@ -1,7 +1,18 @@
 import React from "react";
-import { Form, Input, Table, Popconfirm, Button, Icon } from "antd";
+import {
+  Form,
+  Input,
+  Table,
+  Popconfirm,
+  Button,
+  Icon,
+  Select,
+  InputNumber,
+  Radio
+} from "antd";
 import { withRouter } from "react-router-dom";
 import { PrimButton } from "../Home/HomeStyles";
+const { Option } = Select;
 
 const EditableContext = React.createContext();
 
@@ -40,35 +51,136 @@ class EditableCell extends React.Component {
 
   renderCell = form => {
     this.form = form;
-    const { children, dataIndex, record, title } = this.props;
+    const {
+      children,
+      dataIndex,
+      title,
+      dataType,
+      choices,
+      record
+    } = this.props;
     const { editing } = this.state;
-    return editing ? (
-      <Form.Item style={{ margin: 0 }}>
-        {form.getFieldDecorator(dataIndex, {
-          rules: [
-            {
-              required: true,
-              message: `${title} is required.`
-            }
-          ],
-          initialValue: record[dataIndex]
-        })(
-          <Input
-            ref={node => (this.input = node)}
-            onPressEnter={this.save}
-            onBlur={this.save}
-          />
-        )}
-      </Form.Item>
-    ) : (
-      <div
-        className="editable-cell-value-wrap"
-        style={{ paddingRight: 24 }}
-        onClick={this.toggleEdit}
-      >
-        {children}
-      </div>
-    );
+    if (!editing) {
+      return (
+        <div
+          className="editable-cell-value-wrap"
+          style={{ paddingRight: 24 }}
+          onClick={this.toggleEdit}
+        >
+          {children}
+        </div>
+      );
+    } else {
+      if (dataType === "String") {
+        if (choices) {
+          console.log("entered to choices if");
+          console.log(choices);
+          return (
+            <Form.Item>
+              {form.getFieldDecorator(dataIndex, {
+                initialValue: record[dataIndex],
+                rules: [
+                  {
+                    required: true,
+                    message: `${title} es requerido.`
+                  }
+                ]
+              })(
+                <Select
+                  showSearch
+                  placeholder={title}
+                  ref={node => (this.input = node)}
+                  onPressEnter={this.save}
+                  onBlur={this.save}
+                  optionFilterProp="children"
+                  filterOption={(input, option) =>
+                    option.props.children.toLowerCase().indexOf(
+                      input
+                        .toLowerCase()
+                        .normalize("NFD")
+                        .replace(/[\u0300-\u036f]/g, "")
+                    ) >= 0
+                  }
+                >
+                  {(() => {
+                    return choices.map(ch => {
+                      return (
+                        <Option value={ch} key={ch}>
+                          {ch.normalize("NFD").replace(/[\u0300-\u036f]/g, "")}
+                        </Option>
+                      );
+                    });
+                  })()}
+                </Select>
+              )}
+            </Form.Item>
+          );
+        } else {
+          return (
+            <Form.Item>
+              {form.getFieldDecorator(dataIndex, {
+                initialValue: record[dataIndex],
+                rules: [
+                  {
+                    required: true,
+                    message: `${title} es requerido.`
+                  }
+                ]
+              })(
+                <Input
+                  ref={node => (this.input = node)}
+                  onPressEnter={this.save}
+                  onBlur={this.save}
+                  placeholder={title}
+                />
+              )}
+            </Form.Item>
+          );
+        }
+      } else if (dataType === "Integer") {
+        return (
+          <Form.Item>
+            {form.getFieldDecorator(dataIndex, {
+              initialValue: record[dataIndex],
+              rules: [
+                {
+                  required: true,
+                  message: `${title} es requerido.`
+                }
+              ]
+            })(
+              <InputNumber
+                ref={node => (this.input = node)}
+                onPressEnter={this.save}
+                onBlur={this.save}
+              />
+            )}
+          </Form.Item>
+        );
+      } else if (dataType === "Boolean") {
+        return (
+          <Form.Item>
+            {form.getFieldDecorator(dataIndex, {
+              initialValue: record[dataIndex]
+            })(
+              <Radio.Group
+                ref={node => (this.input = node)}
+                onPressEnter={this.save}
+                onBlur={this.save}
+                buttonStyle="solid"
+              >
+                <Radio.Button value={true}>Sí</Radio.Button>
+                <Radio.Button value={false}>No</Radio.Button>
+              </Radio.Group>
+            )}
+          </Form.Item>
+        );
+      } else {
+        return (
+          <div>Esto es un error, por favor contacte la extensión 13578</div>
+        );
+      }
+    }
   };
 
   render() {
@@ -80,6 +192,8 @@ class EditableCell extends React.Component {
       index,
       handleSave,
       children,
+      dataType,
+      choices,
       ...restProps
     } = this.props;
     return (
@@ -107,7 +221,9 @@ class MutableTable extends React.Component {
       this.columns.push({
         title: fld[1].display,
         dataIndex: fld[0],
-        editable: true
+        editable: true,
+        dataType: fld[1].type,
+        choices: fld[1].choices
       });
     });
     this.columns.push({
@@ -131,14 +247,10 @@ class MutableTable extends React.Component {
 
   handleAdd = () => {
     const { count, dataSource } = this.state;
-    const newData = {
-      key: count,
-      name: `Edward King ${count}`,
-      code: 32,
-      credits: `London, Park Lane no. ${count}`,
-      group: 0,
-      tipology: "P"
-    };
+    const newData = { key: count };
+    Object.entries(this.props.metadata.fields).forEach(fld => {
+      newData[fld[0]] = "Editar";
+    });
     this.setState({
       dataSource: [...dataSource, newData],
       count: count + 1
@@ -163,31 +275,6 @@ class MutableTable extends React.Component {
 
   isEditing = record => record.key === this.state.editingKey;
 
-  cancel = () => {
-    this.setState({ editingKey: "" });
-  };
-
-  save(form, key) {
-    form.validateFields((error, row) => {
-      if (error) {
-        return;
-      }
-      const newData = [...this.state.data];
-      const index = newData.findIndex(item => key === item.key);
-      if (index > -1) {
-        const item = newData[index];
-        newData.splice(index, 1, {
-          ...item,
-          ...row
-        });
-        this.setState({ data: newData, editingKey: "" });
-      } else {
-        newData.push(row);
-        this.setState({ data: newData, editingKey: "" });
-      }
-    });
-  }
-
   edit(key) {
     this.setState({ editingKey: key });
   }
@@ -211,7 +298,9 @@ class MutableTable extends React.Component {
           editable: col.editable,
           dataIndex: col.dataIndex,
           title: col.title,
-          handleSave: this.handleSave
+          handleSave: this.handleSave,
+          dataType: col.dataType,
+          choices: col.choices
         })
       };
     });
