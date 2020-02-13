@@ -23,9 +23,11 @@ class DrawerCreate extends React.Component {
     this.state = {
       programs: [],
       cases: [],
-      periods: []
+      periods: [],
+      id: undefined
     };
   }
+
   autofillName = dni => {
     Backend.sendRequest("POST", "autofill", { field: "name", student_dni: dni })
       .then(response => response.json())
@@ -34,7 +36,8 @@ class DrawerCreate extends React.Component {
           this.props.form.setFieldsValue({ student_name: data.student_name });
       });
   };
-  handleSaveAndEdit = e => {
+
+  handleSave = (e, redirect) => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
@@ -45,7 +48,8 @@ class DrawerCreate extends React.Component {
         Backend.sendRequest("POST", "case", {
           items: [values]
         })
-          .then(async response => {
+          .then(response => {
+            this.props.onClose(e, "Create");
             if (response.status === 200) {
               message.success({ content: "Caso guardado!", key });
             } else if (response.status === 401) {
@@ -53,28 +57,39 @@ class DrawerCreate extends React.Component {
                 content: "Usuario sin autorización para guardar casos!",
                 key
               });
+              this.setState({ id: undefined });
             } else {
               message.error({ content: "Error en guardando el caso", key });
               console.error(
                 "Login Error: Backend HTTP code " + response.status
               );
+              this.setState({ id: undefined });
             }
+            return response.json();
           })
+          .then(data =>
+            redirect(
+              data["inserted_items"][0],
+              "Request." + this.props.form.getFieldValue("_cls")
+            )
+          )
           .catch(error => {
             message.error({ content: "Error en guardando el caso", key });
             console.error("Error en guardando el caso");
             console.error(error);
+            this.setState({ id: undefined });
           });
       }
     });
   };
 
-  handleSave = e => {
+  handleSaveAndEdit = e => {
     e.preventDefault();
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        this.props.onClose(e, "Create");
-      }
+    this.handleSave(e, (id, cls) => {
+      this.props.history.push({
+        pathname: "/edit/" + id,
+        state: { _cls: cls }
+      });
     });
   };
 
@@ -332,7 +347,7 @@ class DrawerCreate extends React.Component {
           </Button>
           <Button
             type="primary"
-            onClick={e => this.handleSave(e)}
+            onClick={e => this.handleSave(e, _ => {})}
             style={{ marginRight: 8 }}
           >
             Guardar
