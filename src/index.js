@@ -7,6 +7,7 @@ import Edit from "./js/Components/Edit/Edit";
 import Contact from "./js/Components/Contact/Contact";
 import * as serviceWorker from "./serviceWorker";
 import { BrowserRouter, Route, Redirect, Switch } from "react-router-dom";
+import "./css/index.css";
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route

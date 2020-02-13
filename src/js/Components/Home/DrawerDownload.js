@@ -34,12 +34,8 @@ class DrawerDownload extends React.Component {
   };
   radioBtn = value => {
     return (
-      <StyledRadio>
-        <Radio
-          style={this.radioStyle}
-          value={value[1].filter}
-          key={value[1].filter}
-        >
+      <StyledRadio key={value[1].filter}>
+        <Radio style={this.radioStyle} value={value[1].filter}>
           {value[1].display}
         </Radio>
       </StyledRadio>
