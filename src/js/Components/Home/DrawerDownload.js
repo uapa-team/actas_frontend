@@ -17,7 +17,11 @@ class DrawerDownload extends React.Component {
   }
   handleGenerate = () => {
     this.setState({ spinning: true });
-    let query = `pre=${this.state.isPre}&consecutive_minute=${this.state.councilNumber}&year=${this.state.councliYear}&${this.state.target}`;
+    let query = `pre=${this.state.isPre}&consecutive_minute${
+      this.state.isPre ? "_ac" : ""
+    }=${this.state.councilNumber}&year=${this.state.councliYear}&${
+      this.state.target
+    }`;
     Backend.sendRequest("GET", `generate?${query}`)
       .then(response => response.json())
       .then(data => {
