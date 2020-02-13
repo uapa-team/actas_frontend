@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import Backend from "../../../serviceBackend";
 import "../../../css/base.css";
 import "../../../css/bootstrap.min.css";
 import "../../../css/bootstrap-theme.min.css";
@@ -238,6 +239,7 @@ class UnalCanvas extends Component {
                         {/*eslint-disable-next-line*/}
                         <a
                           onClick={() => {
+                            Backend.sendRequest("GET", "logout");
                             localStorage.removeItem("jwt");
                             window.location.href = "/";
                           }}
