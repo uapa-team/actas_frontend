@@ -34,19 +34,23 @@ class UnalCanvas extends Component {
         <meta name="expires" content={1} />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <meta name="robots" content="all" />
-        <link type="text/css" href="./css/bootstrap.min.css" media="all" />
         <link
           type="text/css"
-          href="./css/bootstrap-theme.min.css"
+          href="../../../css/bootstrap.min.css"
           media="all"
         />
-        <link type="text/css" href="../css/reset.css" media="all" />
-        <link type="text/css" href="../css/unal.css" media="all" />
-        <link type="text/css" href="../css/base.css" media="all" />
-        <link type="text/css" href="../css/tablet.css" media="all" />
-        <link type="text/css" href="../css/phone.css" media="all" />
-        <link type="text/css" href="../css/small.css" media="all" />
-        <link type="text/css" href="../css/printer.css" media="print" />
+        <link
+          type="text/css"
+          href="../../../css/bootstrap-theme.min.css"
+          media="all"
+        />
+        <link type="text/css" href="../../../css/reset.css" media="all" />
+        <link type="text/css" href="../../../css/unal.css" media="all" />
+        <link type="text/css" href="../../../css/base.css" media="all" />
+        <link type="text/css" href="../../../css/tablet.css" media="all" />
+        <link type="text/css" href="../../../css/phone.css" media="all" />
+        <link type="text/css" href="../../../css/small.css" media="all" />
+        <link type="text/css" href="../../../css/printer.css" media="print" />
         <title>ActasApp: Universidad Nacional de Colombia</title>
         <div id="footfix">
           <div id="services">
@@ -372,7 +376,7 @@ class UnalCanvas extends Component {
               </a>
               <br />
               <a href="index.html#">Acerca de este sitio web</a>
-              <br /> Última actualización: 23/12/2019
+              <br /> Última actualización: 13/02/2020
             </p>
           </div>
           <div className="col-md-2 col-lg-2 col-sm-2 col-xs-12 logos">
