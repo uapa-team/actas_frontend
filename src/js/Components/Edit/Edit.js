@@ -1,10 +1,11 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
-import { Form, Row, Divider, Typography } from "antd";
+import { Form, Row, Divider, Typography, Button, Popconfirm } from "antd";
 import MutableComponent from "./MutableComponent";
 import MutableTable from "./MutableTable";
 import Backend from "../../../serviceBackend";
 import Columns from "react-columns";
+import Functions from "../../../Functions";
 
 const { Title } = Typography;
 
@@ -38,7 +39,21 @@ class Edit extends React.Component {
       <div>
         <Divider style={{ background: "#ffffff00" }} />
         <Row>
-          <Title>Edición de solicitud</Title>
+          <Columns gap={"50px"} columns={2}>
+            <Title>Edición de solicitud</Title>
+            <Popconfirm
+              title="¿Qué tipo de vista previa desea generar?"
+              onConfirm={() => Functions.generateCouncil(true, this.state.id)}
+              onCancel={() => Functions.generateCouncil(true, this.state.id)}
+              okText="Consejo"
+              cancelText="Comité"
+              placement="right"
+            >
+              <Button type="primary" icon="eye">
+                Vista Previa
+              </Button>
+            </Popconfirm>
+          </Columns>
         </Row>
         <Row>
           <Form>

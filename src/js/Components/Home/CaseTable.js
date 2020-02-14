@@ -2,6 +2,7 @@ import React from "react";
 import Backend from "../../../serviceBackend";
 import { Table, Popconfirm, message } from "antd";
 import { withRouter } from "react-router-dom";
+import Functions from "../../../Functions";
 
 class CaseTable extends React.Component {
   confirmCancel = archiveType => {
@@ -9,18 +10,6 @@ class CaseTable extends React.Component {
       message.success("Solicitud anulada exitosamente");
     } else {
       message.success("Solicitud desistida exitosamente");
-    }
-  };
-  generateCouncil = (isPre, recordId) => {
-    Backend.sendRequest("GET", `generate?pre=${isPre}&id=${recordId}`)
-      .then(response => response.json())
-      .then(data => {
-        Backend.openLink(data.url);
-      });
-    if (isPre) {
-      message.success("Acta de Comité Asesor Generada exitosamente");
-    } else {
-      message.success("Acta de Consejo de Facultad Generada exitosamente");
     }
   };
   render() {
@@ -92,8 +81,8 @@ class CaseTable extends React.Component {
             <br />
             <Popconfirm
               title="¿Qué tipo de vista previa desea generar?"
-              onConfirm={() => this.generateCouncil(false, record.id)}
-              onCancel={() => this.generateCouncil(true, record.id)}
+              onConfirm={() => Functions.generateCouncil(false, record.id)}
+              onCancel={() => Functions.generateCouncil(true, record.id)}
               okText="Consejo"
               cancelText="Comité"
               placement="left"
