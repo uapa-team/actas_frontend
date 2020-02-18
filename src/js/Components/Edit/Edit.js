@@ -32,7 +32,14 @@ class Edit extends React.Component {
     return this.state.fields.map(this.createInput);
   };
   createInput = i => {
-    return <MutableComponent key={i[0]} fieldName={i[0]} metadata={i[1]} />;
+    return (
+      <MutableComponent
+        key={i[0]}
+        fieldName={i[0]}
+        metadata={i[1]}
+        form={this.props.form}
+      />
+    );
   };
   createTables = () => {
     return this.state.fields.map(this.createTable);
@@ -48,13 +55,18 @@ class Edit extends React.Component {
         const key = "updatable";
         message.loading({ content: "Guardando cambios...", key });
 
-        console.log("holi " + this.state.id);
-        values = { id: this.state.id }; //, student_dni: "113113"
+        console.log(values);
+        values["id"] = this.state.id;
+        for (var i = 0; i < values.length; i++) {
+          if (values[i]._isAMomentObject === true) {
+            values[i] = values[i].utc().format();
+          }
+        }
+
         Backend.sendRequest("PATCH", "case", {
           items: [values]
         })
           .then(response => {
-            this.props.onClose(e, "Create");
             if (response.status === 200) {
               message.success({
                 content: "Cambios guardados exitosamente.",
@@ -65,7 +77,6 @@ class Edit extends React.Component {
                 content: "Usuario sin autorización para guardar casos.",
                 key
               });
-              this.setState({ id: undefined });
             } else {
               message.error({
                 content: "Ha habido un error guardando el caso.",
@@ -74,7 +85,6 @@ class Edit extends React.Component {
               console.error(
                 "Login Error: Backend HTTP code " + response.status
               );
-              this.setState({ id: undefined });
             }
             return response.json();
           })
@@ -85,7 +95,6 @@ class Edit extends React.Component {
             });
             console.error("Error en guardando el caso");
             console.error(error);
-            this.setState({ id: undefined });
           });
       }
     });
