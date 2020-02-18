@@ -76,10 +76,10 @@ class NormalLoginForm extends React.Component {
                 <Title>Aplicación de Actas</Title>
                 <Text>
                   Bienvenido a la apliación de actas de la Facultad de
-                  Ingeniería de la Universidad Nacional de Colombia.
+                  Ingeniería de la Universidad Nacional de Colombia
                 </Text>
                 <Text>
-                  Para continuar, por favor, ingrese su usuario y contraseña
+                  . Para continuar, por favor, ingrese su usuario y contraseña
                   institucional.
                 </Text>
               </LoginWelcome>

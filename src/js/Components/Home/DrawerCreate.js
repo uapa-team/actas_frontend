@@ -150,10 +150,10 @@ class DrawerCreate extends React.Component {
                               style={{ width: "5em" }}
                               key="student_dni_type"
                             >
-                              <Option value="Cédula de Ciudadanía colombiana">
+                              <Option value="Cédula de ciudadanía Colombiana">
                                 CC
                               </Option>
-                              <Option value="Tarjeta de Identidad colombiana">
+                              <Option value="Tarjeta de identidad Colombiana">
                                 TI
                               </Option>
                               <Option value="Cédula de extranjería">CE</Option>

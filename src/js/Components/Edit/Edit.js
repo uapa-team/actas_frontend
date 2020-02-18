@@ -1,6 +1,14 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
-import { Form, Row, Divider, Typography, Button, Popconfirm } from "antd";
+import {
+  Form,
+  Row,
+  Divider,
+  Typography,
+  Button,
+  Popconfirm,
+  message
+} from "antd";
 import MutableComponent from "./MutableComponent";
 import MutableTable from "./MutableTable";
 import Backend from "../../../serviceBackend";
@@ -34,6 +42,16 @@ class Edit extends React.Component {
       return <MutableTable key={i[0]} fieldName={i[0]} metadata={i[1]} />;
     }
   };
+  saveCase = () => {
+    const key = "updatable";
+    message.loading({ content: "Guardando cambios", key });
+
+    //Send save request
+
+    message.error({ content: "Los cambios no se han guardado", key });
+    message.success({ content: "Cambios guardados exitosamente", key });
+  };
+
   render() {
     return (
       <div>
@@ -41,18 +59,28 @@ class Edit extends React.Component {
         <Row>
           <Columns gap={"50px"} columns={2}>
             <Title>Edición de solicitud</Title>
-            <Popconfirm
-              title="¿Qué tipo de vista previa desea generar?"
-              onConfirm={() => Functions.generateCouncil(true, this.state.id)}
-              onCancel={() => Functions.generateCouncil(true, this.state.id)}
-              okText="Consejo"
-              cancelText="Comité"
-              placement="right"
-            >
-              <Button type="primary" icon="eye">
-                Vista Previa
+            <div>
+              <Button
+                onClick={this.saveCase}
+                type="primary"
+                className="saveCaseButton"
+                icon="save"
+              >
+                Guardar
               </Button>
-            </Popconfirm>
+              <Popconfirm
+                title="¿Qué tipo de vista previa desea generar?"
+                onConfirm={() => Functions.generateCouncil(true, this.state.id)}
+                onCancel={() => Functions.generateCouncil(true, this.state.id)}
+                okText="Consejo"
+                cancelText="Comité"
+                placement="right"
+              >
+                <Button type="primary" icon="eye">
+                  Vista Previa
+                </Button>
+              </Popconfirm>
+            </div>
           </Columns>
         </Row>
         <Row>
