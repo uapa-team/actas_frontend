@@ -42,24 +42,55 @@ class Edit extends React.Component {
       return <MutableTable key={i[0]} fieldName={i[0]} metadata={i[1]} />;
     }
   };
-  saveCase = () => {
-    const key = "updatable";
-    message.loading({ content: "Guardando cambios...", key });
+  saveCase = e => {
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        const key = "updatable";
+        message.loading({ content: "Guardando cambios...", key });
 
-    //Send save request
-
-    message.error({ content: "Los cambios no se han guardado.", key });
-    message.success({ content: "Cambios guardados exitosamente.", key });
+        Backend.sendRequest("PATCH", "case", {
+          items: [values]
+        })
+          .then(response => {
+            this.props.onClose(e, "Create");
+            if (response.status === 200) {
+              message.success({
+                content: "Cambios guardados exitosamente.",
+                key
+              });
+            } else if (response.status === 401) {
+              message.error({
+                content: "Usuario sin autorización para guardar casos.",
+                key
+              });
+              this.setState({ id: undefined });
+            } else {
+              message.error({
+                content: "Ha habido un error guardando el caso.",
+                key
+              });
+              console.error(
+                "Login Error: Backend HTTP code " + response.status
+              );
+              this.setState({ id: undefined });
+            }
+            return response.json();
+          })
+          .catch(error => {
+            message.error({
+              content: "Ha habido un error guardando el caso.",
+              key
+            });
+            console.error("Error en guardando el caso");
+            console.error(error);
+            this.setState({ id: undefined });
+          });
+      }
+    });
   };
 
-  saveCaseReturn = () => {
-    this.saveCase();
-    const key = "updatable";
-    message.success({
-      content:
-        "Cambios guardados exitosamente. Regresando a la página anterior...",
-      key
-    });
+  saveCaseReturn = e => {
+    this.saveCase(e);
     //return();
   };
 
@@ -72,7 +103,7 @@ class Edit extends React.Component {
             <Title>Edición de solicitud</Title>
             <div>
               <Button
-                onClick={this.saveCase}
+                onClick={e => this.saveCase(e)}
                 type="primary"
                 className="saveCaseButton"
                 icon="save"
@@ -80,7 +111,7 @@ class Edit extends React.Component {
                 Guardar
               </Button>
               <Button
-                onClick={this.saveCaseReturn}
+                onClick={e => this.saveCaseReturn(e)}
                 type="primary"
                 className="saveCaseButton"
                 icon="save"
@@ -151,4 +182,5 @@ class Edit extends React.Component {
   }
 }
 
-export default withRouter(Edit);
+const WrappedCreateForm = Form.create({ name: "normal_create" })(Edit);
+export default withRouter(WrappedCreateForm);

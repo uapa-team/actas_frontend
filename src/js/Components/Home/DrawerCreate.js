@@ -29,17 +29,26 @@ class DrawerCreate extends React.Component {
   }
 
   autofillName = dni => {
-    Backend.sendRequest("POST", "autofill", { field: "name", student_dni: dni })
-      .then(response => response.json())
+    Backend.sendRequest("POST", "autofill", {
+      field: "name",
+      student_dni: dni
+    })
+      .then(response => {
+        if (response.status === 200) {
+          return response.json();
+        } else {
+          return { student_name: "" };
+        }
+      })
       .then(data => {
-        if ("student_name" in data)
-          this.props.form.setFieldsValue({ student_name: data.student_name });
+        this.props.form.setFieldsValue({ student_name: data.student_name });
       });
   };
 
   handleSave = (e, redirect) => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
+      console.log(values);
       if (!err) {
         values.date = values.date.utc().format();
         this.props.onClose(e, "Create");
