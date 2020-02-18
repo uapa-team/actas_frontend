@@ -44,12 +44,23 @@ class Edit extends React.Component {
   };
   saveCase = () => {
     const key = "updatable";
-    message.loading({ content: "Guardando cambios", key });
+    message.loading({ content: "Guardando cambios...", key });
 
     //Send save request
 
-    message.error({ content: "Los cambios no se han guardado", key });
-    message.success({ content: "Cambios guardados exitosamente", key });
+    message.error({ content: "Los cambios no se han guardado.", key });
+    message.success({ content: "Cambios guardados exitosamente.", key });
+  };
+
+  saveCaseReturn = () => {
+    this.saveCase();
+    const key = "updatable";
+    message.success({
+      content:
+        "Cambios guardados exitosamente. Regresando a la página anterior...",
+      key
+    });
+    //return();
   };
 
   render() {
@@ -67,6 +78,14 @@ class Edit extends React.Component {
                 icon="save"
               >
                 Guardar
+              </Button>
+              <Button
+                onClick={this.saveCaseReturn}
+                type="primary"
+                className="saveCaseButton"
+                icon="save"
+              >
+                Guardar y volver
               </Button>
               <Popconfirm
                 title="¿Qué tipo de vista previa desea generar?"

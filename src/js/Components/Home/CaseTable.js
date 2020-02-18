@@ -6,9 +6,9 @@ import Functions from "../../../Functions";
 class CaseTable extends React.Component {
   confirmCancel = archiveType => {
     if (archiveType) {
-      message.success("Solicitud anulada exitosamente");
+      message.success("Solicitud anulada exitosamente.");
     } else {
-      message.success("Solicitud desistida exitosamente");
+      message.success("Solicitud desistida exitosamente.");
     }
   };
   render() {

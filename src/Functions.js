@@ -9,9 +9,9 @@ export default class Functions {
         Backend.openLink(data.url);
       });
     if (isPre) {
-      message.success("Acta de Comité Asesor Generada exitosamente");
+      message.success("Acta de Comité Asesor generada exitosamente.");
     } else {
-      message.success("Acta de Consejo de Facultad Generada exitosamente");
+      message.success("Acta de Consejo de Facultad generada exitosamente.");
     }
   }
 }

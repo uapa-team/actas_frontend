@@ -44,22 +44,28 @@ class DrawerCreate extends React.Component {
         values.date = values.date.utc().format();
         this.props.onClose(e, "Create");
         const key = "updatable";
-        message.loading({ content: "Guardando caso", key });
+        message.loading({ content: "Guardando caso...", key });
         Backend.sendRequest("POST", "case", {
           items: [values]
         })
           .then(response => {
             this.props.onClose(e, "Create");
             if (response.status === 200) {
-              message.success({ content: "Caso guardado!", key });
+              message.success({
+                content: "El caso se ha guardado exitosamente.",
+                key
+              });
             } else if (response.status === 401) {
               message.error({
-                content: "Usuario sin autorización para guardar casos!",
+                content: "Usuario sin autorización para guardar casos.",
                 key
               });
               this.setState({ id: undefined });
             } else {
-              message.error({ content: "Error en guardando el caso", key });
+              message.error({
+                content: "Ha habido un error guardando el caso.",
+                key
+              });
               console.error(
                 "Login Error: Backend HTTP code " + response.status
               );
@@ -74,7 +80,10 @@ class DrawerCreate extends React.Component {
             )
           )
           .catch(error => {
-            message.error({ content: "Error en guardando el caso", key });
+            message.error({
+              content: "Ha habido un error guardando el caso.",
+              key
+            });
             console.error("Error en guardando el caso");
             console.error(error);
             this.setState({ id: undefined });

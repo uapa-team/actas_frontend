@@ -28,22 +28,22 @@ class NormalLoginForm extends React.Component {
 
   performLogin = () => {
     const key = "updatable";
-    message.loading({ content: "Iniciando sesión", key });
+    message.loading({ content: "Iniciando sesión...", key });
     Backend.sendLogin(this.state.username, this.state.password)
       .then(async response => {
         if (response.status === 403) {
-          message.error({ content: "Acceso restringido", key });
+          message.error({ content: "Acceso restringido.", key });
         } else if (response.status === 404) {
-          message.error({ content: "Contraseña incorrecta", key });
+          message.error({ content: "Contraseña incorrecta.", key });
         } else if (response.status === 200) {
-          message.success({ content: "Inicio de sesión exitoso", key });
+          message.success({ content: "Inicio de sesión exitoso.", key });
           let res = await response.json();
           localStorage.setItem("jwt", res["token"]);
           window.location.href = "/home";
           // this.props.history.push("/home");
         } else {
           message.error({
-            content: "Error en Login",
+            content: "Error realizando el login.",
             key
           });
           console.log("Login Error: Backend HTTP code " + response.status);
@@ -51,7 +51,7 @@ class NormalLoginForm extends React.Component {
       })
       .catch(error => {
         message.error({
-          content: "Error en Login",
+          content: "Error realizando el login.",
           key
         });
         console.log("Login Error: " + error);
