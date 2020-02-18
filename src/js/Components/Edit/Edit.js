@@ -48,6 +48,8 @@ class Edit extends React.Component {
         const key = "updatable";
         message.loading({ content: "Guardando cambios...", key });
 
+        console.log("holi " + this.state.id);
+        values = { id: this.state.id }; //, student_dni: "113113"
         Backend.sendRequest("PATCH", "case", {
           items: [values]
         })

@@ -177,7 +177,7 @@ class EditableCell extends React.Component {
         );
       } else {
         return (
-          <div>Esto es un error, por favor contacte la extensión 13578</div>
+          <div>Esto es un error, por favor contacte la extensión 13578.</div>
         );
       }
     }
