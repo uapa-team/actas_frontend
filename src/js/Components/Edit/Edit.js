@@ -21,6 +21,7 @@ class Edit extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      case: {},
       full_name: "",
       decision_maker: "",
       fields: [],
@@ -32,6 +33,12 @@ class Edit extends React.Component {
     return this.state.fields.map(this.createInput);
   };
   createInput = i => {
+    if (
+      typeof this.state.case[i[0]] !== "undefined" &&
+      this.state.case[i[0]] !== ""
+    ) {
+      i[1].default = this.state.case[i[0]];
+    }
     return (
       <MutableComponent
         key={i[0]}
@@ -55,13 +62,16 @@ class Edit extends React.Component {
         const key = "updatable";
         message.loading({ content: "Guardando cambios...", key });
 
-        console.log(values);
-        values["id"] = this.state.id;
-        for (var i = 0; i < values.length; i++) {
-          if (values[i]._isAMomentObject === true) {
+        values["_id"] = this.state.id;
+        for (var i in values) {
+          if (
+            typeof values[i] !== "undefined" &&
+            values[i]._isAMomentObject === true
+          ) {
             values[i] = values[i].utc().format();
           }
         }
+        console.log(values);
 
         Backend.sendRequest("PATCH", "case", {
           items: [values]
@@ -158,38 +168,23 @@ class Edit extends React.Component {
     );
   }
   componentDidMount() {
-    if (this.props.history.location.state) {
-      this.setState({ cls: this.props.history.location.state._cls });
-      Backend.sendRequest(
-        "GET",
-        `infocase?cls=${this.props.history.location.state._cls.split(".")[1]}`
-      )
-        .then(response => response.json())
-        .then(data => {
-          this.setState({ full_name: data.full_name });
-          this.setState({ decision_maker: data.decision_maker });
-          delete data.full_name;
-          delete data.decision_maker;
-          this.setState({ fields: Object.entries(data) });
-        });
-    } else {
-      Backend.sendRequest("GET", `case?id=${this.state.id}`)
-        .then(response => response.json())
-        .then(json => {
-          Backend.sendRequest(
-            "GET",
-            `infocase?cls=${json.cases[0]._cls.split(".")[1]}`
-          )
-            .then(response => response.json())
-            .then(data => {
-              this.setState({ full_name: data.full_name });
-              this.setState({ decision_maker: data.decision_maker });
-              delete data.full_name;
-              delete data.decision_maker;
-              this.setState({ fields: Object.entries(data) });
-            });
-        });
-    }
+    Backend.sendRequest("GET", `case?id=${this.state.id}`)
+      .then(response => response.json())
+      .then(json => {
+        this.setState({ case: json["cases"][0] });
+        Backend.sendRequest(
+          "GET",
+          `infocase?cls=${json.cases[0]._cls.split(".")[1]}`
+        )
+          .then(response => response.json())
+          .then(data => {
+            this.setState({ full_name: data.full_name });
+            this.setState({ decision_maker: data.decision_maker });
+            delete data.full_name;
+            delete data.decision_maker;
+            this.setState({ fields: Object.entries(data) });
+          });
+      });
   }
 }
 

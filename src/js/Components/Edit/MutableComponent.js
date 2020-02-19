@@ -127,7 +127,7 @@ class MutableComponent extends React.Component {
             // style={{ marginBottom: "0px", paddingLeft: "10px" }}
           >
             {getFieldDecorator(this.props.fieldName, {
-              initialValue: this.props.metadata.default
+              initialValue: this.props.metadata.default === "True"
             })(
               <Radio.Group buttonStyle="solid">
                 <Radio.Button value={true}>Sí</Radio.Button>
@@ -140,14 +140,10 @@ class MutableComponent extends React.Component {
     } else if (this.props.metadata.type === "List:String") {
       return (
         <StyledFormItem>
-          <Form.Item
-            label={this.props.metadata.display}
-            // style={{ marginBottom: "0px", paddingLeft: "10px" }}
-          >
-            {getFieldDecorator(
-              this.props.fieldName,
-              {}
-            )(
+          <Form.Item label={this.props.metadata.display}>
+            {getFieldDecorator(this.props.fieldName, {
+              initialValue: this.props.metadata.default
+            })(
               <Select
                 mode="tags"
                 style={{ width: "100%" }}
