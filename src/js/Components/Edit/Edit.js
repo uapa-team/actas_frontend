@@ -75,7 +75,7 @@ class Edit extends React.Component {
         const key = "updatable";
         message.loading({ content: "Guardando cambios...", key });
 
-        values["_id"] = this.state.id;
+        values["id"] = this.state.id;
         for (var i in values) {
           if (
             typeof values[i] !== "undefined" &&

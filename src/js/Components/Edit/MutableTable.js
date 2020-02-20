@@ -12,8 +12,9 @@ import {
 } from "antd";
 import { withRouter } from "react-router-dom";
 import { PrimButton } from "../Home/HomeStyles";
-const { Option } = Select;
+import _ from "lodash";
 
+const { Option } = Select;
 const EditableContext = React.createContext();
 
 const EditableRow = ({ form, index, ...props }) => (
@@ -270,8 +271,9 @@ class MutableTable extends React.Component {
     });
     this.setState({ dataSource: newData });
     var toReturn = {};
+    var dataAux = _.cloneDeep(newData);
     toReturn[`${this.props.fieldName}`] = {
-      value: newData,
+      value: dataAux,
       errors: []
     };
     toReturn[`${this.props.fieldName}`].value.forEach(i => {
