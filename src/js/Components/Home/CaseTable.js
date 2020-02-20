@@ -1,5 +1,5 @@
 import React from "react";
-import { Table, Popconfirm, message } from "antd";
+import { Table, Popconfirm, message, Button } from "antd";
 import { withRouter } from "react-router-dom";
 import Functions from "../../../Functions";
 
@@ -11,6 +11,7 @@ class CaseTable extends React.Component {
       message.success("Solicitud desistida exitosamente.");
     }
   };
+
   render() {
     var columns = [
       {
@@ -131,9 +132,26 @@ class CaseTable extends React.Component {
       }
     ];
     return (
-      <Table dataSource={this.props.dataSource} columns={columns} rowKey="id" />
+      <Table
+        dataSource={this.props.dataSource}
+        columns={columns}
+        rowKey="id"
+        pagination={{
+          defaultPageSize: 10,
+          showSizeChanger: true,
+          pageSizeOptions: ["10", "20", "50", "100"],
+          position: "both",
+          showQuickJumper: <Button>hjk</Button>,
+          size: "small",
+          showTotal: showTotal
+        }}
+      />
     );
   }
+}
+
+function showTotal(total) {
+  return `Hay ${total} solicitudes`;
 }
 
 export default withRouter(CaseTable);
