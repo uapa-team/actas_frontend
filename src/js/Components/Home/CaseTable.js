@@ -60,7 +60,7 @@ class CaseTable extends React.Component {
       </div>
     ),
     filterIcon: filtered => (
-      <Icon type="search" style={{ color: filtered ? "#1890ff" : undefined }} />
+      <Icon type="search" style={{ color: filtered ? "#1890ff" : "#000000" }} />
     ),
     onFilter: (value, record) =>
       record[dataIndex]
@@ -112,7 +112,7 @@ class CaseTable extends React.Component {
         title: "DNI",
         dataIndex: "student_dni",
         key: "student_dni",
-        sorter: (a, b) => a.student_dni.localeCompare(b.student_dni),
+        //sorter: (a, b) => a.student_dni.localeCompare(b.student_dni),
         ...this.getColumnSearchProps("student_dni", "DNI")
       },
       {
@@ -150,22 +150,21 @@ class CaseTable extends React.Component {
         dataIndex: "consecutive_minute",
         key: "consecutive_minute",
         width: "10%",
-        sorter: (a, b) =>
-          a.consecutive_minute.localeCompare(b.consecutive_minute),
+        //sorter: (a, b) => a.consecutive_minute.localeCompare(b.consecutive_minute),
         ...this.getColumnSearchProps("consecutive_minute", "acta")
       },
       {
         title: "Año",
         dataIndex: "year",
         key: "year",
-        sorter: (a, b) => a.year.localeCompare(b.year),
+        //sorter: (a, b) => a.year.localeCompare(b.year),
         ...this.getColumnSearchProps("year", "año")
       },
       {
         title: "Periodo",
         dataIndex: "academic_period",
         key: "academic_period",
-        sorter: (a, b) => a.academic_period.localeCompare(b.academic_period),
+        //sorter: (a, b) => a.academic_period.localeCompare(b.academic_period),
         ...this.getColumnSearchProps("academic_period", "periodo")
       },
       /*{

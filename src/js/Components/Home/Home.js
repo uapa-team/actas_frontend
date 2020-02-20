@@ -1,17 +1,7 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
 import CaseTable from "./CaseTable";
-import {
-  Typography,
-  Row,
-  Divider,
-  Col,
-  Button,
-  Switch,
-  InputNumber,
-  Tooltip
-} from "antd";
-import Search from "antd/lib/input/Search";
+import { Typography, Row, Divider, Col, Button } from "antd";
 import DrawerDownload from "./DrawerDownload";
 import DrawerCreate from "./DrawerCreate";
 import Backend from "../../../serviceBackend";
