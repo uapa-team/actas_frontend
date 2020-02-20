@@ -73,8 +73,6 @@ class EditableCell extends React.Component {
     } else {
       if (dataType === "String") {
         if (choices) {
-          console.log("entered to choices if");
-          console.log(choices);
           return (
             <Form.Item>
               {form.getFieldDecorator(dataIndex, {
@@ -271,6 +269,15 @@ class MutableTable extends React.Component {
       ...row
     });
     this.setState({ dataSource: newData });
+    var toReturn = {};
+    toReturn[`${this.props.fieldName}`] = {
+      value: newData,
+      errors: []
+    };
+    toReturn[`${this.props.fieldName}`].value.forEach(i => {
+      delete i.key;
+    });
+    this.props.form.setFields(toReturn);
   };
 
   isEditing = record => record.key === this.state.editingKey;
@@ -280,6 +287,7 @@ class MutableTable extends React.Component {
   }
 
   render() {
+    const { getFieldDecorator } = this.props.form;
     const { dataSource } = this.state;
     const components = {
       body: {
@@ -327,13 +335,17 @@ class MutableTable extends React.Component {
           </PrimButton>
         </div>
         <Form.Item label={this.props.metadata.display}>
-          <Table
-            components={components}
-            rowClassName={() => "editable-row"}
-            bordered
-            dataSource={dataSource}
-            columns={columns}
-          />
+          {getFieldDecorator(this.props.fieldName, {
+            initialValue: this.props.metadata.default
+          })(
+            <Table
+              components={components}
+              rowClassName={() => "editable-row"}
+              bordered
+              dataSource={dataSource}
+              columns={columns}
+            />
+          )}
         </Form.Item>
       </div>
     );
