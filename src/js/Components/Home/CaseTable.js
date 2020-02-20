@@ -19,7 +19,7 @@ class CaseTable extends React.Component {
     searchedColumn: ""
   };
 
-  getColumnSearchProps = dataIndex => ({
+  getColumnSearchProps = (dataIndex, searchTerm) => ({
     filterDropdown: ({
       setSelectedKeys,
       selectedKeys,
@@ -31,7 +31,7 @@ class CaseTable extends React.Component {
           ref={node => {
             this.searchInput = node;
           }}
-          placeholder={`Search ${dataIndex}`}
+          placeholder={`Buscar por ${searchTerm}`}
           value={selectedKeys[0]}
           onChange={e =>
             setSelectedKeys(e.target.value ? [e.target.value] : [])
@@ -48,14 +48,14 @@ class CaseTable extends React.Component {
           size="small"
           style={{ width: 90, marginRight: 8 }}
         >
-          Search
+          Buscar
         </Button>
         <Button
           onClick={() => this.handleReset(clearFilters)}
           size="small"
           style={{ width: 90 }}
         >
-          Reset
+          Limpiar
         </Button>
       </div>
     ),
@@ -106,28 +106,28 @@ class CaseTable extends React.Component {
         key: "_cls_display",
         width: "20%",
         sorter: (a, b) => a._cls_display.localeCompare(b._cls_display),
-        ...this.getColumnSearchProps("_cls_display")
+        ...this.getColumnSearchProps("_cls_display", "tipo de solicitud")
       },
       {
         title: "DNI",
         dataIndex: "student_dni",
         key: "student_dni",
         sorter: (a, b) => a.student_dni.localeCompare(b.student_dni),
-        ...this.getColumnSearchProps("student_dni")
+        ...this.getColumnSearchProps("student_dni", "DNI")
       },
       {
         title: "Nombres",
         dataIndex: "student_name",
         key: "student_name",
         sorter: (a, b) => a.student_name.localeCompare(b.student_name),
-        ...this.getColumnSearchProps("student_name")
+        ...this.getColumnSearchProps("student_name", "nombres")
       },
       {
         title: "Plan de estudios",
         dataIndex: "academic_program",
         key: "academic_program",
         sorter: (a, b) => a.academic_program.localeCompare(b.academic_program),
-        ...this.getColumnSearchProps("academic_program")
+        ...this.getColumnSearchProps("academic_program", "programa")
       },
       /*{
         title: "Creación",
@@ -152,21 +152,21 @@ class CaseTable extends React.Component {
         width: "10%",
         sorter: (a, b) =>
           a.consecutive_minute.localeCompare(b.consecutive_minute),
-        ...this.getColumnSearchProps("consecutive_minute")
+        ...this.getColumnSearchProps("consecutive_minute", "acta")
       },
       {
         title: "Año",
         dataIndex: "year",
         key: "year",
         sorter: (a, b) => a.year.localeCompare(b.year),
-        ...this.getColumnSearchProps("year")
+        ...this.getColumnSearchProps("year", "año")
       },
       {
         title: "Periodo",
         dataIndex: "academic_period",
         key: "academic_period",
         sorter: (a, b) => a.academic_period.localeCompare(b.academic_period),
-        ...this.getColumnSearchProps("academic_period")
+        ...this.getColumnSearchProps("academic_period", "periodo")
       },
       /*{
         title: "Rta CF",
@@ -231,6 +231,7 @@ class CaseTable extends React.Component {
       <Table
         dataSource={this.props.dataSource}
         columns={columns}
+        bordered={true}
         expandedRowRender={record => (
           <Columns gap={"0px"} columns={3}>
             <div>
@@ -248,9 +249,9 @@ class CaseTable extends React.Component {
         pagination={{
           defaultPageSize: 10,
           showSizeChanger: true,
+          locale: { items_per_page: "por página" },
           pageSizeOptions: ["10", "20", "50", "100"],
-          position: "both",
-          showQuickJumper: true,
+          position: "bottom",
           size: "small",
           showTotal: showTotal
         }}

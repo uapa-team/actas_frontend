@@ -101,10 +101,11 @@ class Home extends React.Component {
             marginBottom: "10px"
           }}
         >
-          <Col span={7}>
+          <Col span={2} />
+          <Col span={10}>
             <Title style={{ marginBottom: "0px" }}>Casos Estudiantiles</Title>
           </Col>
-          <Col span={3}>
+          <Col span={4}>
             <PrimButton>
               <Button
                 block
@@ -121,7 +122,7 @@ class Home extends React.Component {
             />
           </Col>
           <Col span={1} />
-          <Col span={3}>
+          <Col span={4}>
             <PrimButton>
               <Button
                 block
@@ -136,58 +137,6 @@ class Home extends React.Component {
               visible={this.state.createDrawerVisible}
               onClose={this.closeDrawer}
             />
-          </Col>
-          <Col span={2} style={{ textAlignLast: "center" }}>
-            <Tooltip title="Filtar por número de acta">
-              <Switch
-                checked={this.state.filterByMinute}
-                onChange={checked =>
-                  this.filerByMinute(
-                    checked,
-                    this.state.minuteSearch,
-                    this.state.yearSearch
-                  )
-                }
-              />
-            </Tooltip>
-          </Col>
-          <Col span={2}>
-            <InputNumber
-              disabled={!this.state.filterByMinute}
-              min={0}
-              defaultValue={1}
-              onChange={value =>
-                this.filerByMinute(
-                  this.state.filterByMinute,
-                  value,
-                  this.state.yearSearch
-                )
-              }
-            />
-          </Col>
-          <Col span={2}>
-            <InputNumber
-              disabled={!this.state.filterByMinute}
-              min={2000}
-              defaultValue={2020}
-              onChange={value =>
-                this.filerByMinute(
-                  this.state.filterByMinute,
-                  this.state.minuteSearch,
-                  value
-                )
-              }
-            />
-          </Col>
-          <Col span={4}>
-            <PrimButton>
-              <Search
-                placeholder="Documento"
-                onChange={v => this.performSearch(v.target.value)}
-                value={this.state.searchTerm}
-                enterButton
-              />
-            </PrimButton>
           </Col>
         </Row>
         <Row>
