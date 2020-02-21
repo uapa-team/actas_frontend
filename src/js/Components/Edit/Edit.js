@@ -57,8 +57,13 @@ class Edit extends React.Component {
         typeof this.state.case[i[0]] !== "undefined" &&
         this.state.case[i[0]] !== ""
       ) {
-        console.log(this.state.case[i[0]].map(i => i["cases"][0]));
-        i[1].default = this.state.case[i[0]].map(i => i["cases"][0]);
+        i[1].default = Array.from(
+          this.state.case[i[0]].map((i, index) => {
+            let dirResult = i["cases"][0];
+            dirResult["key"] = index;
+            return dirResult;
+          })
+        );
       }
       return (
         <MutableTable

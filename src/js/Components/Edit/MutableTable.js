@@ -212,8 +212,7 @@ class MutableTable extends React.Component {
     super(props);
     this.state = {
       dataSource: this.props.dataSource,
-      editingKey: "",
-      count: 0
+      editingKey: ""
     };
     this.columns = [];
     Object.entries(this.props.metadata.fields).forEach(fld => {
@@ -245,16 +244,14 @@ class MutableTable extends React.Component {
   }
 
   handleAdd = () => {
-    const { count, dataSource } = this.state;
-    const newData = { key: count };
+    let newItem = { key: this.state.dataSource.length };
     Object.entries(this.props.metadata.fields).forEach(fld => {
-      newData[fld[0]] = "Editar";
+      newItem[fld[0]] = "Editar";
     });
+    let newDataSource = this.state.dataSource.concat(newItem);
     this.setState({
-      dataSource: [...dataSource, newData],
-      count: count + 1
+      dataSource: newDataSource
     });
-    console.log(dataSource);
   };
 
   handleDelete = key => {
@@ -352,14 +349,6 @@ class MutableTable extends React.Component {
         </Form.Item>
       </div>
     );
-  }
-
-  componentDidMount() {
-    var dataFormat = [];
-    this.props.metadata.default.forEach(singleData =>
-      dataFormat.push(singleData["cases"][0])
-    );
-    this.setState({ dataSource: dataFormat });
   }
 }
 
