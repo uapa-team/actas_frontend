@@ -211,7 +211,7 @@ class MutableTable extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      dataSource: [],
+      dataSource: this.props.dataSource,
       editingKey: "",
       count: 0
     };

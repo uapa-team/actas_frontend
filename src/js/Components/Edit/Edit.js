@@ -52,17 +52,19 @@ class Edit extends React.Component {
     return this.state.fields.map(this.createTable);
   };
   createTable = i => {
-    if (
-      typeof this.state.case[i[0]] !== "undefined" &&
-      this.state.case[i[0]] !== ""
-    ) {
-      i[1].default = this.state.case[i[0]];
-    }
     if (i[1].type === "Table") {
+      if (
+        typeof this.state.case[i[0]] !== "undefined" &&
+        this.state.case[i[0]] !== ""
+      ) {
+        console.log(this.state.case[i[0]].map(i => i["cases"][0]));
+        i[1].default = this.state.case[i[0]].map(i => i["cases"][0]);
+      }
       return (
         <MutableTable
           key={i[0]}
           fieldName={i[0]}
+          dataSource={i[1].default}
           metadata={i[1]}
           form={this.props.form}
         />
