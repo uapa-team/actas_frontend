@@ -246,7 +246,8 @@ class MutableTable extends React.Component {
   handleAdd = () => {
     let newItem = { key: this.state.dataSource.length };
     Object.entries(this.props.metadata.fields).forEach(fld => {
-      newItem[fld[0]] = "Editar";
+      console.log(fld);
+      newItem[fld[0]] = fld[0]["default"];
     });
     let newDataSource = this.state.dataSource.concat(newItem);
     this.setState({
@@ -268,8 +269,12 @@ class MutableTable extends React.Component {
       ...row
     });
     this.setState({ dataSource: newData });
+    this.saveInForm();
+  };
+
+  saveInForm() {
     var toReturn = {};
-    var dataAux = _.cloneDeep(newData);
+    var dataAux = _.cloneDeep(this.state.dataSource);
     toReturn[`${this.props.fieldName}`] = {
       value: dataAux,
       errors: []
@@ -278,7 +283,7 @@ class MutableTable extends React.Component {
       delete i.key;
     });
     this.props.form.setFields(toReturn);
-  };
+  }
 
   isEditing = record => record.key === this.state.editingKey;
 
@@ -349,6 +354,10 @@ class MutableTable extends React.Component {
         </Form.Item>
       </div>
     );
+  }
+
+  componentDidMount() {
+    this.saveInForm();
   }
 }
 

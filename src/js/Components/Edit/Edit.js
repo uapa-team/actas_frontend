@@ -132,7 +132,9 @@ class Edit extends React.Component {
 
   saveCaseReturn = e => {
     this.saveCase(e);
-    //return();
+    this.props.history.push({
+      pathname: "/home/"
+    });
   };
 
   render() {
