@@ -254,6 +254,7 @@ class MutableTable extends React.Component {
       dataSource: [...dataSource, newData],
       count: count + 1
     });
+    console.log(dataSource);
   };
 
   handleDelete = key => {
@@ -351,6 +352,14 @@ class MutableTable extends React.Component {
         </Form.Item>
       </div>
     );
+  }
+
+  componentDidMount() {
+    var dataFormat = [];
+    this.props.metadata.default.forEach(singleData =>
+      dataFormat.push(singleData["cases"][0])
+    );
+    this.setState({ dataSource: dataFormat });
   }
 }
 
