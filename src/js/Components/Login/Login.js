@@ -39,8 +39,9 @@ class NormalLoginForm extends React.Component {
           message.success({ content: "Inicio de sesión exitoso.", key });
           let res = await response.json();
           localStorage.setItem("jwt", res["token"]);
-          window.location.href = "/home";
-          // this.props.history.push("/home");
+          //window.location.href = "%PUBLIC_URL%/home";
+          this.props.history.push("/home");
+          window.location.reload();
         } else {
           message.error({
             content: "Error realizando el login.",

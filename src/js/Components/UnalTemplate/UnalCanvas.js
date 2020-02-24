@@ -209,7 +209,7 @@ class UnalCanvas extends Component {
               </div>
               <div className="mainMenu">
                 <div className="btn-group">
-                  <a href="/home" className="btn btn-default dropdown-toggle">
+                  <a href="/actas/home" className="btn btn-default dropdown-toggle">
                     Inicio
                   </a>
                   <span className="caret-right" />
@@ -241,7 +241,7 @@ class UnalCanvas extends Component {
                           onClick={() => {
                             Backend.sendRequest("GET", "logout");
                             localStorage.removeItem("jwt");
-                            window.location.href = "/";
+                            window.location.reload();
                           }}
                           className="btn btn-default dropdown-toggle"
                         >
