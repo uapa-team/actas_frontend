@@ -4,13 +4,70 @@ import { withRouter } from "react-router-dom";
 import Functions from "../../../Functions";
 import Highlighter from "react-highlight-words";
 import Columns from "react-columns";
+import Backend from "../../../serviceBackend";
 
 class CaseTable extends React.Component {
-  confirmCancel = archiveType => {
+  constructor(props) {
+    super(props);
+    this.state = {
+      info_case: {}
+    };
+  }
+
+  confirmCancel = (archiveType, id) => {
+    var values = {};
+    values["id"] = id;
+
     if (archiveType) {
-      message.success("Solicitud anulada exitosamente.");
+      Backend.sendRequest("GET", `case?id=${id}`)
+        .then(response => {
+          return response.json();
+        })
+        .then(data => {
+          data.cases[0]["approval_status"] = "Anular";
+          return this.setState({ info_case: data.cases[0] });
+        })
+        .then(_ => {
+          Backend.sendRequest("PATCH", "case", {
+            items: [this.state.info_case]
+          }).then(response => {
+            if (response.status === 200) {
+              message.success("Solicitud anulada exitosamente.");
+            } else if (response.status === 401) {
+              message.error("Usuario sin autorización.");
+            } else {
+              message.error("Ha ocurrido un error anulando el caso.");
+              console.error(
+                "Login Error: Backend HTTP code " + response.status
+              );
+            }
+          });
+        });
     } else {
-      message.success("Solicitud desistida exitosamente.");
+      Backend.sendRequest("GET", `case?id=${id}`)
+        .then(response => {
+          return response.json();
+        })
+        .then(data => {
+          data.cases[0]["approval_status"] = "Desistir";
+          return this.setState({ info_case: data.cases[0] });
+        })
+        .then(_ => {
+          Backend.sendRequest("PATCH", "case", {
+            items: [this.state.info_case]
+          }).then(response => {
+            if (response.status === 200) {
+              message.success("Solicitud desistida exitosamente.");
+            } else if (response.status === 401) {
+              message.error("Usuario sin autorización.");
+            } else {
+              message.error("Ha ocurrido un error desistiendo el caso.");
+              console.error(
+                "Login Error: Backend HTTP code " + response.status
+              );
+            }
+          });
+        });
     }
   };
 
@@ -201,8 +258,8 @@ class CaseTable extends React.Component {
             <br />
             <Popconfirm
               title="¿Qué acción desea tomar con la solicitud?"
-              onConfirm={() => this.confirmCancel(true)}
-              onCancel={() => this.confirmCancel(false)}
+              onConfirm={() => this.confirmCancel(true, record.id)}
+              onCancel={() => this.confirmCancel(false, record.id)}
               okText="Anular"
               cancelText="Desistir"
               placement="left"

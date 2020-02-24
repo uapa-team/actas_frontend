@@ -1,6 +1,6 @@
 export default class Backend {
-  static backEndUrl = 'https://ingenieria.bogota.unal.edu.co/actas-api/';
-  //static backEndUrl = "http://127.0.0.1:8000/council_minutes/";
+  //static backEndUrl = 'https://ingenieria.bogota.unal.edu.co/actas-api/';
+  static backEndUrl = "http://127.0.0.1:8000/council_minutes/";
 
   static openLink(url) {
     window.open(this.backEndUrl + url, "_blank");
