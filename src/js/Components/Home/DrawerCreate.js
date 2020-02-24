@@ -64,6 +64,7 @@ class DrawerCreate extends React.Component {
                 content: "El caso se ha guardado exitosamente.",
                 key
               });
+              window.location.reload();
             } else if (response.status === 401) {
               message.error({
                 content: "Usuario sin autorización para guardar casos.",
