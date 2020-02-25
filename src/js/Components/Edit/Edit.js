@@ -163,7 +163,7 @@ class Edit extends React.Component {
               </Button>
               <Popconfirm
                 title="¿Qué tipo de vista previa desea generar?"
-                onConfirm={() => Functions.generateCouncil(true, this.state.id)}
+                onConfirm={() => Functions.generateCouncil(false, this.state.id)}
                 onCancel={() => Functions.generateCouncil(true, this.state.id)}
                 okText="Consejo"
                 cancelText="Comité"
