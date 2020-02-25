@@ -23,8 +23,7 @@ class DrawerCreate extends React.Component {
     this.state = {
       programs: [],
       cases: [],
-      periods: [],
-      id: undefined
+      periods: []
     };
   }
 
@@ -64,13 +63,17 @@ class DrawerCreate extends React.Component {
                 content: "El caso se ha guardado exitosamente.",
                 key
               });
-              window.location.reload();
+              response.json().then(data =>
+                redirect(
+                  data["inserted_items"][0],
+                  "Request." + this.props.form.getFieldValue("_cls")
+                )
+              );
             } else if (response.status === 401) {
               message.error({
                 content: "Usuario sin autorización para guardar casos.",
                 key
               });
-              this.setState({ id: undefined });
             } else {
               message.error({
                 content: "Ha habido un error guardando el caso.",
@@ -79,24 +82,17 @@ class DrawerCreate extends React.Component {
               console.error(
                 "Login Error: Backend HTTP code " + response.status
               );
-              this.setState({ id: undefined });
             }
-            return response.json();
+            return ;
           })
-          .then(data =>
-            redirect(
-              data["inserted_items"][0],
-              "Request." + this.props.form.getFieldValue("_cls")
-            )
-          )
           .catch(error => {
             message.error({
               content: "Ha habido un error guardando el caso.",
               key
             });
             console.error("Error en guardando el caso");
+            console.error(values);
             console.error(error);
-            this.setState({ id: undefined });
           });
       }
     });
@@ -104,10 +100,9 @@ class DrawerCreate extends React.Component {
 
   handleSaveAndEdit = e => {
     e.preventDefault();
-    this.handleSave(e, (id, cls) => {
+    this.handleSave(e, (id) => {
       this.props.history.push({
-        pathname: "/edit/" + id,
-        state: { _cls: cls }
+        pathname: "/edit/" + id
       });
     });
   };
@@ -304,7 +299,7 @@ class DrawerCreate extends React.Component {
           <Row>
             <Col span={12}>
               <Form.Item label="Número del Acta">
-                {getFieldDecorator("council_year", {
+                {getFieldDecorator("consecutive_minute", {
                   initialValue: 1,
                   rule: [
                     {
@@ -323,7 +318,7 @@ class DrawerCreate extends React.Component {
             </Col>
             <Col span={12}>
               <Form.Item label="Año">
-                {getFieldDecorator("council_minute", {
+                {getFieldDecorator("year", {
                   initialValue: 2020,
                   rule: [
                     {
