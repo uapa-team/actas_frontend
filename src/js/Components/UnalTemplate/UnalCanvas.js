@@ -241,6 +241,7 @@ class UnalCanvas extends Component {
                           onClick={() => {
                             Backend.sendRequest("GET", "logout");
                             localStorage.removeItem("jwt");
+                            localStorage.removeItem("type");
                             window.location.reload();
                           }}
                           className="btn btn-default dropdown-toggle"
