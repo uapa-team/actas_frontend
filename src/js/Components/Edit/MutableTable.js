@@ -252,10 +252,12 @@ class MutableTable extends React.Component {
         newItem[fld[0]] = fld[1]["display"];
       }
     });
+    
     let newDataSource = this.state.dataSource.concat(newItem);
     this.setState({
       dataSource: newDataSource
     });
+    console.log(this.state.dataSource);
   };
 
   handleDelete = key => {
