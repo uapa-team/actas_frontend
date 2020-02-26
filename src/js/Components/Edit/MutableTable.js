@@ -246,10 +246,14 @@ class MutableTable extends React.Component {
   handleAdd = () => {
     let newItem = { key: this.state.dataSource.length };
     Object.entries(this.props.metadata.fields).forEach(fld => {
-      console.log(fld);
+      console.log(fld)
       newItem[fld[0]] = fld[1]["default"];
-      if (newItem[fld[0]] === "" || typeof newItem[fld[0]] === "undefined") {
-        newItem[fld[0]] = fld[1]["display"];
+      if (newItem[fld[0]] === "" || fld[1]["default"] === null) {
+        if(fld[1]["type"] == "Integer"){        
+          newItem[fld[0]] = 1;
+        }else{
+          newItem[fld[0]] = fld[1]["display"];
+        }
       }
     });
     
