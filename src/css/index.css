@@ -28,3 +28,19 @@ code {
 .saveCaseButton {
   margin-right: 20px;
 }
+
+.ant-table-tbody tr:first-child {
+  background-color: whitesmoke;
+}
+
+.ant-table-tbody tr:nth-child(even) {
+  background-color: whitesmoke;
+}
+
+.ant-table-tbody tr:nth-child(odd) {
+  background-color: white;
+}
+
+.ant-table-tbody tr:last-child {
+  background-color: whitesmoke;
+}

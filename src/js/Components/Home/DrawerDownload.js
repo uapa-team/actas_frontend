@@ -151,7 +151,7 @@ class DrawerDownload extends React.Component {
               onClick={e => this.props.onClose(e, "Download")}
               style={{ marginRight: 8 }}
             >
-              Cancel
+              Cancelar
             </Button>
             <Button
               onClick={e => {
