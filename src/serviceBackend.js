@@ -7,7 +7,7 @@ export default class Backend {
   }
 
   static sendRequest(method, path, body) {
-    return this._request(
+    let answer = this._request(
       method,
       path,
       {
@@ -17,6 +17,11 @@ export default class Backend {
       },
       body
     );
+    if (answer.then(res => res.status) === 401) {
+      localStorage.removeItem("jwt");
+      window.location.reload();
+    }
+    return answer;
   }
 
   static sendLogin(username, password) {

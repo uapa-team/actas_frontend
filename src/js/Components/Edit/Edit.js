@@ -91,7 +91,6 @@ class Edit extends React.Component {
             values[i] = values[i].utc().format();
           }
         }
-        console.log(values);
 
         Backend.sendRequest("PATCH", "case", {
           items: [values]
