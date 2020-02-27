@@ -82,26 +82,28 @@ class Home extends React.Component {
   render() {
     return (
       <div style={{ marginHorizontal: "50px" }}>
-        <Divider style={{ background: "#ffffff00" }} />
-        <Row
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            marginBottom: "10px"
-          }}
-        >
-          <Col span={2} />
-          <Col span={10}>
-            <Title style={{ marginBottom: "0px" }}>Casos Estudiantiles</Title>
-          </Col>
-          <Col span={4}>
+        <Divider style={{ background: "#ffffff00" }} />               
+          {localStorage.getItem("type") !== "secretary" ? //When not secretary:
+            <Row
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              marginBottom: "10px"
+            }}
+          >
+            <Col span={2} />
+            <Col span={10}>
+              <Title style={{ marginBottom: "0px" }}>Casos Estudiantiles</Title>
+            </Col>
+            <Col span={4}>
             <PrimButton>
               <Button
                 block
                 type="primary"
                 icon="download"
                 onClick={e => this.showDrawer(e, "Download")}
+                className="generateCM_button"
               >
                 Generar Acta
               </Button>
@@ -119,6 +121,7 @@ class Home extends React.Component {
                 type="primary"
                 icon="plus"
                 onClick={e => this.showDrawer(e, "Create")}
+                className="createCM_button"
               >
                 Crear un nuevo caso
               </Button>
@@ -127,8 +130,20 @@ class Home extends React.Component {
               visible={this.state.createDrawerVisible}
               onClose={this.closeDrawer}
             />
-          </Col>
-        </Row>
+            </Col></Row> : //When secretary:
+          <Row
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            marginBottom: "10px"
+          }}
+        >
+          <Col span={2} />
+          <Col span={10}>
+            <Title style={{ marginBottom: "0px" }}>Casos Estudiantiles</Title>
+            </Col></Row>
+        }          
         <Row>
           <CaseTable
             dataSource={

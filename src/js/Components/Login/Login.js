@@ -21,6 +21,7 @@ class NormalLoginForm extends React.Component {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
+        console.log(values)
         this.performLogin();
       }
     });
@@ -38,7 +39,9 @@ class NormalLoginForm extends React.Component {
         } else if (response.status === 200) {
           message.success({ content: "Inicio de sesión exitoso.", key });
           let res = await response.json();
+          console.log(res)
           localStorage.setItem("jwt", res["token"]);
+          localStorage.setItem("type", res["group"]);
           //window.location.href = "%PUBLIC_URL%/home";
           this.props.history.push("/home");
           window.location.reload();

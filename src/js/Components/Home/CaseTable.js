@@ -6,6 +6,8 @@ import Highlighter from "react-highlight-words";
 import Columns from "react-columns";
 import Backend from "../../../serviceBackend";
 
+import moment from 'moment';
+
 class CaseTable extends React.Component {
   constructor(props) {
     super(props);
@@ -155,6 +157,15 @@ class CaseTable extends React.Component {
     this.setState({ searchText: "" });
   };
 
+  date_diff_indays = (now, created) => {
+    created = created.replace(/(\d{4})-(\d{1,2})-(\d{1,2})/, function(match,y,m,d) { 
+        return m + '/' + d + '/' + y;  
+    });
+    var dt1 = new Date(now);
+    var dt2 = new Date(created);
+    return parseInt((dt1 - dt2) / (1000 * 60 * 60 * 24), 10); 
+  };
+
   render() {
     var columns = [
       {
@@ -186,65 +197,31 @@ class CaseTable extends React.Component {
         sorter: (a, b) => a.academic_program.localeCompare(b.academic_program),
         ...this.getColumnSearchProps("academic_program", "programa")
       },
-      /*{
-        title: "Creación",
-        dataIndex: "date_stamp",
-        key: "date_stamp",
-        width: "10%",
-        sorter: (a, b) => a.date_stamp.localeCompare(b.date_stamp),
-        ...this.getColumnSearchProps("date_stamp")
-      },*/
-      /*{
-        title: "Radicación",
-        dataIndex: "date",
-        key: "date",
-        width: "10%",
-        sorter: (a, b) => a.date.localeCompare(b.date),
-        ...this.getColumnSearchProps("date")
-      },*/
       {
         title: "Acta #",
         dataIndex: "consecutive_minute",
         key: "consecutive_minute",
         width: "10%",
-        //sorter: (a, b) => a.consecutive_minute.localeCompare(b.consecutive_minute),
         ...this.getColumnSearchProps("consecutive_minute", "acta")
       },
       {
         title: "Año",
         dataIndex: "year",
         key: "year",
-        //sorter: (a, b) => a.year.localeCompare(b.year),
         ...this.getColumnSearchProps("year", "año")
       },
       {
         title: "Periodo",
         dataIndex: "academic_period",
         key: "academic_period",
-        //sorter: (a, b) => a.academic_period.localeCompare(b.academic_period),
         ...this.getColumnSearchProps("academic_period", "periodo")
       },
-      /*{
-        title: "Rta CF",
-        dataIndex: "approval_status",
-        key: "approval_status",
-        width: "8%",
-        sorter: (a, b) => a.approval_status.localeCompare(b.approval_status),
-        ...this.getColumnSearchProps("approval_status")
-      },
-      {
-        title: "Rta CA",
-        dataIndex: "advisor_response",
-        key: "advisor_response",
-        width: "8%",
-        ...this.getColumnSearchProps("advisor_response")
-      },*/
       {
         title: "Editar",
         key: "edit",
         render: (text, record) => (
           <span>
-            {/* eslint-disable-next-line */}
+            {/* eslint-disable-next-line */}            
             <a
               onClick={() =>
                 this.props.history.push({
@@ -283,10 +260,61 @@ class CaseTable extends React.Component {
         )
       }
     ];
+
+    var columnsSecretary = [
+      {
+        title: "Tipo de solicitud",
+        dataIndex: "_cls_display",
+        key: "_cls_display",
+        width: "20%",
+        sorter: (a, b) => a._cls_display.localeCompare(b._cls_display),
+        ...this.getColumnSearchProps("_cls_display", "tipo de solicitud")
+      },
+      {
+        title: "DNI",
+        dataIndex: "student_dni",
+        key: "student_dni",
+        ...this.getColumnSearchProps("student_dni", "DNI")
+      },
+      {
+        title: "Nombres",
+        dataIndex: "student_name",
+        key: "student_name",
+        sorter: (a, b) => a.student_name.localeCompare(b.student_name),
+        ...this.getColumnSearchProps("student_name", "nombres")
+      },
+      {
+        title: "Plan de estudios",
+        dataIndex: "academic_program",
+        key: "academic_program",
+        sorter: (a, b) => a.academic_program.localeCompare(b.academic_program),
+        ...this.getColumnSearchProps("academic_program", "programa")
+      },
+      {
+        title: "Acta #",
+        dataIndex: "consecutive_minute",
+        key: "consecutive_minute",
+        width: "10%",
+        ...this.getColumnSearchProps("consecutive_minute", "acta")
+      },
+      {
+        title: "Año",
+        dataIndex: "year",
+        key: "year",
+        ...this.getColumnSearchProps("year", "año")
+      },
+      {
+        title: "Periodo",
+        dataIndex: "academic_period",
+        key: "academic_period",
+        ...this.getColumnSearchProps("academic_period", "periodo")
+      },
+    ];
+
     return (
-      <Table
+        <Table
         dataSource={this.props.dataSource}
-        columns={columns}
+        columns={localStorage.getItem("type") !== "secretary" ? columns : columnsSecretary }
         bordered={true}
         expandedRowRender={record => (
           <Columns gap={"0px"} columns={3}>
@@ -298,6 +326,13 @@ class CaseTable extends React.Component {
             </div>
             <div>
               <b>Respuesta de Comité Asesor:</b> {record.advisor_response}.
+            </div>
+            <div>
+              <b>Instancia que decide:</b> {record.decision_maker}.
+            </div>
+            <div>
+              <b>Días desde la radicación:</b> {
+                this.date_diff_indays(moment().format('MM/DD/YYYY'), record.date)}.
             </div>
           </Columns>
         )}
@@ -311,7 +346,7 @@ class CaseTable extends React.Component {
           size: "small",
           showTotal: showTotal
         }}
-      />
+      /> 
     );
   }
 }

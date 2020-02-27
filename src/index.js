@@ -22,11 +22,24 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
   />
 );
 
+const PublicRoute = ({ component: Component, ...rest }) => (
+  <Route
+    {...rest}
+    render={props =>
+      localStorage.getItem("jwt") === null ? (
+        <Component {...props} />
+      ) : (
+        <Redirect to="/home" />
+      )
+    }
+  />
+);
+
 ReactDOM.render(
   <BrowserRouter basename={"/actas"}>
     <UnalCanvas>
       <Switch>
-        <Route exact path="/" component={LoginForm} />
+        <PublicRoute exact path="/" component={LoginForm} />
         <Route exact path="/contact" component={Contact} />
         <PrivateRoute exact path="/home" component={Home} />
         <PrivateRoute exact path="/edit/:id" component={Edit} />
