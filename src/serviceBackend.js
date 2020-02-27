@@ -7,7 +7,7 @@ export default class Backend {
   }
 
   static sendRequest(method, path, body) {
-    let answer = this._request(
+    return this._request(
       method,
       path,
       {
@@ -17,11 +17,6 @@ export default class Backend {
       },
       body
     );
-    if (answer.then(res => res.status) === 401) {
-      localStorage.removeItem("jwt");
-      window.location.reload();
-    }
-    return answer;
   }
 
   static sendLogin(username, password) {
@@ -40,10 +35,17 @@ export default class Backend {
   }
 
   static _request(method, path, headers, body) {
-    return fetch(this.backEndUrl + path, {
+    let answer = fetch(this.backEndUrl + path, {
       method: method,
       headers: headers,
       body: JSON.stringify(body)
     });
+    answer.then(res => {
+      if (res.status=== 401) {
+        localStorage.removeItem("jwt");
+        window.location.reload();
+      }
+    });
+    return answer;
   }
 }
