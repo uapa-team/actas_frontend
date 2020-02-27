@@ -142,7 +142,26 @@ class Home extends React.Component {
           <Col span={2} />
           <Col span={10}>
             <Title style={{ marginBottom: "0px" }}>Casos Estudiantiles</Title>
-            </Col></Row>
+            </Col>
+            <Col span={1} />
+          <Col span={4}>
+            <PrimButton>
+              <Button
+                block
+                type="primary"
+                icon="plus"
+                onClick={e => this.showDrawer(e, "Create")}
+                className="createCM_button"
+              >
+                Crear un nuevo caso
+              </Button>
+            </PrimButton>
+            <DrawerCreate
+              visible={this.state.createDrawerVisible}
+              onClose={this.closeDrawer}
+            />
+            </Col>
+          </Row>
         }          
         <Row>
           <CaseTable

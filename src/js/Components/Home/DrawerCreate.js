@@ -366,13 +366,17 @@ class DrawerCreate extends React.Component {
           >
             Guardar
           </Button>
-          <Button
-            type="primary"
-            onClick={e => this.handleSaveAndEdit(e)}
-            style={{ marginRight: 8 }}
-          >
-            Guardar y editar
+          {localStorage.getItem("type") !== "secretary" ?
+            <Button
+              type="primary"
+              onClick={e => this.handleSaveAndEdit(e)}
+              style={{ marginRight: 8 }}
+            >
+              Guardar y editar
           </Button>
+            :
+            null
+          }
         </div>
       </Drawer>
     );
