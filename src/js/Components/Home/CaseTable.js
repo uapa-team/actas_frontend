@@ -171,7 +171,8 @@ class CaseTable extends React.Component {
     .then(response => {
       console.log("holi" + response.status)
       if(response.status === 200){
-        message.success("Solicitud recibida correctamente.");        
+        message.success("Solicitud recibida correctamente.");
+        this.props.updateDataSource(id);
       }else{
         message.error("No se ha podido marcar como recibido. Es posible que falte un campo por llenar.");
       }

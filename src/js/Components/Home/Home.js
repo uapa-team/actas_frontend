@@ -13,6 +13,7 @@ class Home extends React.Component {
   constructor(props) {
     super(props);
     this.closeDrawer = this.closeDrawer.bind(this);
+    this.updateDataSource = this.updateDataSource.bind(this);
     this.state = {
       dataSource: [],
       dataMatches: [],
@@ -24,6 +25,19 @@ class Home extends React.Component {
       yearSearch: 2020
     };
   }
+
+  updateDataSource = id => {
+    var newDataSource = this.state.dataSource;
+    newDataSource.forEach(item => {
+      if (item.id == id){
+        item.received_date = 'Recibido'      
+      }    
+    })
+    this.setState({
+      "dataSource" : newDataSource,
+    })  
+  }
+
   performSearch = keyTerm => {
     this.setState({ searchTerm: keyTerm });
     this.setState({ filterByMinute: false });
@@ -165,6 +179,7 @@ class Home extends React.Component {
         }          
         <Row>
           <CaseTable
+            updateDataSource = {this.updateDataSource}
             dataSource={
               this.state.searchTerm === "" && !this.state.filterByMinute
                 ? this.state.dataSource
