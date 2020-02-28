@@ -166,6 +166,20 @@ class CaseTable extends React.Component {
     return parseInt((dt1 - dt2) / (1000 * 60 * 60 * 24), 10); 
   };
 
+  markAsRecieved = id => {
+    Backend.sendRequest("PATCH", `mark_received?id=${id}`)
+    .then(response => {
+      console.log("holi" + response.status)
+      if(response.status === 200){
+        message.success("Solicitud recibida correctamente.");        
+      }else{
+        message.error("No se ha podido marcar como recibido. Es posible que falte un campo por llenar.");
+      }
+    })   
+  }
+
+
+
   render() {
     var columns = [
       {
@@ -220,6 +234,7 @@ class CaseTable extends React.Component {
         title: "Editar",
         key: "edit",
         render: (text, record) => (
+          record.received_date !== 'None' ? //If it has been recieved:
           <span>
             {/* eslint-disable-next-line */}            
             <a
@@ -257,6 +272,21 @@ class CaseTable extends React.Component {
               <a>Vista Previa</a>
             </Popconfirm>
           </span>
+          : //Else - If it hasn't being marked as recieved:
+          <span>
+            {/* eslint-disable-next-line */}            
+            <Popconfirm
+              title="¿Desea marcar como recibido?"
+              onConfirm={() => this.markAsRecieved(record.id)}
+              okText="Sí"
+              cancelText="No"
+              placement="left"
+            >
+              {/* eslint-disable-next-line */}
+              <a>Marcar como recibido</a>
+            </Popconfirm>
+          </span>
+        
         )
       }
     ];
