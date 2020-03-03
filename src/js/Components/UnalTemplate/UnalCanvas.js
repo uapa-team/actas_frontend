@@ -9,7 +9,9 @@ import "../../../css/reset.css";
 import "../../../css/small.css";
 import "../../../css/tablet.css";
 import "../../../css/unal.css";
+
 import "./unal.js";
+import './jquery.js';
 
 class UnalCanvas extends Component {
   constructor(props) {
