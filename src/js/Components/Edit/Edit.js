@@ -176,6 +176,8 @@ class Edit extends React.Component {
           </Columns>
         </Row>
         <Row>
+          <p><b>ID del caso:</b> {this.state.id}.</p>
+          
           <Form>
             <Columns gap={"50px"} columns={2}>
               {this.createInputs()}

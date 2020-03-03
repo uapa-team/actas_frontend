@@ -29,7 +29,7 @@ class Home extends React.Component {
   updateDataSource = id => {
     var newDataSource = this.state.dataSource;
     newDataSource.forEach(item => {
-      if (item.id == id){
+      if (item.id === id){
         item.received_date = 'Recibido'      
       }    
     })

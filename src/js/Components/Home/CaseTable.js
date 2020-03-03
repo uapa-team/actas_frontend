@@ -365,6 +365,9 @@ class CaseTable extends React.Component {
               <b>Días desde la radicación:</b> {
                 this.date_diff_indays(moment().format('MM/DD/YYYY'), record.date)}.
             </div>
+            <div>
+              <b>ID del caso:</b> {record.id}.
+            </div>
           </Columns>
         )}
         rowKey="id"
