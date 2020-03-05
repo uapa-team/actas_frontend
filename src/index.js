@@ -1,13 +1,52 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
-import { BrowserRouter } from 'react-router-dom'
+import React from "react";
+import ReactDOM from "react-dom";
+import UnalCanvas from "./js/Components/UnalTemplate/UnalCanvas";
+import LoginForm from "./js/Components/Login/Login";
+import Home from "./js/Components/Home/Home";
+import Edit from "./js/Components/Edit/Edit";
+import Contact from "./js/Components/Contact/Contact";
+import * as serviceWorker from "./serviceWorker";
+import { BrowserRouter, Route, Redirect, Switch } from "react-router-dom";
+import "./css/index.css";
 
-ReactDOM.render(<BrowserRouter><App /></BrowserRouter>, document.getElementById('root'));
+const PrivateRoute = ({ component: Component, ...rest }) => (
+  <Route
+    {...rest}
+    render={props =>
+      localStorage.getItem("jwt") != null ? (
+        <Component {...props} />
+      ) : (
+        <Redirect to="/" />
+      )
+    }
+  />
+);
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
+const PublicRoute = ({ component: Component, ...rest }) => (
+  <Route
+    {...rest}
+    render={props =>
+      localStorage.getItem("jwt") === null ? (
+        <Component {...props} />
+      ) : (
+        <Redirect to="/home" />
+      )
+    }
+  />
+);
+
+ReactDOM.render(
+  <BrowserRouter basename={"/actas"}>
+    <UnalCanvas>
+      <Switch>
+        <PublicRoute exact path="/" component={LoginForm} />
+        <Route exact path="/contact" component={Contact} />
+        <PrivateRoute exact path="/home" component={Home} />
+        <PrivateRoute exact path="/edit/:id" component={Edit} />
+      </Switch>
+    </UnalCanvas>
+  </BrowserRouter>,
+  document.getElementById("root")
+);
+
 serviceWorker.unregister();

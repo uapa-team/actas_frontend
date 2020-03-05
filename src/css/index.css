@@ -1,0 +1,46 @@
+@font-face {
+  font-family: "Ancizar sans";
+  font-weight: normal;
+  font-style: normal;
+  src: url("../fonts/ancizarsans_regular-webfont.eot"),
+    url("../fonts/ancizarsans_regular-webfont.eot?#iefix")
+      format("embedded-opentype"),
+    url("../fonts/ancizarsans_regular-webfont.woff") format("woff"),
+    url("../fonts/ancizarsans_regular-webfont.ttf") format("truetype"),
+    url("../fonts/ancizarsans_regular-webfont.svg#ancizar_sansbold_italic")
+      format("svg");
+}
+
+body {
+  margin: 0;
+  font-family: "Ancizar sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+    "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+.saveCaseButton {
+  margin-right: 20px;
+}
+
+.ant-table-tbody tr:first-child {
+  background-color: whitesmoke;
+}
+
+.ant-table-tbody tr:nth-child(even) {
+  background-color: whitesmoke;
+}
+
+.ant-table-tbody tr:nth-child(odd) {
+  background-color: white;
+}
+
+.ant-table-tbody tr:last-child {
+  background-color: whitesmoke;
+}
