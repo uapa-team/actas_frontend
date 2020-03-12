@@ -216,18 +216,39 @@ class MutableTable extends React.Component {
     };
     this.columns = [];
     Object.entries(this.props.metadata.fields).forEach(fld => {
-      this.columns.push({
-        title: fld[1].display,
-        dataIndex: fld[0],
-        editable: true,
-        dataType: fld[1].type,
-        choices: fld[1].choices
-      });
+      if (fld[1].display == "Tipología") {
+        this.columns.push({
+          title: fld[1].display,
+          dataIndex: fld[0],
+          editable: true,
+          dataType: fld[1].type,
+          choices: fld[1].choices,
+          width: 300
+        });
+      } else if (fld[1].display == "Créditos") {
+        this.columns.push({
+          title: fld[1].display,
+          dataIndex: fld[0],
+          editable: true,
+          dataType: fld[1].type,
+          choices: fld[1].choices,
+          width: 100
+        });
+      } else {
+        this.columns.push({
+          title: fld[1].display,
+          dataIndex: fld[0],
+          editable: true,
+          dataType: fld[1].type,
+          choices: fld[1].choices
+        });
+      }
     });
     this.columns.push({
       title: "Eliminar",
       dataIndex: "operation",
-      width: "7%",
+      fixed: "right",
+      width: 80,
       render: (text, record) =>
         this.state.dataSource.length >= 1 ? (
           <Popconfirm
@@ -241,22 +262,24 @@ class MutableTable extends React.Component {
           </Popconfirm>
         ) : null
     });
+    this.columns[0]["fixed"] = "left";
+    this.columns[0]["width"] = 300;
   }
 
   handleAdd = () => {
     let newItem = { key: this.state.dataSource.length };
     Object.entries(this.props.metadata.fields).forEach(fld => {
-      console.log(fld)
+      console.log(fld);
       newItem[fld[0]] = fld[1]["default"];
       if (newItem[fld[0]] === "" || fld[1]["default"] === null) {
-        if(fld[1]["type"] === "Integer"){        
+        if (fld[1]["type"] === "Integer") {
           newItem[fld[0]] = 1;
-        }else{
+        } else {
           newItem[fld[0]] = fld[1]["display"];
         }
       }
     });
-    
+
     let newDataSource = this.state.dataSource.concat(newItem);
     this.setState({
       dataSource: newDataSource
@@ -358,6 +381,7 @@ class MutableTable extends React.Component {
               bordered
               dataSource={dataSource}
               columns={columns}
+              scroll={{ x: 3000, y: 300 }}
             />
           )}
         </Form.Item>
