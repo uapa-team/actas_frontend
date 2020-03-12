@@ -7,8 +7,7 @@ import {
   Button,
   Icon,
   Select,
-  InputNumber,
-  Radio
+  InputNumber
 } from "antd";
 import { withRouter } from "react-router-dom";
 import { PrimButton } from "../Home/HomeStyles";
@@ -44,7 +43,7 @@ class EditableCell extends React.Component {
     const { record, handleSave } = this.props;
     this.form.validateFields((error, values) => {
       if (error && error[e.currentTarget.id]) {
-        return;
+        console.log(error);
       }
       this.toggleEdit();
       handleSave({ ...record, ...values });
@@ -75,6 +74,7 @@ class EditableCell extends React.Component {
     } else {
       if (dataType === "String") {
         if (choices) {
+          console.log(choices);
           return (
             <Form.Item>
               {form.getFieldDecorator(dataIndex, {
@@ -161,17 +161,25 @@ class EditableCell extends React.Component {
         return (
           <Form.Item>
             {form.getFieldDecorator(dataIndex, {
-              initialValue: record[dataIndex]
+              initialValue: record[dataIndex] === "True" ? "Si" : "No",
+              rules: [
+                {
+                  required: true,
+                  message: `${title} es requerido.`
+                }
+              ]
             })(
-              <Radio.Group
+              <Select
+                showSearch
+                placeholder={title}
                 ref={node => (this.input = node)}
                 onPressEnter={this.save}
                 onBlur={this.save}
-                buttonStyle="solid"
+                optionFilterProp="children"
               >
-                <Radio.Button value={true}>Sí</Radio.Button>
-                <Radio.Button value={false}>No</Radio.Button>
-              </Radio.Group>
+                <Option value="True">Si</Option>
+                <Option value="False">No</Option>
+              </Select>
             )}
           </Form.Item>
         );
@@ -217,7 +225,7 @@ class MutableTable extends React.Component {
     };
     this.columns = [];
     Object.entries(this.props.metadata.fields).forEach(fld => {
-      if (fld[1].display == "Tipología") {
+      if (fld[1].display === "Tipología") {
         this.columns.push({
           title: fld[1].display,
           dataIndex: fld[0],
@@ -226,7 +234,7 @@ class MutableTable extends React.Component {
           choices: fld[1].choices,
           width: 300
         });
-      } else if (fld[1].display == "Créditos") {
+      } else if (fld[1].display === "Créditos") {
         this.columns.push({
           title: fld[1].display,
           dataIndex: fld[0],
