@@ -13,6 +13,7 @@ import {
 import { withRouter } from "react-router-dom";
 import { PrimButton } from "../Home/HomeStyles";
 import _ from "lodash";
+import "./Edit.css";
 
 const { Option } = Select;
 const EditableContext = React.createContext();

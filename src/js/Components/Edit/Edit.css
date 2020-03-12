@@ -1,0 +1,14 @@
+.editable-cell {
+  position: relative;
+}
+
+.editable-cell-value-wrap {
+  padding: 5px 12px;
+  cursor: pointer;
+}
+
+.editable-row:hover .editable-cell-value-wrap {
+  border: 1px solid #2d2656;
+  border-radius: 4px;
+  padding: 4px 11px;
+}
