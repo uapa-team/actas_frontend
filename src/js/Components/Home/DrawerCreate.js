@@ -10,7 +10,7 @@ import {
   InputNumber,
   Select,
   DatePicker,
-  message
+  message,
 } from "antd";
 import moment from "moment";
 import Backend from "../../../serviceBackend";
@@ -23,23 +23,23 @@ class DrawerCreate extends React.Component {
     this.state = {
       programs: [],
       cases: [],
-      periods: []
+      periods: [],
     };
   }
 
-  autofillName = dni => {
+  autofillName = (dni) => {
     Backend.sendRequest("POST", "autofill", {
       field: "name",
-      student_dni: dni
+      student_dni: dni,
     })
-      .then(response => {
+      .then((response) => {
         if (response.status === 200) {
           return response.json();
         } else {
           return { student_name: "" };
         }
       })
-      .then(data => {
+      .then((data) => {
         this.props.form.setFieldsValue({ student_name: data.student_name });
       });
   };
@@ -54,41 +54,43 @@ class DrawerCreate extends React.Component {
         const key = "updatable";
         message.loading({ content: "Guardando caso...", key });
         Backend.sendRequest("POST", "case", {
-          items: [values]
+          items: [values],
         })
-          .then(response => {
+          .then((response) => {
             this.props.onClose(e, "Create");
             if (response.status === 200) {
               message.success({
                 content: "El caso se ha guardado exitosamente.",
-                key
+                key,
               });
-              response.json().then(data =>
-                redirect(
-                  data["inserted_items"][0],
-                  "Request." + this.props.form.getFieldValue("_cls")
-                )
-              );
+              response
+                .json()
+                .then((data) =>
+                  redirect(
+                    data["inserted_items"][0],
+                    "Request." + this.props.form.getFieldValue("_cls")
+                  )
+                );
             } else if (response.status === 401) {
               message.error({
                 content: "Usuario sin autorización para guardar casos.",
-                key
+                key,
               });
             } else {
               message.error({
                 content: "Ha habido un error guardando el caso.",
-                key
+                key,
               });
               console.error(
                 "Login Error: Backend HTTP code " + response.status
               );
             }
-            return ;
+            return;
           })
-          .catch(error => {
+          .catch((error) => {
             message.error({
               content: "Ha habido un error guardando el caso.",
-              key
+              key,
             });
             console.error("Error en guardando el caso");
             console.error(values);
@@ -98,16 +100,27 @@ class DrawerCreate extends React.Component {
     });
   };
 
-  handleSaveAndEdit = e => {
-    e.preventDefault();
+  handleSaveAux = (e) => {
     this.handleSave(e, (id) => {
-      this.props.history.push({
-        pathname: "/edit/" + id
-      });
+      if (localStorage.getItem("type") !== "secretary") {
+        Backend.sendRequest("PATCH", `mark_received?id=${id}`);
+      }
     });
   };
 
-  selectItem = i => {
+  handleSaveAndEdit = (e) => {
+    e.preventDefault();
+    this.handleSave(e, (id) => {
+      this.props.history.push({
+        pathname: "/edit/" + id,
+      });
+      if (localStorage.getItem("type") !== "secretary") {
+        Backend.sendRequest("PATCH", `mark_received?id=${id}`);
+      }
+    });
+  };
+
+  selectItem = (i) => {
     return (
       <Option value={i} key={i}>
         {i}
@@ -115,7 +128,7 @@ class DrawerCreate extends React.Component {
     );
   };
 
-  selectItemCase = i => {
+  selectItemCase = (i) => {
     return (
       <Option value={i.code} key={i.code}>
         {i.name}
@@ -141,7 +154,7 @@ class DrawerCreate extends React.Component {
       <Drawer
         title="Crear un nuevo caso"
         width={"40%"}
-        onClose={e => this.props.onClose(e, "Create")}
+        onClose={(e) => this.props.onClose(e, "Create")}
         visible={this.props.visible}
         bodyStyle={{ paddingBottom: 80, paddingRight: 60 }}
       >
@@ -158,7 +171,7 @@ class DrawerCreate extends React.Component {
                       addonBefore={
                         <Form.Item>
                           {getFieldDecorator("student_dni_type", {
-                            initialValue: "CC"
+                            initialValue: "CC",
                           })(
                             <Select
                               style={{ width: "5em" }}
@@ -179,7 +192,7 @@ class DrawerCreate extends React.Component {
                       }
                       placeholder="Ingrese el documento del estudiante"
                       key="student_dni"
-                      onBlur={e => this.autofillName(e.target.value)}
+                      onBlur={(e) => this.autofillName(e.target.value)}
                     />
                   </LabelSD>
                 )}
@@ -208,9 +221,9 @@ class DrawerCreate extends React.Component {
                   rules: [
                     {
                       required: true,
-                      message: "Por favor, escoja el tipo de caso"
-                    }
-                  ]
+                      message: "Por favor, escoja el tipo de caso",
+                    },
+                  ],
                 })(
                   <Select
                     showSearch
@@ -266,7 +279,7 @@ class DrawerCreate extends React.Component {
               <Form.Item label="Periodo académico">
                 {getFieldDecorator("academic_period", {
                   initialValue:
-                    moment().year() + (moment().month() < 6 ? "-1S" : "-2S")
+                    moment().year() + (moment().month() < 6 ? "-1S" : "-2S"),
                 })(
                   <Select
                     showSearch
@@ -291,7 +304,7 @@ class DrawerCreate extends React.Component {
             <Col>
               <Form.Item label="Fecha de radicación">
                 {getFieldDecorator("date", {
-                  initialValue: moment()
+                  initialValue: moment(),
                 })(<DatePicker key="date" style={{ width: "100%" }} />)}
               </Form.Item>
             </Col>
@@ -304,9 +317,9 @@ class DrawerCreate extends React.Component {
                   rule: [
                     {
                       min: 0,
-                      message: "El número mínimo del acta es 0"
-                    }
-                  ]
+                      message: "El número mínimo del acta es 0",
+                    },
+                  ],
                 })(
                   <InputNumber
                     placeholder="Número de acta"
@@ -323,13 +336,13 @@ class DrawerCreate extends React.Component {
                   rule: [
                     {
                       min: 2000,
-                      message: "El mínimo año para acta"
+                      message: "El mínimo año para acta",
                     },
                     {
                       min: 2100,
-                      message: "El máximo año del acta es 0"
-                    }
-                  ]
+                      message: "El máximo año del acta es 0",
+                    },
+                  ],
                 })(
                   <InputNumber
                     placeholder="Número de acta"
@@ -350,47 +363,45 @@ class DrawerCreate extends React.Component {
             borderTop: "1px solid #e9e9e9",
             padding: "10px 16px",
             background: "#fff",
-            textAlign: "right"
+            textAlign: "right",
           }}
         >
           <Button
-            onClick={e => this.props.onClose(e, "Create")}
+            onClick={(e) => this.props.onClose(e, "Create")}
             style={{ marginRight: 8 }}
           >
             Cancelar
           </Button>
           <Button
             type="primary"
-            onClick={e => this.handleSave(e, _ => {})}
+            onClick={(e) => this.handleSaveAux(e, (_) => {})}
             style={{ marginRight: 8 }}
           >
             Guardar
           </Button>
-          {localStorage.getItem("type") !== "secretary" ?
+          {localStorage.getItem("type") !== "secretary" ? (
             <Button
               type="primary"
-              onClick={e => this.handleSaveAndEdit(e)}
+              onClick={(e) => this.handleSaveAndEdit(e)}
               style={{ marginRight: 8 }}
             >
               Guardar y editar
-          </Button>
-            :
-            null
-          }
+            </Button>
+          ) : null}
         </div>
       </Drawer>
     );
   }
   componentDidMount() {
     Backend.sendRequest("GET", "details")
-      .then(response => response.json())
-      .then(data => {
+      .then((response) => response.json())
+      .then((data) => {
         this.setState({ programs: data.programs });
         this.setState({ periods: data.periods });
       });
     Backend.sendRequest("GET", "infocase")
-      .then(response => response.json())
-      .then(data => {
+      .then((response) => response.json())
+      .then((data) => {
         this.setState({ cases: data.cases });
       });
   }

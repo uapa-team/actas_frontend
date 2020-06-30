@@ -1,6 +1,6 @@
 export default class Backend {
-  //static backEndUrl = 'https://ingenieria.bogota.unal.edu.co/actas-api/';
-  static backEndUrl = "http://127.0.0.1:8000/council_minutes/";
+  static backEndUrl = "https://ingenieria.bogota.unal.edu.co/actas-api/";
+  //static backEndUrl = "http://127.0.0.1:8000/council_minutes/";
 
   static openLink(url) {
     window.open(this.backEndUrl + url, "_blank");
@@ -13,7 +13,7 @@ export default class Backend {
       {
         Accept: "application/json",
         "Content-Type": "application/json",
-        Authorization: "Token " + localStorage.getItem("jwt")
+        Authorization: "Token " + localStorage.getItem("jwt"),
       },
       body
     );
@@ -25,11 +25,11 @@ export default class Backend {
       "login",
       {
         Accept: "application/json",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
       {
         username: username,
-        password: password
+        password: password,
       }
     );
   }
@@ -38,10 +38,10 @@ export default class Backend {
     let answer = fetch(this.backEndUrl + path, {
       method: method,
       headers: headers,
-      body: JSON.stringify(body)
+      body: JSON.stringify(body),
     });
-    answer.then(res => {
-      if (res.status=== 401) {
+    answer.then((res) => {
+      if (res.status === 401) {
         localStorage.removeItem("jwt");
         window.location.reload();
       }

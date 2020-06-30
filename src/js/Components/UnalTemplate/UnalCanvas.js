@@ -11,17 +11,17 @@ import "../../../css/tablet.css";
 import "../../../css/unal.css";
 
 import "./unal.js";
-import './jquery.js';
+import "./jquery.js";
 
 class UnalCanvas extends Component {
   constructor(props) {
     super(props);
     this.handleSession = this.handleSession.bind(this);
     this.state = {
-      logged: false
+      logged: false,
     };
   }
-  handleSession = logged => {
+  handleSession = (logged) => {
     this.setState({ logged: logged });
   };
   render() {
@@ -211,14 +211,17 @@ class UnalCanvas extends Component {
               </div>
               <div className="mainMenu">
                 <div className="btn-group">
-                  <a href="/actas/home" className="btn btn-default dropdown-toggle">
+                  <a
+                    href="/actas/home"
+                    className="btn btn-default dropdown-toggle"
+                  >
                     Inicio
                   </a>
                   <span className="caret-right" />
                 </div>
                 <div className="btn-group">
                   <a
-                    href="/contact"
+                    href="https://ingenieria.bogota.unal.edu.co/actas/contact"
                     className="btn btn-default dropdown-toggle"
                   >
                     Contáctenos
@@ -293,7 +296,7 @@ class UnalCanvas extends Component {
           style={{
             marginTop: "-20px",
             lineHeight: "normal",
-            overflow: "hidden"
+            overflow: "hidden",
           }}
         >
           <nav className="col-md-3 col-lg-3 col-sm-3 col-xs-4 col-xxs-6 gobiernoLinea">
