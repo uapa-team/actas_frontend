@@ -1,13 +1,9 @@
 import React, { Component } from "react";
 import Backend from "../../../serviceBackend";
-import "../../../css/base.css";
 import "../../../css/bootstrap.min.css";
 import "../../../css/bootstrap-theme.min.css";
-import "../../../css/phone.css";
 import "../../../css/printer.css";
 import "../../../css/reset.css";
-import "../../../css/small.css";
-import "../../../css/tablet.css";
 import "../../../css/unal.css";
 
 import "./unal.js";
@@ -49,10 +45,6 @@ class UnalCanvas extends Component {
         />
         <link type="text/css" href="../../../css/reset.css" media="all" />
         <link type="text/css" href="../../../css/unal.css" media="all" />
-        <link type="text/css" href="../../../css/base.css" media="all" />
-        <link type="text/css" href="../../../css/tablet.css" media="all" />
-        <link type="text/css" href="../../../css/phone.css" media="all" />
-        <link type="text/css" href="../../../css/small.css" media="all" />
         <link type="text/css" href="../../../css/printer.css" media="print" />
         <title>ActasApp: Universidad Nacional de Colombia</title>
         <div id="footfix">
@@ -373,7 +365,7 @@ class UnalCanvas extends Component {
               (+57 1) 316 5000 Ext. 13578
             </p>
             <p className="col-sm-12 col-md-6 derechos">
-              © Copyright 2019
+              © Copyright 2020
               <br /> Algunos derechos reservados.
               <br />
               <a
@@ -384,7 +376,7 @@ class UnalCanvas extends Component {
               </a>
               <br />
               <a href="index.html#">Acerca de este sitio web</a>
-              <br /> Última actualización: 13/02/2020
+              <br /> Última actualización: 23/07/2020
             </p>
           </div>
           <div className="col-md-2 col-lg-2 col-sm-2 col-xs-12 logos">

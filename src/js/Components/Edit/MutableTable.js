@@ -7,7 +7,7 @@ import {
   Button,
   Icon,
   Select,
-  InputNumber
+  InputNumber,
 } from "antd";
 import { withRouter } from "react-router-dom";
 import { PrimButton } from "../Home/HomeStyles";
@@ -27,7 +27,7 @@ const EditableFormRow = Form.create()(EditableRow);
 
 class EditableCell extends React.Component {
   state = {
-    editing: false
+    editing: false,
   };
 
   toggleEdit = () => {
@@ -39,7 +39,7 @@ class EditableCell extends React.Component {
     });
   };
 
-  save = e => {
+  save = (e) => {
     const { record, handleSave } = this.props;
     this.form.validateFields((error, values) => {
       if (error && error[e.currentTarget.id]) {
@@ -50,7 +50,7 @@ class EditableCell extends React.Component {
     });
   };
 
-  renderCell = form => {
+  renderCell = (form) => {
     this.form = form;
     const {
       children,
@@ -58,7 +58,7 @@ class EditableCell extends React.Component {
       title,
       dataType,
       choices,
-      record
+      record,
     } = this.props;
     const { editing } = this.state;
     if (!editing) {
@@ -74,7 +74,6 @@ class EditableCell extends React.Component {
     } else {
       if (dataType === "String") {
         if (choices) {
-          console.log(choices);
           return (
             <Form.Item>
               {form.getFieldDecorator(dataIndex, {
@@ -82,14 +81,14 @@ class EditableCell extends React.Component {
                 rules: [
                   {
                     required: true,
-                    message: `${title} es requerido.`
-                  }
-                ]
+                    message: `${title} es requerido.`,
+                  },
+                ],
               })(
                 <Select
                   showSearch
                   placeholder={title}
-                  ref={node => (this.input = node)}
+                  ref={(node) => (this.input = node)}
                   onPressEnter={this.save}
                   onBlur={this.save}
                   optionFilterProp="children"
@@ -103,7 +102,7 @@ class EditableCell extends React.Component {
                   }
                 >
                   {(() => {
-                    return choices.map(ch => {
+                    return choices.map((ch) => {
                       return (
                         <Option value={ch} key={ch}>
                           {ch.normalize("NFD").replace(/[\u0300-\u036f]/g, "")}
@@ -123,12 +122,12 @@ class EditableCell extends React.Component {
                 rules: [
                   {
                     required: true,
-                    message: `${title} es requerido.`
-                  }
-                ]
+                    message: `${title} es requerido.`,
+                  },
+                ],
               })(
                 <Input
-                  ref={node => (this.input = node)}
+                  ref={(node) => (this.input = node)}
                   onPressEnter={this.save}
                   onBlur={this.save}
                   placeholder={title}
@@ -145,12 +144,12 @@ class EditableCell extends React.Component {
               rules: [
                 {
                   required: true,
-                  message: `${title} es requerido.`
-                }
-              ]
+                  message: `${title} es requerido.`,
+                },
+              ],
             })(
               <InputNumber
-                ref={node => (this.input = node)}
+                ref={(node) => (this.input = node)}
                 onPressEnter={this.save}
                 onBlur={this.save}
               />
@@ -161,18 +160,17 @@ class EditableCell extends React.Component {
         return (
           <Form.Item>
             {form.getFieldDecorator(dataIndex, {
-              initialValue: record[dataIndex] === "True" ? "Si" : "No",
               rules: [
                 {
                   required: true,
-                  message: `${title} es requerido.`
-                }
-              ]
+                  message: `${title} es requerido.`,
+                },
+              ],
             })(
               <Select
                 showSearch
                 placeholder={title}
-                ref={node => (this.input = node)}
+                ref={(node) => (this.input = node)}
                 onPressEnter={this.save}
                 onBlur={this.save}
                 optionFilterProp="children"
@@ -221,10 +219,10 @@ class MutableTable extends React.Component {
     super(props);
     this.state = {
       dataSource: this.props.dataSource,
-      editingKey: ""
+      editingKey: "",
     };
     this.columns = [];
-    Object.entries(this.props.metadata.fields).forEach(fld => {
+    Object.entries(this.props.metadata.fields).forEach((fld) => {
       if (fld[1].display === "Tipología") {
         this.columns.push({
           title: fld[1].display,
@@ -232,16 +230,25 @@ class MutableTable extends React.Component {
           editable: true,
           dataType: fld[1].type,
           choices: fld[1].choices,
-          width: 300
+          width: 250,
         });
-      } else if (fld[1].display === "Créditos") {
+      } else if (fld[1].display === "Créditos" || fld[1].display === "Grupo") {
         this.columns.push({
           title: fld[1].display,
           dataIndex: fld[0],
           editable: true,
           dataType: fld[1].type,
           choices: fld[1].choices,
-          width: 100
+          width: 110,
+        });
+      } else if (fld[1].display === "Código") {
+        this.columns.push({
+          title: fld[1].display,
+          dataIndex: fld[0],
+          editable: true,
+          dataType: fld[1].type,
+          choices: fld[1].choices,
+          width: 200,
         });
       } else {
         this.columns.push({
@@ -249,15 +256,19 @@ class MutableTable extends React.Component {
           dataIndex: fld[0],
           editable: true,
           dataType: fld[1].type,
-          choices: fld[1].choices
+          choices: fld[1].choices,
+          width: 250,
         });
       }
     });
+
+    this.columns[0]["fixed"] = "left";
+    this.columns[0]["width"] = 300;
+
     this.columns.push({
-      title: "Eliminar",
+      title: "Eli.",
       dataIndex: "operation",
       fixed: "right",
-      width: 80,
       render: (text, record) =>
         this.state.dataSource.length >= 1 ? (
           <Popconfirm
@@ -269,16 +280,13 @@ class MutableTable extends React.Component {
             {/* eslint-disable-next-line */}
             <Icon type="delete" />
           </Popconfirm>
-        ) : null
+        ) : null,
     });
-    this.columns[0]["fixed"] = "left";
-    this.columns[0]["width"] = 300;
   }
 
   handleAdd = () => {
     let newItem = { key: this.state.dataSource.length };
-    Object.entries(this.props.metadata.fields).forEach(fld => {
-      console.log(fld);
+    Object.entries(this.props.metadata.fields).forEach((fld) => {
       newItem[fld[0]] = fld[1]["default"];
       if (newItem[fld[0]] === "" || fld[1]["default"] === null) {
         if (fld[1]["type"] === "Integer") {
@@ -291,23 +299,24 @@ class MutableTable extends React.Component {
 
     let newDataSource = this.state.dataSource.concat(newItem);
     this.setState({
-      dataSource: newDataSource
+      dataSource: newDataSource,
     });
-    console.log(this.state.dataSource);
   };
 
-  handleDelete = key => {
+  handleDelete = (key) => {
     const dataSource = [...this.state.dataSource];
-    this.setState({ dataSource: dataSource.filter(item => item.key !== key) });
+    this.setState({
+      dataSource: dataSource.filter((item) => item.key !== key),
+    });
   };
 
-  handleSave = row => {
+  handleSave = (row) => {
     const newData = [...this.state.dataSource];
-    const index = newData.findIndex(item => row.key === item.key);
+    const index = newData.findIndex((item) => row.key === item.key);
     const item = newData[index];
     newData.splice(index, 1, {
       ...item,
-      ...row
+      ...row,
     });
     this.setState({ dataSource: newData });
     this.saveInForm();
@@ -318,15 +327,15 @@ class MutableTable extends React.Component {
     var dataAux = _.cloneDeep(this.state.dataSource);
     toReturn[`${this.props.fieldName}`] = {
       value: dataAux,
-      errors: []
+      errors: [],
     };
-    toReturn[`${this.props.fieldName}`].value.forEach(i => {
+    toReturn[`${this.props.fieldName}`].value.forEach((i) => {
       delete i.key;
     });
     this.props.form.setFields(toReturn);
   }
 
-  isEditing = record => record.key === this.state.editingKey;
+  isEditing = (record) => record.key === this.state.editingKey;
 
   edit(key) {
     this.setState({ editingKey: key });
@@ -338,24 +347,25 @@ class MutableTable extends React.Component {
     const components = {
       body: {
         row: EditableFormRow,
-        cell: EditableCell
-      }
+        cell: EditableCell,
+      },
     };
-    const columns = this.columns.map(col => {
+    const columns = this.columns.map((col) => {
+      console.log(col);
       if (!col.editable) {
         return col;
       }
       return {
         ...col,
-        onCell: record => ({
+        onCell: (record) => ({
           record,
           editable: col.editable,
           dataIndex: col.dataIndex,
           title: col.title,
           handleSave: this.handleSave,
           dataType: col.dataType,
-          choices: col.choices
-        })
+          choices: col.choices,
+        }),
       };
     });
     return (
@@ -366,7 +376,7 @@ class MutableTable extends React.Component {
             display: "flex",
             justifyContent: "flex-end",
             width: "100%",
-            zIndex: "1"
+            zIndex: "1",
           }}
         >
           <PrimButton>
@@ -382,7 +392,7 @@ class MutableTable extends React.Component {
         </div>
         <Form.Item label={this.props.metadata.display}>
           {getFieldDecorator(this.props.fieldName, {
-            initialValue: this.props.metadata.default
+            initialValue: this.props.metadata.default,
           })(
             <Table
               components={components}
@@ -390,7 +400,7 @@ class MutableTable extends React.Component {
               bordered
               dataSource={dataSource}
               columns={columns}
-              scroll={{ x: 3000, y: 300 }}
+              scroll={{ x: 1800, y: 300 }}
             />
           )}
         </Form.Item>

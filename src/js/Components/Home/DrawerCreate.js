@@ -47,7 +47,6 @@ class DrawerCreate extends React.Component {
   handleSave = (e, redirect) => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
-      console.log(values);
       if (!err) {
         values.date = values.date.utc().format();
         this.props.onClose(e, "Create");
