@@ -1,27 +1,23 @@
 import React, { Component } from "react";
 import Backend from "../../../serviceBackend";
-import "../../../css/base.css";
 import "../../../css/bootstrap.min.css";
 import "../../../css/bootstrap-theme.min.css";
-import "../../../css/phone.css";
 import "../../../css/printer.css";
 import "../../../css/reset.css";
-import "../../../css/small.css";
-import "../../../css/tablet.css";
 import "../../../css/unal.css";
 
 import "./unal.js";
-import './jquery.js';
+import "./jquery.js";
 
 class UnalCanvas extends Component {
   constructor(props) {
     super(props);
     this.handleSession = this.handleSession.bind(this);
     this.state = {
-      logged: false
+      logged: false,
     };
   }
-  handleSession = logged => {
+  handleSession = (logged) => {
     this.setState({ logged: logged });
   };
   render() {
@@ -49,10 +45,6 @@ class UnalCanvas extends Component {
         />
         <link type="text/css" href="../../../css/reset.css" media="all" />
         <link type="text/css" href="../../../css/unal.css" media="all" />
-        <link type="text/css" href="../../../css/base.css" media="all" />
-        <link type="text/css" href="../../../css/tablet.css" media="all" />
-        <link type="text/css" href="../../../css/phone.css" media="all" />
-        <link type="text/css" href="../../../css/small.css" media="all" />
         <link type="text/css" href="../../../css/printer.css" media="print" />
         <title>ActasApp: Universidad Nacional de Colombia</title>
         <div id="footfix">
@@ -211,14 +203,17 @@ class UnalCanvas extends Component {
               </div>
               <div className="mainMenu">
                 <div className="btn-group">
-                  <a href="/actas/home" className="btn btn-default dropdown-toggle">
+                  <a
+                    href="/actas/home"
+                    className="btn btn-default dropdown-toggle"
+                  >
                     Inicio
                   </a>
                   <span className="caret-right" />
                 </div>
                 <div className="btn-group">
                   <a
-                    href="/contact"
+                    href="https://ingenieria.bogota.unal.edu.co/actas/contact"
                     className="btn btn-default dropdown-toggle"
                   >
                     Contáctenos
@@ -293,7 +288,7 @@ class UnalCanvas extends Component {
           style={{
             marginTop: "-20px",
             lineHeight: "normal",
-            overflow: "hidden"
+            overflow: "hidden",
           }}
         >
           <nav className="col-md-3 col-lg-3 col-sm-3 col-xs-4 col-xxs-6 gobiernoLinea">
@@ -370,7 +365,7 @@ class UnalCanvas extends Component {
               (+57 1) 316 5000 Ext. 13578
             </p>
             <p className="col-sm-12 col-md-6 derechos">
-              © Copyright 2019
+              © Copyright 2020
               <br /> Algunos derechos reservados.
               <br />
               <a
@@ -381,7 +376,7 @@ class UnalCanvas extends Component {
               </a>
               <br />
               <a href="index.html#">Acerca de este sitio web</a>
-              <br /> Última actualización: 13/02/2020
+              <br /> Última actualización: 23/07/2020
             </p>
           </div>
           <div className="col-md-2 col-lg-2 col-sm-2 col-xs-12 logos">

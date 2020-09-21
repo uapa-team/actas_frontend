@@ -6,13 +6,13 @@ import Highlighter from "react-highlight-words";
 import Columns from "react-columns";
 import Backend from "../../../serviceBackend";
 
-import moment from 'moment';
+import moment from "moment";
 
 class CaseTable extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      info_case: {}
+      info_case: {},
     };
   }
 
@@ -22,17 +22,17 @@ class CaseTable extends React.Component {
 
     if (archiveType) {
       Backend.sendRequest("GET", `case?id=${id}`)
-        .then(response => {
+        .then((response) => {
           return response.json();
         })
-        .then(data => {
+        .then((data) => {
           data.cases[0]["approval_status"] = "Anular";
           return this.setState({ info_case: data.cases[0] });
         })
-        .then(_ => {
+        .then((_) => {
           Backend.sendRequest("PATCH", "case", {
-            items: [this.state.info_case]
-          }).then(response => {
+            items: [this.state.info_case],
+          }).then((response) => {
             if (response.status === 200) {
               message.success("Solicitud anulada exitosamente.");
             } else if (response.status === 401) {
@@ -47,17 +47,17 @@ class CaseTable extends React.Component {
         });
     } else {
       Backend.sendRequest("GET", `case?id=${id}`)
-        .then(response => {
+        .then((response) => {
           return response.json();
         })
-        .then(data => {
+        .then((data) => {
           data.cases[0]["approval_status"] = "Desistir";
           return this.setState({ info_case: data.cases[0] });
         })
-        .then(_ => {
+        .then((_) => {
           Backend.sendRequest("PATCH", "case", {
-            items: [this.state.info_case]
-          }).then(response => {
+            items: [this.state.info_case],
+          }).then((response) => {
             if (response.status === 200) {
               message.success("Solicitud desistida exitosamente.");
             } else if (response.status === 401) {
@@ -75,7 +75,7 @@ class CaseTable extends React.Component {
 
   state = {
     searchText: "",
-    searchedColumn: ""
+    searchedColumn: "",
   };
 
   getColumnSearchProps = (dataIndex, searchTerm) => ({
@@ -83,16 +83,16 @@ class CaseTable extends React.Component {
       setSelectedKeys,
       selectedKeys,
       confirm,
-      clearFilters
+      clearFilters,
     }) => (
       <div style={{ padding: 8 }}>
         <Input
-          ref={node => {
+          ref={(node) => {
             this.searchInput = node;
           }}
           placeholder={`Buscar por ${searchTerm}`}
           value={selectedKeys[0]}
-          onChange={e =>
+          onChange={(e) =>
             setSelectedKeys(e.target.value ? [e.target.value] : [])
           }
           onPressEnter={() =>
@@ -118,20 +118,17 @@ class CaseTable extends React.Component {
         </Button>
       </div>
     ),
-    filterIcon: filtered => (
+    filterIcon: (filtered) => (
       <Icon type="search" style={{ color: filtered ? "#1890ff" : "#000000" }} />
     ),
     onFilter: (value, record) =>
-      record[dataIndex]
-        .toString()
-        .toLowerCase()
-        .includes(value.toLowerCase()),
-    onFilterDropdownVisibleChange: visible => {
+      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
+    onFilterDropdownVisibleChange: (visible) => {
       if (visible) {
         setTimeout(() => this.searchInput.select());
       }
     },
-    render: text =>
+    render: (text) =>
       this.state.searchedColumn === dataIndex ? (
         <Highlighter
           highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
@@ -141,45 +138,48 @@ class CaseTable extends React.Component {
         />
       ) : (
         text
-      )
+      ),
   });
 
   handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
     this.setState({
       searchText: selectedKeys[0],
-      searchedColumn: dataIndex
+      searchedColumn: dataIndex,
     });
   };
 
-  handleReset = clearFilters => {
+  handleReset = (clearFilters) => {
     clearFilters();
     this.setState({ searchText: "" });
   };
 
   date_diff_indays = (now, created) => {
-    created = created.replace(/(\d{4})-(\d{1,2})-(\d{1,2})/, function(match,y,m,d) { 
-        return m + '/' + d + '/' + y;  
+    created = created.replace(/(\d{4})-(\d{1,2})-(\d{1,2})/, function (
+      match,
+      y,
+      m,
+      d
+    ) {
+      return m + "/" + d + "/" + y;
     });
     var dt1 = new Date(now);
     var dt2 = new Date(created);
-    return parseInt((dt1 - dt2) / (1000 * 60 * 60 * 24), 10); 
+    return parseInt((dt1 - dt2) / (1000 * 60 * 60 * 24), 10);
   };
 
-  markAsRecieved = id => {
-    Backend.sendRequest("PATCH", `mark_received?id=${id}`)
-    .then(response => {
-      console.log("holi" + response.status)
-      if(response.status === 200){
+  markAsRecieved = (id) => {
+    Backend.sendRequest("PATCH", `mark_received?id=${id}`).then((response) => {
+      if (response.status === 200) {
         message.success("Solicitud recibida correctamente.");
         this.props.updateDataSource(id);
-      }else{
-        message.error("No se ha podido marcar como recibido. Es posible que falte un campo por llenar.");
+      } else {
+        message.error(
+          "No se ha podido marcar como recibido. Es posible que falte un campo por llenar."
+        );
       }
-    })   
-  }
-
-
+    });
+  };
 
   render() {
     var columns = [
@@ -189,107 +189,107 @@ class CaseTable extends React.Component {
         key: "_cls_display",
         width: "20%",
         sorter: (a, b) => a._cls_display.localeCompare(b._cls_display),
-        ...this.getColumnSearchProps("_cls_display", "tipo de solicitud")
+        ...this.getColumnSearchProps("_cls_display", "tipo de solicitud"),
       },
       {
         title: "DNI",
         dataIndex: "student_dni",
         key: "student_dni",
         //sorter: (a, b) => a.student_dni.localeCompare(b.student_dni),
-        ...this.getColumnSearchProps("student_dni", "DNI")
+        ...this.getColumnSearchProps("student_dni", "DNI"),
       },
       {
         title: "Nombres",
         dataIndex: "student_name",
         key: "student_name",
         sorter: (a, b) => a.student_name.localeCompare(b.student_name),
-        ...this.getColumnSearchProps("student_name", "nombres")
+        ...this.getColumnSearchProps("student_name", "nombres"),
       },
       {
         title: "Plan de estudios",
         dataIndex: "academic_program",
         key: "academic_program",
         sorter: (a, b) => a.academic_program.localeCompare(b.academic_program),
-        ...this.getColumnSearchProps("academic_program", "programa")
+        ...this.getColumnSearchProps("academic_program", "programa"),
       },
       {
         title: "Acta #",
         dataIndex: "consecutive_minute",
         key: "consecutive_minute",
         width: "10%",
-        ...this.getColumnSearchProps("consecutive_minute", "acta")
+        ...this.getColumnSearchProps("consecutive_minute", "acta"),
       },
       {
         title: "Año",
         dataIndex: "year",
         key: "year",
-        ...this.getColumnSearchProps("year", "año")
+        ...this.getColumnSearchProps("year", "año"),
       },
       {
         title: "Periodo",
         dataIndex: "academic_period",
         key: "academic_period",
-        ...this.getColumnSearchProps("academic_period", "periodo")
+        ...this.getColumnSearchProps("academic_period", "periodo"),
       },
       {
         title: "Editar",
         key: "edit",
-        render: (text, record) => (
-          record.received_date !== 'None' ? //If it has been recieved:
-          <span>
-            {/* eslint-disable-next-line */}            
-            <a
-              onClick={() =>
-                this.props.history.push({
-                  pathname: "/edit/" + record.id,
-                  state: { _cls: record._cls }
-                })
-              }
-            >
-              Editar
-            </a>
-            <br />
-            <Popconfirm
-              title="¿Qué acción desea tomar con la solicitud?"
-              onConfirm={() => this.confirmCancel(true, record.id)}
-              onCancel={() => this.confirmCancel(false, record.id)}
-              okText="Anular"
-              cancelText="Desistir"
-              placement="left"
-            >
+        render: (text, record) =>
+          record.received_date !== "None" ? ( //If it has been recieved:
+            <span>
               {/* eslint-disable-next-line */}
-              <a>Archivar</a>
-            </Popconfirm>
-            <br />
-            <Popconfirm
-              title="¿Qué tipo de vista previa desea generar?"
-              onConfirm={() => Functions.generateCouncil(false, record.id)}
-              onCancel={() => Functions.generateCouncil(true, record.id)}
-              okText="Consejo"
-              cancelText="Comité"
-              placement="left"
-            >
+              <a
+                onClick={() =>
+                  this.props.history.push({
+                    pathname: "/edit/" + record.id,
+                    state: { _cls: record._cls },
+                  })
+                }
+              >
+                Editar
+              </a>
+              <br />
+              <Popconfirm
+                title="¿Qué acción desea tomar con la solicitud?"
+                onConfirm={() => this.confirmCancel(true, record.id)}
+                onCancel={() => this.confirmCancel(false, record.id)}
+                okText="Anular"
+                cancelText="Desistir"
+                placement="left"
+              >
+                {/* eslint-disable-next-line */}
+                <a>Archivar</a>
+              </Popconfirm>
+              <br />
+              <Popconfirm
+                title="¿Qué tipo de vista previa desea generar?"
+                onConfirm={() => Functions.generateCouncil(false, record.id)}
+                onCancel={() => Functions.generateCouncil(true, record.id)}
+                okText="Consejo"
+                cancelText="Comité"
+                placement="left"
+              >
+                {/* eslint-disable-next-line */}
+                <a>Vista Previa</a>
+              </Popconfirm>
+            </span>
+          ) : (
+            //Else - If it hasn't being marked as recieved:
+            <span>
               {/* eslint-disable-next-line */}
-              <a>Vista Previa</a>
-            </Popconfirm>
-          </span>
-          : //Else - If it hasn't being marked as recieved:
-          <span>
-            {/* eslint-disable-next-line */}            
-            <Popconfirm
-              title="¿Desea marcar como recibido?"
-              onConfirm={() => this.markAsRecieved(record.id)}
-              okText="Sí"
-              cancelText="No"
-              placement="left"
-            >
-              {/* eslint-disable-next-line */}
-              <a>Marcar como recibido</a>
-            </Popconfirm>
-          </span>
-        
-        )
-      }
+              <Popconfirm
+                title="¿Desea marcar como recibido?"
+                onConfirm={() => this.markAsRecieved(record.id)}
+                okText="Sí"
+                cancelText="No"
+                placement="left"
+              >
+                {/* eslint-disable-next-line */}
+                <a>Marcar como recibido</a>
+              </Popconfirm>
+            </span>
+          ),
+      },
     ];
 
     var columnsSecretary = [
@@ -299,55 +299,59 @@ class CaseTable extends React.Component {
         key: "_cls_display",
         width: "20%",
         sorter: (a, b) => a._cls_display.localeCompare(b._cls_display),
-        ...this.getColumnSearchProps("_cls_display", "tipo de solicitud")
+        ...this.getColumnSearchProps("_cls_display", "tipo de solicitud"),
       },
       {
         title: "DNI",
         dataIndex: "student_dni",
         key: "student_dni",
-        ...this.getColumnSearchProps("student_dni", "DNI")
+        ...this.getColumnSearchProps("student_dni", "DNI"),
       },
       {
         title: "Nombres",
         dataIndex: "student_name",
         key: "student_name",
         sorter: (a, b) => a.student_name.localeCompare(b.student_name),
-        ...this.getColumnSearchProps("student_name", "nombres")
+        ...this.getColumnSearchProps("student_name", "nombres"),
       },
       {
         title: "Plan de estudios",
         dataIndex: "academic_program",
         key: "academic_program",
         sorter: (a, b) => a.academic_program.localeCompare(b.academic_program),
-        ...this.getColumnSearchProps("academic_program", "programa")
+        ...this.getColumnSearchProps("academic_program", "programa"),
       },
       {
         title: "Acta #",
         dataIndex: "consecutive_minute",
         key: "consecutive_minute",
         width: "10%",
-        ...this.getColumnSearchProps("consecutive_minute", "acta")
+        ...this.getColumnSearchProps("consecutive_minute", "acta"),
       },
       {
         title: "Año",
         dataIndex: "year",
         key: "year",
-        ...this.getColumnSearchProps("year", "año")
+        ...this.getColumnSearchProps("year", "año"),
       },
       {
         title: "Periodo",
         dataIndex: "academic_period",
         key: "academic_period",
-        ...this.getColumnSearchProps("academic_period", "periodo")
+        ...this.getColumnSearchProps("academic_period", "periodo"),
       },
     ];
 
     return (
-        <Table
+      <Table
         dataSource={this.props.dataSource}
-        columns={localStorage.getItem("type") !== "secretary" ? columns : columnsSecretary }
+        columns={
+          localStorage.getItem("type") !== "secretary"
+            ? columns
+            : columnsSecretary
+        }
         bordered={true}
-        expandedRowRender={record => (
+        expandedRowRender={(record) => (
           <Columns gap={"0px"} columns={3}>
             <div>
               <b>Fecha de radicación:</b> {record.date}.
@@ -362,8 +366,12 @@ class CaseTable extends React.Component {
               <b>Instancia que decide:</b> {record.decision_maker}.
             </div>
             <div>
-              <b>Días desde la radicación:</b> {
-                this.date_diff_indays(moment().format('MM/DD/YYYY'), record.date)}.
+              <b>Días desde la radicación:</b>{" "}
+              {this.date_diff_indays(
+                moment().format("MM/DD/YYYY"),
+                record.date
+              )}
+              .
             </div>
             <div>
               <b>ID del caso:</b> {record.id}.
@@ -378,9 +386,9 @@ class CaseTable extends React.Component {
           pageSizeOptions: ["10", "20", "50", "100"],
           position: "bottom",
           size: "small",
-          showTotal: showTotal
+          showTotal: showTotal,
         }}
-      /> 
+      />
     );
   }
 }
