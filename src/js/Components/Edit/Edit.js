@@ -1,14 +1,9 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
-import {
-  Form,
-  Row,
-  Divider,
-  Typography,
-  Button,
-  Popconfirm,
-  message
-} from "antd";
+import { EyeOutlined, SaveOutlined } from '@ant-design/icons';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Row, Divider, Typography, Button, Popconfirm, message } from "antd";
 import MutableComponent from "./MutableComponent";
 import MutableTable from "./MutableTable";
 import Backend from "../../../serviceBackend";
@@ -148,7 +143,7 @@ class Edit extends React.Component {
                 onClick={e => this.saveCase(e)}
                 type="primary"
                 className="saveCaseButton"
-                icon="save"
+                icon={<SaveOutlined />}
               >
                 Guardar
               </Button>
@@ -156,7 +151,7 @@ class Edit extends React.Component {
                 onClick={e => this.saveCaseReturn(e)}
                 type="primary"
                 className="saveCaseButton"
-                icon="save"
+                icon={<SaveOutlined />}
               >
                 Guardar y volver
               </Button>
@@ -168,7 +163,7 @@ class Edit extends React.Component {
                 cancelText="Comité"
                 placement="right"
               >
-                <Button type="primary" icon="eye">
+                <Button type="primary" icon={<EyeOutlined />}>
                   Vista Previa
                 </Button>
               </Popconfirm>

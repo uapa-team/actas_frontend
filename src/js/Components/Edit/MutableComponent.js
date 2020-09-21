@@ -1,6 +1,8 @@
 import React from "react";
 import moment from "moment";
-import { Form, Input, DatePicker, Select, InputNumber, Radio } from "antd";
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Input, DatePicker, Select, InputNumber, Radio } from "antd";
 import { withRouter } from "react-router-dom";
 import { StyledFormItem } from "./EditStyles";
 

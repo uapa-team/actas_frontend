@@ -1,6 +1,7 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
 import CaseTable from "./CaseTable";
+import { DownloadOutlined, PlusOutlined } from '@ant-design/icons';
 import { Typography, Row, Divider, Col, Button, message } from "antd";
 import DrawerDownload from "./DrawerDownload";
 import DrawerCreate from "./DrawerCreate";
@@ -115,7 +116,7 @@ class Home extends React.Component {
                 <Button
                   block
                   type="primary"
-                  icon="download"
+                  icon={<DownloadOutlined />}
                   onClick={(e) => this.showDrawer(e, "Download")}
                   className="generateCM_button"
                 >
@@ -133,7 +134,7 @@ class Home extends React.Component {
                 <Button
                   block
                   type="primary"
-                  icon="plus"
+                  icon={<PlusOutlined />}
                   onClick={(e) => this.showDrawer(e, "Create")}
                   className="createCM_button"
                 >
@@ -165,7 +166,7 @@ class Home extends React.Component {
                 <Button
                   block
                   type="primary"
-                  icon="plus"
+                  icon={<PlusOutlined />}
                   onClick={(e) => this.showDrawer(e, "Create")}
                   className="createCM_button"
                 >

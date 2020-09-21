@@ -1,17 +1,8 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
-import {
-  Drawer,
-  Form,
-  Button,
-  Col,
-  Row,
-  Input,
-  InputNumber,
-  Select,
-  DatePicker,
-  message,
-} from "antd";
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Drawer, Button, Col, Row, Input, InputNumber, Select, DatePicker, message } from "antd";
 import moment from "moment";
 import Backend from "../../../serviceBackend";
 import { LabelSD } from "./DrawerCreateStyles";

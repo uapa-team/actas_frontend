@@ -1,5 +1,7 @@
 import React from "react";
-import { Form, Input, Button, Checkbox, Typography, message } from "antd";
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Input, Button, Checkbox, Typography, message } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { Row, Col } from "antd";
 import { withRouter } from "react-router-dom";

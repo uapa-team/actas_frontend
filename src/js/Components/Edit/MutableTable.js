@@ -1,16 +1,10 @@
 import React from "react";
-import {
-  Form,
-  Input,
-  Table,
-  Popconfirm,
-  Button,
-  Select,
-  InputNumber,
-} from "antd";
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Input, Table, Popconfirm, Button, Select, InputNumber } from "antd";
 import { withRouter } from "react-router-dom";
 import { PrimButton } from "../Home/HomeStyles";
-import { DeleteOutlined } from "@ant-design/icons";
+import { DeleteOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import _ from "lodash";
 import "./Edit.css";
 
@@ -384,7 +378,7 @@ class MutableTable extends React.Component {
               onClick={this.handleAdd}
               type="primary"
               style={{ marginBottom: 16 }}
-              icon="plus-circle"
+              icon={<PlusCircleOutlined />}
             >
               {`Añadir ${this.props.metadata.display}`}
             </Button>
