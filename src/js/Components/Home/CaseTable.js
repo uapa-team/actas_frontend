@@ -1,5 +1,6 @@
 import React from "react";
-import { Table, Popconfirm, message, Input, Button, Icon } from "antd";
+import { Table, Popconfirm, message, Input, Button } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
 import { withRouter } from "react-router-dom";
 import Functions from "../../../Functions";
 import Highlighter from "react-highlight-words";
@@ -119,7 +120,7 @@ class CaseTable extends React.Component {
       </div>
     ),
     filterIcon: (filtered) => (
-      <Icon type="search" style={{ color: filtered ? "#1890ff" : "#000000" }} />
+      <SearchOutlined style={{ color: filtered ? "#1890ff" : "#000000" }} />
     ),
     onFilter: (value, record) =>
       record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),

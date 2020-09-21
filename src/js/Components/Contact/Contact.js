@@ -1,13 +1,15 @@
 import React from "react";
-import { Form, Icon, Input, Button, Radio, Divider } from "antd";
+import { Form, Input, Button, Radio, Divider } from "antd";
 import { Row, Col } from "antd";
+
+import { SmileOutlined, MailOutlined } from "@ant-design/icons";
 
 import { withRouter } from "react-router-dom";
 
 const { TextArea } = Input;
 
 class Contact extends React.Component {
-  handleSubmit = e => {
+  handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
@@ -17,7 +19,7 @@ class Contact extends React.Component {
   };
 
   state = {
-    value: ""
+    value: "",
   };
 
   onChange = ({ target: { value } }) => {
@@ -41,12 +43,12 @@ class Contact extends React.Component {
               <Form.Item label="Nombre completo">
                 {getFieldDecorator("nombre", {
                   rules: [
-                    { required: true, message: "Por favor ingrese su nombre." }
-                  ]
+                    { required: true, message: "Por favor ingrese su nombre." },
+                  ],
                 })(
                   <Input
                     prefix={
-                      <Icon type="smile" style={{ color: "rgba(0,0,0,.25)" }} />
+                      <SmileOutlined style={{ color: "rgba(0,0,0,.25)" }} />
                     }
                     placeholder="Escriba su nombre completo"
                   />
@@ -58,13 +60,13 @@ class Contact extends React.Component {
                   rules: [
                     {
                       required: true,
-                      message: "Por favor ingrese su correo electrónico."
-                    }
-                  ]
+                      message: "Por favor ingrese su correo electrónico.",
+                    },
+                  ],
                 })(
                   <Input
                     prefix={
-                      <Icon type="mail" style={{ color: "rgba(0,0,0,.25)" }} />
+                      <MailOutlined style={{ color: "rgba(0,0,0,.25)" }} />
                     }
                     placeholder="Escriba su dirección de correo electrónico"
                   />
@@ -89,8 +91,11 @@ class Contact extends React.Component {
               <Form.Item>
                 {getFieldDecorator("mensaje", {
                   rules: [
-                    { required: true, message: "Por favor ingrese su mensaje." }
-                  ]
+                    {
+                      required: true,
+                      message: "Por favor ingrese su mensaje.",
+                    },
+                  ],
                 })(
                   <TextArea
                     value={value}

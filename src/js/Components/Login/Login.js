@@ -1,5 +1,6 @@
 import React from "react";
-import { Form, Icon, Input, Button, Checkbox, Typography, message } from "antd";
+import { Form, Input, Button, Checkbox, Typography, message } from "antd";
+import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { Row, Col } from "antd";
 import { withRouter } from "react-router-dom";
 import { PrimButton } from "../Home/HomeStyles";
@@ -92,7 +93,7 @@ class NormalLoginForm extends React.Component {
                 })(
                   <Input
                     prefix={
-                      <Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />
+                      <UserOutlined style={{ color: "rgba(0,0,0,.25)" }} />
                     }
                     placeholder="Usuario SIA"
                     onChange={(text) => {
@@ -112,7 +113,7 @@ class NormalLoginForm extends React.Component {
                 })(
                   <Input
                     prefix={
-                      <Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />
+                      <LockOutlined style={{ color: "rgba(0,0,0,.25)" }} />
                     }
                     type="password"
                     placeholder="Contraseña"

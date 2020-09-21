@@ -5,12 +5,12 @@ import {
   Table,
   Popconfirm,
   Button,
-  Icon,
   Select,
   InputNumber,
 } from "antd";
 import { withRouter } from "react-router-dom";
 import { PrimButton } from "../Home/HomeStyles";
+import { DeleteOutlined } from "@ant-design/icons";
 import _ from "lodash";
 import "./Edit.css";
 
@@ -278,7 +278,7 @@ class MutableTable extends React.Component {
             onConfirm={() => this.handleDelete(record.key)}
           >
             {/* eslint-disable-next-line */}
-            <Icon type="delete" />
+            <DeleteOutlined />
           </Popconfirm>
         ) : null,
     });
