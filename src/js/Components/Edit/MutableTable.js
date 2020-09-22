@@ -1,7 +1,14 @@
 import React from "react";
-import { Form } from "@ant-design/compatible";
 import "@ant-design/compatible/assets/index.css";
-import { Input, Table, Popconfirm, Button, Select, InputNumber } from "antd";
+import {
+  Input,
+  Table,
+  Popconfirm,
+  Button,
+  Select,
+  InputNumber,
+  Form,
+} from "antd";
 import { withRouter } from "react-router-dom";
 import { PrimButton } from "../Home/HomeStyles";
 import { DeleteOutlined, PlusCircleOutlined } from "@ant-design/icons";
@@ -17,7 +24,7 @@ const EditableRow = ({ form, index, ...props }) => (
   </EditableContext.Provider>
 );
 
-const EditableFormRow = Form.create()(EditableRow);
+const EditableFormRow = EditableRow;
 
 class EditableCell extends React.Component {
   state = {
@@ -402,4 +409,4 @@ class MutableTable extends React.Component {
   }
 }
 
-export default withRouter(Form.create({ name: "mutable_table" })(MutableTable));
+export default withRouter(MutableTable);

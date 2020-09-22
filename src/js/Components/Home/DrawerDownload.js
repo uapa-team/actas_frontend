@@ -173,7 +173,5 @@ class DrawerDownload extends React.Component {
       .then((data) => this.setState({ allowed: Object.entries(data) }));
   }
 }
-const WrappedDownloadForm = Form.create({ name: "normal_download" })(
-  DrawerDownload
-);
-export default withRouter(WrappedDownloadForm);
+
+export default withRouter(DrawerDownload);

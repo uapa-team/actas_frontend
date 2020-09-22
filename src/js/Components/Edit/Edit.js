@@ -1,9 +1,16 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
-import { EyeOutlined, SaveOutlined } from '@ant-design/icons';
-import { Form } from '@ant-design/compatible';
-import '@ant-design/compatible/assets/index.css';
-import { Row, Divider, Typography, Button, Popconfirm, message } from "antd";
+import { EyeOutlined, SaveOutlined } from "@ant-design/icons";
+import "@ant-design/compatible/assets/index.css";
+import {
+  Row,
+  Divider,
+  Typography,
+  Button,
+  Popconfirm,
+  message,
+  Form,
+} from "antd";
 import MutableComponent from "./MutableComponent";
 import MutableTable from "./MutableTable";
 import Backend from "../../../serviceBackend";
@@ -21,13 +28,13 @@ class Edit extends React.Component {
       decision_maker: "",
       fields: [],
       cls: "",
-      id: this.props.match.params.id
+      id: this.props.match.params.id,
     };
   }
   createInputs = () => {
     return this.state.fields.map(this.createInput);
   };
-  createInput = i => {
+  createInput = (i) => {
     if (
       typeof this.state.case[i[0]] !== "undefined" &&
       this.state.case[i[0]] !== ""
@@ -46,7 +53,7 @@ class Edit extends React.Component {
   createTables = () => {
     return this.state.fields.map(this.createTable);
   };
-  createTable = i => {
+  createTable = (i) => {
     if (i[1].type === "Table") {
       if (
         typeof this.state.case[i[0]] !== "undefined" &&
@@ -71,7 +78,7 @@ class Edit extends React.Component {
       );
     }
   };
-  saveCase = e => {
+  saveCase = (e) => {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         const key = "updatable";
@@ -88,23 +95,23 @@ class Edit extends React.Component {
         }
 
         Backend.sendRequest("PATCH", "case", {
-          items: [values]
+          items: [values],
         })
-          .then(response => {
+          .then((response) => {
             if (response.status === 200) {
               message.success({
                 content: "Cambios guardados exitosamente.",
-                key
+                key,
               });
             } else if (response.status === 401) {
               message.error({
                 content: "Usuario sin autorización para guardar casos.",
-                key
+                key,
               });
             } else {
               message.error({
                 content: "Ha habido un error guardando el caso.",
-                key
+                key,
               });
               console.error(
                 "Login Error: Backend HTTP code " + response.status
@@ -112,10 +119,10 @@ class Edit extends React.Component {
             }
             return response.json();
           })
-          .catch(error => {
+          .catch((error) => {
             message.error({
               content: "Ha habido un error guardando el caso.",
-              key
+              key,
             });
             console.error("Error en guardando el caso");
             console.error(error);
@@ -124,10 +131,10 @@ class Edit extends React.Component {
     });
   };
 
-  saveCaseReturn = e => {
+  saveCaseReturn = (e) => {
     this.saveCase(e);
     this.props.history.push({
-      pathname: "/home/"
+      pathname: "/home/",
     });
   };
 
@@ -140,7 +147,7 @@ class Edit extends React.Component {
             <Title>Edición de solicitud</Title>
             <div>
               <Button
-                onClick={e => this.saveCase(e)}
+                onClick={(e) => this.saveCase(e)}
                 type="primary"
                 className="saveCaseButton"
                 icon={<SaveOutlined />}
@@ -148,7 +155,7 @@ class Edit extends React.Component {
                 Guardar
               </Button>
               <Button
-                onClick={e => this.saveCaseReturn(e)}
+                onClick={(e) => this.saveCaseReturn(e)}
                 type="primary"
                 className="saveCaseButton"
                 icon={<SaveOutlined />}
@@ -157,7 +164,9 @@ class Edit extends React.Component {
               </Button>
               <Popconfirm
                 title="¿Qué tipo de vista previa desea generar?"
-                onConfirm={() => Functions.generateCouncil(false, this.state.id)}
+                onConfirm={() =>
+                  Functions.generateCouncil(false, this.state.id)
+                }
                 onCancel={() => Functions.generateCouncil(true, this.state.id)}
                 okText="Consejo"
                 cancelText="Comité"
@@ -171,8 +180,10 @@ class Edit extends React.Component {
           </Columns>
         </Row>
         <Row>
-          <p><b>ID del caso:</b> {this.state.id}.</p>
-          
+          <p>
+            <b>ID del caso:</b> {this.state.id}.
+          </p>
+
           <Form>
             <Columns gap={"50px"} columns={2}>
               {this.createInputs()}
@@ -187,15 +198,15 @@ class Edit extends React.Component {
   }
   componentDidMount() {
     Backend.sendRequest("GET", `case?id=${this.state.id}`)
-      .then(response => response.json())
-      .then(json => {
+      .then((response) => response.json())
+      .then((json) => {
         this.setState({ case: json["cases"][0] });
         Backend.sendRequest(
           "GET",
           `infocase?cls=${json.cases[0]._cls.split(".")[1]}`
         )
-          .then(response => response.json())
-          .then(data => {
+          .then((response) => response.json())
+          .then((data) => {
             this.setState({ full_name: data.full_name });
             this.setState({ decision_maker: data.decision_maker });
             delete data.full_name;
@@ -206,5 +217,4 @@ class Edit extends React.Component {
   }
 }
 
-const WrappedCreateForm = Form.create({ name: "normal_create" })(Edit);
-export default withRouter(WrappedCreateForm);
+export default withRouter(Edit);

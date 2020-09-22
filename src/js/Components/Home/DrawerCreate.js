@@ -387,6 +387,4 @@ class DrawerCreate extends React.Component {
   }
 }
 
-const WrappedCreateForm = Form.create({ name: "normal_create" })(DrawerCreate);
-
-export default withRouter(WrappedCreateForm);
+export default withRouter(DrawerCreate);
