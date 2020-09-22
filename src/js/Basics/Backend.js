@@ -1,3 +1,5 @@
+import { message } from "antd";
+
 export default class Backend {
   static backEndUrl = "https://ingenieria.bogota.unal.edu.co/actas-api/";
   //static backEndUrl = "http://127.0.0.1:8000/council_minutes/";
@@ -32,6 +34,19 @@ export default class Backend {
         password: password,
       }
     );
+  }
+
+  static generateCouncil(isPre, recordId) {
+    this.sendRequest("GET", `generate?pre=${isPre}&id=${recordId}`)
+      .then((response) => response.json())
+      .then((data) => {
+        this.openLink(data.url);
+      });
+    if (isPre) {
+      message.success("Acta de Comité Asesor generada exitosamente.");
+    } else {
+      message.success("Acta de Consejo de Facultad generada exitosamente.");
+    }
   }
 
   static request(method, path, headers, body) {

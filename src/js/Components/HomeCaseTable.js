@@ -2,10 +2,9 @@ import React from "react";
 import { Table, Popconfirm, message, Input, Button } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import { withRouter } from "react-router-dom";
-import Functions from "../Basics/Functions";
 import Highlighter from "react-highlight-words";
 import Columns from "react-columns";
-import Backend from "../Basics/serviceBackend";
+import Backend from "../Basics/Backend";
 
 import moment from "moment";
 
@@ -264,8 +263,8 @@ class HomeCaseTable extends React.Component {
               <br />
               <Popconfirm
                 title="¿Qué tipo de vista previa desea generar?"
-                onConfirm={() => Functions.generateCouncil(false, record.id)}
-                onCancel={() => Functions.generateCouncil(true, record.id)}
+                onConfirm={() => Backend.generateCouncil(false, record.id)}
+                onCancel={() => Backend.generateCouncil(true, record.id)}
                 okText="Consejo"
                 cancelText="Comité"
                 placement="left"

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Backend from "./serviceBackend";
+import Backend from "./Backend";
 import "../../css/bootstrap.min.css";
 import "../../css/bootstrap-theme.min.css";
 import "../../css/printer.css";

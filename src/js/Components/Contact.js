@@ -11,7 +11,7 @@ import {
 } from "antd";
 import { SmileOutlined, MailOutlined } from "@ant-design/icons";
 import { withRouter } from "react-router-dom";
-import Backend from "../Basics/serviceBackend";
+import Backend from "../Basics/Backend";
 
 const { Title } = Typography;
 const { TextArea } = Input;

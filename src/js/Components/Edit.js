@@ -12,9 +12,8 @@ import {
 } from "antd";
 import EditComponent from "./EditComponent";
 import EditTable from "./EditTable";
-import Backend from "../Basics/serviceBackend";
+import Backend from "../Basics/Backend";
 import Columns from "react-columns";
-import Functions from "../Basics/serviceBackend";
 
 const { Title } = Typography;
 
@@ -157,10 +156,8 @@ class Edit extends React.Component {
               </Button>
               <Popconfirm
                 title="¿Qué tipo de vista previa desea generar?"
-                onConfirm={() =>
-                  Functions.generateCouncil(false, this.state.id)
-                }
-                onCancel={() => Functions.generateCouncil(true, this.state.id)}
+                onConfirm={() => Backend.generateCouncil(false, this.state.id)}
+                onCancel={() => Backend.generateCouncil(true, this.state.id)}
                 okText="Consejo"
                 cancelText="Comité"
                 placement="right"

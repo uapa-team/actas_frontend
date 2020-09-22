@@ -11,7 +11,7 @@ import {
 } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { withRouter } from "react-router-dom";
-import Backend from "../Basics/serviceBackend";
+import Backend from "../Basics/Backend";
 
 const { Title, Text } = Typography;
 
@@ -73,7 +73,7 @@ class NormalLoginForm extends React.Component {
             <div className="login-welcome">
               <Title>Aplicación de Actas</Title>
               <Text>
-                Bienvenido a la apliación de actas de la Facultad de Ingeniería
+                Bienvenido a la aplicación de actas de la Facultad de Ingeniería
               </Text>
               <Text>
                 . Para continuar, por favor, ingrese su usuario y contraseña
