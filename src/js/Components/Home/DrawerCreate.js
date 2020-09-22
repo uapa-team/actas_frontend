@@ -45,59 +45,52 @@ class DrawerCreate extends React.Component {
       });
   };
 
-  handleSave = (e, redirect) => {
-    e.preventDefault();
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        values.date = values.date.utc().format();
+  handleSave = (values, e, redirect) => {
+    values.date = values.date.utc().format();
+    this.props.onClose(e, "Create");
+    const key = "updatable";
+    message.loading({ content: "Guardando caso...", key });
+    Backend.sendRequest("POST", "case", {
+      items: [values],
+    })
+      .then((response) => {
         this.props.onClose(e, "Create");
-        const key = "updatable";
-        message.loading({ content: "Guardando caso...", key });
-        Backend.sendRequest("POST", "case", {
-          items: [values],
-        })
-          .then((response) => {
-            this.props.onClose(e, "Create");
-            if (response.status === 200) {
-              message.success({
-                content: "El caso se ha guardado exitosamente.",
-                key,
-              });
-              response
-                .json()
-                .then((data) =>
-                  redirect(
-                    data["inserted_items"][0],
-                    "Request." + this.props.form.getFieldValue("_cls")
-                  )
-                );
-            } else if (response.status === 401) {
-              message.error({
-                content: "Usuario sin autorización para guardar casos.",
-                key,
-              });
-            } else {
-              message.error({
-                content: "Ha habido un error guardando el caso.",
-                key,
-              });
-              console.error(
-                "Login Error: Backend HTTP code " + response.status
-              );
-            }
-            return;
-          })
-          .catch((error) => {
-            message.error({
-              content: "Ha habido un error guardando el caso.",
-              key,
-            });
-            console.error("Error en guardando el caso");
-            console.error(values);
-            console.error(error);
+        if (response.status === 200) {
+          message.success({
+            content: "El caso se ha guardado exitosamente.",
+            key,
           });
-      }
-    });
+          response
+            .json()
+            .then((data) =>
+              redirect(
+                data["inserted_items"][0],
+                "Request." + this.props.form.getFieldValue("_cls")
+              )
+            );
+        } else if (response.status === 401) {
+          message.error({
+            content: "Usuario sin autorización para guardar casos.",
+            key,
+          });
+        } else {
+          message.error({
+            content: "Ha habido un error guardando el caso.",
+            key,
+          });
+          console.error("Login Error: Backend HTTP code " + response.status);
+        }
+        return;
+      })
+      .catch((error) => {
+        message.error({
+          content: "Ha habido un error guardando el caso.",
+          key,
+        });
+        console.error("Error en guardando el caso");
+        console.error(values);
+        console.error(error);
+      });
   };
 
   handleSaveAux = (e) => {
@@ -109,7 +102,6 @@ class DrawerCreate extends React.Component {
   };
 
   handleSaveAndEdit = (e) => {
-    e.preventDefault();
     this.handleSave(e, (id) => {
       this.props.history.push({
         pathname: "/edit/" + id,
@@ -157,7 +149,7 @@ class DrawerCreate extends React.Component {
         visible={this.props.visible}
         bodyStyle={{ paddingBottom: 80, paddingRight: 60 }}
       >
-        <Form onSubmit={this.handleSubmit} layout="vertical">
+        <Form onFinish={this.handleSave} layout="vertical">
           <Row>
             <Col>
               <Form.Item label="Documento Estudiante" name="student_dni">

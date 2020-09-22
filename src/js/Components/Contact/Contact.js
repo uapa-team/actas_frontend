@@ -10,13 +10,8 @@ import { withRouter } from "react-router-dom";
 const { TextArea } = Input;
 
 class Contact extends React.Component {
-  handleSubmit = (e) => {
-    e.preventDefault();
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        console.log("Received values of form: ", values);
-      }
-    });
+  onFinish = (values) => {
+    console.log("Received values of form: ", values);
   };
 
   state = {
@@ -39,7 +34,7 @@ class Contact extends React.Component {
               <h1>Contáctenos</h1>
             </div>
 
-            <Form onSubmit={this.handleSubmit} className="login-form">
+            <Form onFinish={this.onFinish} className="login-form">
               <Form.Item
                 label="Nombre completo"
                 name="nombre"

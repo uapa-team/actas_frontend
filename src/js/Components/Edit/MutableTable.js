@@ -40,15 +40,10 @@ class EditableCell extends React.Component {
     });
   };
 
-  save = (e) => {
+  save = (e, values) => {
     const { record, handleSave } = this.props;
-    this.form.validateFields((error, values) => {
-      if (error && error[e.currentTarget.id]) {
-        console.log(error);
-      }
-      this.toggleEdit();
-      handleSave({ ...record, ...values });
-    });
+    this.toggleEdit();
+    handleSave({ ...record, ...values });
   };
 
   renderCell = (form) => {
@@ -329,7 +324,8 @@ class MutableTable extends React.Component {
     toReturn[`${this.props.fieldName}`].value.forEach((i) => {
       delete i.key;
     });
-    this.props.form.setFields(toReturn);
+    console.log(this.props);
+    //this.props.form.setFields(toReturn);
   }
 
   isEditing = (record) => record.key === this.state.editingKey;

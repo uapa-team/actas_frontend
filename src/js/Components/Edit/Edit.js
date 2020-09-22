@@ -78,57 +78,51 @@ class Edit extends React.Component {
       );
     }
   };
-  saveCase = (e) => {
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        const key = "updatable";
-        message.loading({ content: "Guardando cambios...", key });
+  saveCase = (values) => {
+    const key = "updatable";
+    message.loading({ content: "Guardando cambios...", key });
 
-        values["id"] = this.state.id;
-        for (var i in values) {
-          if (
-            typeof values[i] !== "undefined" &&
-            values[i]._isAMomentObject === true
-          ) {
-            values[i] = values[i].utc().format();
-          }
-        }
-
-        Backend.sendRequest("PATCH", "case", {
-          items: [values],
-        })
-          .then((response) => {
-            if (response.status === 200) {
-              message.success({
-                content: "Cambios guardados exitosamente.",
-                key,
-              });
-            } else if (response.status === 401) {
-              message.error({
-                content: "Usuario sin autorización para guardar casos.",
-                key,
-              });
-            } else {
-              message.error({
-                content: "Ha habido un error guardando el caso.",
-                key,
-              });
-              console.error(
-                "Login Error: Backend HTTP code " + response.status
-              );
-            }
-            return response.json();
-          })
-          .catch((error) => {
-            message.error({
-              content: "Ha habido un error guardando el caso.",
-              key,
-            });
-            console.error("Error en guardando el caso");
-            console.error(error);
-          });
+    values["id"] = this.state.id;
+    for (var i in values) {
+      if (
+        typeof values[i] !== "undefined" &&
+        values[i]._isAMomentObject === true
+      ) {
+        values[i] = values[i].utc().format();
       }
-    });
+    }
+
+    Backend.sendRequest("PATCH", "case", {
+      items: [values],
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          message.success({
+            content: "Cambios guardados exitosamente.",
+            key,
+          });
+        } else if (response.status === 401) {
+          message.error({
+            content: "Usuario sin autorización para guardar casos.",
+            key,
+          });
+        } else {
+          message.error({
+            content: "Ha habido un error guardando el caso.",
+            key,
+          });
+          console.error("Login Error: Backend HTTP code " + response.status);
+        }
+        return response.json();
+      })
+      .catch((error) => {
+        message.error({
+          content: "Ha habido un error guardando el caso.",
+          key,
+        });
+        console.error("Error en guardando el caso");
+        console.error(error);
+      });
   };
 
   saveCaseReturn = (e) => {

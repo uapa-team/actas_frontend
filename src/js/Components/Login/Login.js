@@ -19,14 +19,8 @@ class NormalLoginForm extends React.Component {
     };
   }
   infocase;
-  handleSubmit = (e) => {
-    e.preventDefault();
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        console.log(values);
-        this.performLogin();
-      }
-    });
+  onFinish = (values) => {
+    this.performLogin();
   };
 
   performLogin = () => {
@@ -81,7 +75,7 @@ class NormalLoginForm extends React.Component {
                 institucional.
               </Text>
             </LoginWelcome>
-            <Form onSubmit={this.handleSubmit} className="login-form">
+            <Form onFinish={this.onFinish} className="login-form">
               <Form.Item
                 name="username"
                 rules={[

@@ -1,7 +1,7 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
 import CaseTable from "./CaseTable";
-import { DownloadOutlined, PlusOutlined } from '@ant-design/icons';
+import { DownloadOutlined, PlusOutlined } from "@ant-design/icons";
 import { Typography, Row, Divider, Col, Button, message } from "antd";
 import DrawerDownload from "./DrawerDownload";
 import DrawerCreate from "./DrawerCreate";
@@ -71,7 +71,6 @@ class Home extends React.Component {
     }
   };
   showDrawer = (e, drw) => {
-    e.preventDefault();
     if (drw === "Create") {
       this.setState({
         createDrawerVisible: true,
@@ -83,7 +82,6 @@ class Home extends React.Component {
     }
   };
   closeDrawer = (e, drw) => {
-    e.preventDefault();
     if (drw === "Create") {
       this.setState({
         createDrawerVisible: false,
