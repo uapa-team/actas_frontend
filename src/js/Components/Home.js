@@ -6,6 +6,7 @@ import { Typography, Row, Divider, Col, Button, message } from "antd";
 import HomeDrawerDownload from "./HomeDrawerDownload";
 import HomeDrawerCreate from "./HomeDrawerCreate";
 import Backend from "../Basics/Backend";
+import "../../css/index.css";
 
 const { Title } = Typography;
 
@@ -49,6 +50,7 @@ class Home extends React.Component {
     });
     this.setState({ dataMatches: matches });
   };
+
   filerByMinute = (checked, minute, year) => {
     this.setState({ filterByMinute: checked });
     this.setState({ minuteSearch: minute });
@@ -57,19 +59,15 @@ class Home extends React.Component {
     let newMatches = [];
     if (checked) {
       this.state.dataSource.forEach((i) => {
-        if (
-          // eslint-disable-next-line
-          i.consecutive_minute == minute &&
-          // eslint-disable-next-line
-          i.year == year
-        ) {
+        if (i.consecutive_minute === minute && i.year === year) {
           newMatches.push(i);
         }
       });
       this.setState({ dataMatches: newMatches });
     }
   };
-  showDrawer = (e, drw) => {
+
+  showDrawer = (drw) => {
     if (drw === "Create") {
       this.setState({
         createDrawerVisible: true,
@@ -80,7 +78,8 @@ class Home extends React.Component {
       });
     }
   };
-  closeDrawer = (e, drw) => {
+
+  closeDrawer = (drw) => {
     if (drw === "Create") {
       this.setState({
         createDrawerVisible: false,
@@ -91,36 +90,29 @@ class Home extends React.Component {
       });
     }
   };
+
   render() {
     return (
-      <div style={{ marginHorizontal: "50px" }}>
+      <div>
         <Divider style={{ background: "#ffffff00" }} />
         {localStorage.getItem("type") !== "secretary" ? ( //When not secretary:
-          <Row
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              marginBottom: "10px",
-            }}
-          >
+          <Row className="home-main-row">
             <Col span={2} />
             <Col span={10}>
-              <Title style={{ marginBottom: "0px" }}>Casos Estudiantiles</Title>
+              <Title className="home-title">Casos Estudiantiles</Title>
             </Col>
             <Col span={4}>
               <Button
                 block
                 type="primary"
                 icon={<DownloadOutlined />}
-                onClick={(e) => this.showDrawer(e, "Download")}
-                className="generateCM_button"
+                onClick={(e) => this.showDrawer("Download")}
               >
                 Generar Acta
               </Button>
               <HomeDrawerDownload
                 visible={this.state.downloadDrawerVisible}
-                onClose={this.closeDrawer}
+                onClose={(e) => this.closeDrawer("Download")}
               />
             </Col>
             <Col span={1} />
@@ -129,29 +121,22 @@ class Home extends React.Component {
                 block
                 type="primary"
                 icon={<PlusOutlined />}
-                onClick={(e) => this.showDrawer(e, "Create")}
-                className="createCM_button"
+                onClick={(e) => this.showDrawer("Create")}
               >
                 Crear un nuevo caso
               </Button>
               <HomeDrawerCreate
                 visible={this.state.createDrawerVisible}
-                onClose={this.closeDrawer}
+                onClose={(e) => this.closeDrawer("Create")}
               />
             </Col>
-          </Row> //When secretary:
+          </Row>
         ) : (
-          <Row
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              marginBottom: "10px",
-            }}
-          >
+          //When secretary:
+          <Row className="home-main-row">
             <Col span={2} />
             <Col span={10}>
-              <Title style={{ marginBottom: "0px" }}>Casos Estudiantiles</Title>
+              <Title className="home-title">Casos Estudiantiles</Title>
             </Col>
             <Col span={1} />
             <Col span={4}>
@@ -159,18 +144,19 @@ class Home extends React.Component {
                 block
                 type="primary"
                 icon={<PlusOutlined />}
-                onClick={(e) => this.showDrawer(e, "Create")}
+                onClick={(e) => this.showDrawer("Create")}
                 className="createCM_button"
               >
                 Crear un nuevo caso
               </Button>
               <HomeDrawerCreate
                 visible={this.state.createDrawerVisible}
-                onClose={this.closeDrawer}
+                onClose={this.closeDrawer("Create")}
               />
             </Col>
           </Row>
         )}
+        <Divider style={{ background: "#ffffff00" }} />
         <Row>
           <HomeCaseTable
             updateDataSource={this.updateDataSource}
@@ -185,6 +171,7 @@ class Home extends React.Component {
       </div>
     );
   }
+
   componentDidMount() {
     message.loading("Cargando casos...", 7);
     Backend.sendRequest("GET", "case")

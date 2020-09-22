@@ -14,6 +14,7 @@ class HomeDrawerDownload extends React.Component {
       spinning: false,
     };
   }
+
   handleGenerate = () => {
     this.setState({ spinning: true });
     let query = `pre=${this.state.isPre}&consecutive_minute${
@@ -28,20 +29,23 @@ class HomeDrawerDownload extends React.Component {
         Backend.openLink(data.url);
       });
   };
-  radioStyle = {
-    display: "flex",
-    whiteSpace: "normal",
-  };
+
   menuJS = () => {
     return this.state.allowed.map(this.radioBtn);
   };
+
   radioBtn = (value) => {
     return (
-      <Radio style={this.radioStyle} value={value[1].filter}>
+      <Radio
+        className="home-drawer-radio-style"
+        key={value[0]}
+        value={value[1].filter}
+      >
         {value[1].display}
       </Radio>
     );
   };
+
   render() {
     return (
       <Spin spinning={this.state.spinning}>
@@ -131,18 +135,7 @@ class HomeDrawerDownload extends React.Component {
               </Col>
             </Row>
           </Form>
-          <div
-            style={{
-              position: "absolute",
-              right: 0,
-              bottom: 0,
-              width: "100%",
-              borderTop: "1px solid #e9e9e9",
-              padding: "10px 16px",
-              background: "#fff",
-              textAlign: "right",
-            }}
-          >
+          <div className="home-drawer-div">
             <Button
               onClick={(e) => this.props.onClose(e, "Download")}
               style={{ marginRight: 8 }}

@@ -322,18 +322,7 @@ class HomeDrawerCreate extends React.Component {
             </Col>
           </Row>
         </Form>
-        <div
-          style={{
-            position: "absolute",
-            right: 0,
-            bottom: 0,
-            width: "100%",
-            borderTop: "1px solid #e9e9e9",
-            padding: "10px 16px",
-            background: "#fff",
-            textAlign: "right",
-          }}
-        >
+        <div className="home-drawer-div">
           <Button
             onClick={(e) => this.props.onClose(e, "Create")}
             style={{ marginRight: 8 }}

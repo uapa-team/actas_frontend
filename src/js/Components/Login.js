@@ -41,10 +41,8 @@ class NormalLoginForm extends React.Component {
         } else if (response.status === 200) {
           message.success({ content: "Inicio de sesión exitoso.", key });
           let res = await response.json();
-          console.log(res);
           localStorage.setItem("jwt", res["token"]);
           localStorage.setItem("type", res["group"]);
-          //window.location.href = "%PUBLIC_URL%/home";
           this.props.history.push("/home");
           window.location.reload();
         } else {
@@ -52,7 +50,7 @@ class NormalLoginForm extends React.Component {
             content: "Error realizando el login.",
             key,
           });
-          console.log("Login Error: Backend HTTP code " + response.status);
+          console.log("Login Error: Backend HTTP code: " + response.status);
         }
       })
       .catch((error) => {
