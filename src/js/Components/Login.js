@@ -1,8 +1,15 @@
 import React from "react";
-import "@ant-design/compatible/assets/index.css";
-import { Input, Button, Checkbox, Typography, message, Form } from "antd";
+import {
+  Input,
+  Button,
+  Checkbox,
+  Typography,
+  message,
+  Form,
+  Row,
+  Col,
+} from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
-import { Row, Col } from "antd";
 import { withRouter } from "react-router-dom";
 import Backend from "../Basics/serviceBackend";
 
@@ -14,11 +21,12 @@ class NormalLoginForm extends React.Component {
     this.state = {
       username: "",
       password: "",
+      checked: false,
     };
   }
-  infocase;
-  onFinish = (values) => {
-    this.performLogin();
+
+  checkChanged = () => {
+    this.setState({ checked: !this.state.checked });
   };
 
   performLogin = () => {
@@ -61,8 +69,8 @@ class NormalLoginForm extends React.Component {
       <Row>
         <Col xs={4} sm={4} md={6} lg={8} xl={8}></Col>
         <Col xs={16} sm={16} md={12} lg={8} xl={8}>
-          <div>
-            <div>
+          <div className="login-general">
+            <div className="login-welcome">
               <Title>Aplicación de Actas</Title>
               <Text>
                 Bienvenido a la apliación de actas de la Facultad de Ingeniería
@@ -72,7 +80,7 @@ class NormalLoginForm extends React.Component {
                 institucional.
               </Text>
             </div>
-            <Form onFinish={this.onFinish} className="login-form">
+            <Form onFinish={this.performLogin} className="login-form">
               <Form.Item
                 name="username"
                 rules={[
@@ -99,31 +107,39 @@ class NormalLoginForm extends React.Component {
                   },
                 ]}
               >
-                <Input
+                <Input.Password
                   prefix={<LockOutlined style={{ color: "rgba(0,0,0,.25)" }} />}
-                  type="password"
                   placeholder="Contraseña"
                   onChange={(text) => {
                     this.setState({ password: text.target.value });
                   }}
                 />
               </Form.Item>
-              <Form.Item
-                name="remember"
-                valuePropName="checked"
-                initialValue={true}
-              >
-                <Checkbox>Recuérdame</Checkbox>
-                <div
-                  className="login-form-forgot"
-                  href="https://cuenta.unal.edu.co/index.php?p=recoverPassword"
+              <Form.Item name="remember" className="login-form-remember">
+                <Checkbox
+                  checked={this.state.checked}
+                  onClick={this.checkChanged}
                 >
-                  Olvidé mi contraseña
-                </div>
-                <Button type="primary" htmlType="submit" block>
+                  Recuérdame
+                </Checkbox>
+              </Form.Item>
+              <a
+                className="login-form-forgot"
+                href="https://cuenta.unal.edu.co/index.php?p=recoverPassword"
+              >
+                Olvidé mi contraseña
+              </a>
+              <Form.Item>
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  className="login-form-button"
+                >
                   Ingresar
                 </Button>
-                ¿No tiene un usuario? - <a href="/contact">Contáctenos</a>
+                <div className="login-form-contact">
+                  ¿No tiene un usuario? - <a href="/contact">Contáctenos</a>
+                </div>
               </Form.Item>
             </Form>
           </div>

@@ -29,23 +29,21 @@ code {
   margin-right: 20px;
 }
 
-.ant-table-tbody tr:first-child {
-  background-color: whitesmoke;
+/* Sobre-escribiendo estilos de AntD */
+.ant-form-item-required::before {
+  font-size: 0px !important;
 }
 
-.ant-table-tbody tr:nth-child(even) {
-  background-color: whitesmoke;
+.ant-radio-button-wrapper:focus-within {
+  outline: 3px solid rgba(45, 38, 86, 0.06) !important;
 }
 
-.ant-table-tbody tr:nth-child(odd) {
-  background-color: white;
+.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
+  color: white !important;
+  background: #2d2656da !important;
+  box-shadow: -1px 0 0 0 #2d2656 !important;
 }
 
-.ant-table-tbody tr:last-child {
-  background-color: whitesmoke;
-}
-
-/* Edit.css */
 .editable-cell {
   position: relative;
 }
@@ -59,4 +57,54 @@ code {
   border: 1px solid #2d2656;
   border-radius: 4px;
   padding: 4px 11px;
+}
+
+/* Login y Contact */
+.main-row-container {
+  padding: 1em;
+  padding-bottom: 0;
+  margin-top: 1.5em;
+}
+
+.login-general {
+  padding: 1em;
+  padding-bottom: 0;
+  margin-top: 1.5em;
+  background-color: lightgrey;
+  border-radius: 15px;
+}
+
+.login-welcome {
+  text-align: center;
+  margin-bottom: 1.5em;
+}
+
+.login-form-forgot {
+  float: right;
+  margin-top: -2em;
+}
+
+.login-form-remember {
+  margin-bottom: 0em !important;
+  width: 50%;
+}
+
+.login-form-button {
+  width: 100%;
+  margin-bottom: 1em;
+  margin-top: 1em;
+}
+
+.login-form-contact {
+  margin-bottom: 0.5em;
+}
+
+.login-form-button {
+  width: 100%;
+  margin-bottom: 1em;
+  margin-top: 1em;
+}
+
+.contact-welcome {
+  text-align: center;
 }

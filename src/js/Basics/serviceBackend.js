@@ -7,7 +7,7 @@ export default class Backend {
   }
 
   static sendRequest(method, path, body) {
-    return this._request(
+    return this.request(
       method,
       path,
       {
@@ -20,7 +20,7 @@ export default class Backend {
   }
 
   static sendLogin(username, password) {
-    return this._request(
+    return this.request(
       "POST",
       "login",
       {
@@ -34,7 +34,7 @@ export default class Backend {
     );
   }
 
-  static _request(method, path, headers, body) {
+  static request(method, path, headers, body) {
     let answer = fetch(this.backEndUrl + path, {
       method: method,
       headers: headers,

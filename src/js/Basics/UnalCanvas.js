@@ -15,11 +15,14 @@ class UnalCanvas extends Component {
     this.handleSession = this.handleSession.bind(this);
     this.state = {
       logged: false,
+      checked: false,
     };
   }
+
   handleSession = (logged) => {
     this.setState({ logged: logged });
   };
+
   render() {
     return (
       <div>
@@ -258,16 +261,6 @@ class UnalCanvas extends Component {
                   Servicios<span className="caret"> </span>
                 </div>
               </div>
-              <div className="btn-group hidden-sm hidden-md hidden-lg hidden-print">
-                <div
-                  className="btn btn-default dropdown-toggle"
-                  data-toggle="dropdown"
-                  id="unalOpenMenuPerfiles"
-                  data-target="#profiles"
-                >
-                  Perfiles<span className="caret"> </span>
-                </div>
-              </div>
             </div>
           </header>
 
@@ -282,7 +275,7 @@ class UnalCanvas extends Component {
         <footer
           className="clear"
           style={{
-            marginTop: "-20px",
+            marginTop: "-25px",
             lineHeight: "normal",
             overflow: "hidden",
           }}
@@ -372,7 +365,7 @@ class UnalCanvas extends Component {
               </a>
               <br />
               <a href="index.html#">Acerca de este sitio web</a>
-              <br /> Última actualización: 23/07/2020
+              <br /> Última actualización: 22/09/2020
             </p>
           </div>
           <div className="col-md-2 col-lg-2 col-sm-2 col-xs-12 logos">

@@ -1,6 +1,5 @@
 import React from "react";
 import moment from "moment";
-import "@ant-design/compatible/assets/index.css";
 import { Input, DatePicker, Select, InputNumber, Radio, Form } from "antd";
 import { withRouter } from "react-router-dom";
 

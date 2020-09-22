@@ -1,7 +1,6 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
 import { EyeOutlined, SaveOutlined } from "@ant-design/icons";
-import "@ant-design/compatible/assets/index.css";
 import {
   Row,
   Divider,
