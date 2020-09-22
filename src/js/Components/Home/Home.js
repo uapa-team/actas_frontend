@@ -6,7 +6,6 @@ import { Typography, Row, Divider, Col, Button, message } from "antd";
 import DrawerDownload from "./DrawerDownload";
 import DrawerCreate from "./DrawerCreate";
 import Backend from "../../../serviceBackend";
-import { PrimButton } from "./HomeStyles";
 
 const { Title } = Typography;
 
@@ -110,17 +109,15 @@ class Home extends React.Component {
               <Title style={{ marginBottom: "0px" }}>Casos Estudiantiles</Title>
             </Col>
             <Col span={4}>
-              <PrimButton>
-                <Button
-                  block
-                  type="primary"
-                  icon={<DownloadOutlined />}
-                  onClick={(e) => this.showDrawer(e, "Download")}
-                  className="generateCM_button"
-                >
-                  Generar Acta
-                </Button>
-              </PrimButton>
+              <Button
+                block
+                type="primary"
+                icon={<DownloadOutlined />}
+                onClick={(e) => this.showDrawer(e, "Download")}
+                className="generateCM_button"
+              >
+                Generar Acta
+              </Button>
               <DrawerDownload
                 visible={this.state.downloadDrawerVisible}
                 onClose={this.closeDrawer}
@@ -128,17 +125,15 @@ class Home extends React.Component {
             </Col>
             <Col span={1} />
             <Col span={4}>
-              <PrimButton>
-                <Button
-                  block
-                  type="primary"
-                  icon={<PlusOutlined />}
-                  onClick={(e) => this.showDrawer(e, "Create")}
-                  className="createCM_button"
-                >
-                  Crear un nuevo caso
-                </Button>
-              </PrimButton>
+              <Button
+                block
+                type="primary"
+                icon={<PlusOutlined />}
+                onClick={(e) => this.showDrawer(e, "Create")}
+                className="createCM_button"
+              >
+                Crear un nuevo caso
+              </Button>
               <DrawerCreate
                 visible={this.state.createDrawerVisible}
                 onClose={this.closeDrawer}
@@ -160,17 +155,15 @@ class Home extends React.Component {
             </Col>
             <Col span={1} />
             <Col span={4}>
-              <PrimButton>
-                <Button
-                  block
-                  type="primary"
-                  icon={<PlusOutlined />}
-                  onClick={(e) => this.showDrawer(e, "Create")}
-                  className="createCM_button"
-                >
-                  Crear un nuevo caso
-                </Button>
-              </PrimButton>
+              <Button
+                block
+                type="primary"
+                icon={<PlusOutlined />}
+                onClick={(e) => this.showDrawer(e, "Create")}
+                className="createCM_button"
+              >
+                Crear un nuevo caso
+              </Button>
               <DrawerCreate
                 visible={this.state.createDrawerVisible}
                 onClose={this.closeDrawer}

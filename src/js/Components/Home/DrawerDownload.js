@@ -3,7 +3,6 @@ import { withRouter } from "react-router-dom";
 import Backend from "../../../serviceBackend";
 import "@ant-design/compatible/assets/index.css";
 import { Drawer, Button, Col, Row, Radio, InputNumber, Spin, Form } from "antd";
-import { StyledRadio } from "./HomeStyles";
 class DrawerDownload extends React.Component {
   constructor(props) {
     super(props);
@@ -39,11 +38,9 @@ class DrawerDownload extends React.Component {
   };
   radioBtn = (value) => {
     return (
-      <StyledRadio key={value[1].filter}>
-        <Radio style={this.radioStyle} value={value[1].filter}>
-          {value[1].display}
-        </Radio>
-      </StyledRadio>
+      <Radio style={this.radioStyle} value={value[1].filter}>
+        {value[1].display}
+      </Radio>
     );
   };
   render() {

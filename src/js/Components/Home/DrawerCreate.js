@@ -15,7 +15,6 @@ import {
 } from "antd";
 import moment from "moment";
 import Backend from "../../../serviceBackend";
-import { LabelSD } from "./DrawerCreateStyles";
 const { Option } = Select;
 
 class DrawerCreate extends React.Component {
@@ -153,28 +152,26 @@ class DrawerCreate extends React.Component {
           <Row>
             <Col>
               <Form.Item label="Documento Estudiante" name="student_dni">
-                <LabelSD>
-                  <Input
-                    addonBefore={
-                      <Form.Item name="student_dni_type" initialValue="CC">
-                        <Select style={{ width: "5em" }} key="student_dni_type">
-                          <Option value="Cédula de ciudadanía Colombiana">
-                            CC
-                          </Option>
-                          <Option value="Tarjeta de identidad Colombiana">
-                            TI
-                          </Option>
-                          <Option value="Cédula de extranjería">CE</Option>
-                          <Option value="Pasaporte">PS</Option>
-                          <Option value="Otro">OT</Option>
-                        </Select>
-                      </Form.Item>
-                    }
-                    placeholder="Ingrese el documento del estudiante"
-                    key="student_dni"
-                    onBlur={(e) => this.autofillName(e.target.value)}
-                  />
-                </LabelSD>
+                <Input
+                  addonBefore={
+                    <Form.Item name="student_dni_type" initialValue="CC">
+                      <Select style={{ width: "5em" }} key="student_dni_type">
+                        <Option value="Cédula de ciudadanía Colombiana">
+                          CC
+                        </Option>
+                        <Option value="Tarjeta de identidad Colombiana">
+                          TI
+                        </Option>
+                        <Option value="Cédula de extranjería">CE</Option>
+                        <Option value="Pasaporte">PS</Option>
+                        <Option value="Otro">OT</Option>
+                      </Select>
+                    </Form.Item>
+                  }
+                  placeholder="Ingrese el documento del estudiante"
+                  key="student_dni"
+                  onBlur={(e) => this.autofillName(e.target.value)}
+                />
               </Form.Item>
             </Col>
           </Row>

@@ -4,8 +4,6 @@ import { Input, Button, Checkbox, Typography, message, Form } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { Row, Col } from "antd";
 import { withRouter } from "react-router-dom";
-import { PrimButton } from "../Home/HomeStyles";
-import { LoginFormForgot, LoginGeneral, LoginWelcome } from "./LoginStyled";
 import Backend from "../../../serviceBackend";
 
 const { Title, Text } = Typography;
@@ -63,18 +61,17 @@ class NormalLoginForm extends React.Component {
       <Row>
         <Col xs={4} sm={4} md={6} lg={8} xl={8}></Col>
         <Col xs={16} sm={16} md={12} lg={8} xl={8}>
-          <LoginGeneral>
-            <LoginWelcome>
+          <div>
+            <div>
               <Title>Aplicación de Actas</Title>
               <Text>
                 Bienvenido a la apliación de actas de la Facultad de Ingeniería
-                de la Universidad Nacional de Colombia
               </Text>
               <Text>
                 . Para continuar, por favor, ingrese su usuario y contraseña
                 institucional.
               </Text>
-            </LoginWelcome>
+            </div>
             <Form onFinish={this.onFinish} className="login-form">
               <Form.Item
                 name="username"
@@ -117,21 +114,19 @@ class NormalLoginForm extends React.Component {
                 initialValue={true}
               >
                 <Checkbox>Recuérdame</Checkbox>
-                <LoginFormForgot
+                <div
                   className="login-form-forgot"
                   href="https://cuenta.unal.edu.co/index.php?p=recoverPassword"
                 >
                   Olvidé mi contraseña
-                </LoginFormForgot>
-                <PrimButton>
-                  <Button type="primary" htmlType="submit" block>
-                    Ingresar
-                  </Button>
-                </PrimButton>
+                </div>
+                <Button type="primary" htmlType="submit" block>
+                  Ingresar
+                </Button>
                 ¿No tiene un usuario? - <a href="/contact">Contáctenos</a>
               </Form.Item>
             </Form>
-          </LoginGeneral>
+          </div>
         </Col>
         <Col xs={4} sm={4} md={6} lg={8} xl={8}></Col>
       </Row>

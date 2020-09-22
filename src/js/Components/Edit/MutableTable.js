@@ -10,10 +10,8 @@ import {
   Form,
 } from "antd";
 import { withRouter } from "react-router-dom";
-import { PrimButton } from "../Home/HomeStyles";
 import { DeleteOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import _ from "lodash";
-import "./Edit.css";
 
 const { Option } = Select;
 const EditableContext = React.createContext();
@@ -371,16 +369,14 @@ class MutableTable extends React.Component {
             zIndex: "1",
           }}
         >
-          <PrimButton>
-            <Button
-              onClick={this.handleAdd}
-              type="primary"
-              style={{ marginBottom: 16 }}
-              icon={<PlusCircleOutlined />}
-            >
-              {`Añadir ${this.props.metadata.display}`}
-            </Button>
-          </PrimButton>
+          <Button
+            onClick={this.handleAdd}
+            type="primary"
+            style={{ marginBottom: 16 }}
+            icon={<PlusCircleOutlined />}
+          >
+            {`Añadir ${this.props.metadata.display}`}
+          </Button>
         </div>
         <Form.Item
           label={this.props.metadata.display}
