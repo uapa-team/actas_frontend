@@ -1,7 +1,6 @@
 import React from "react";
-import { Form } from '@ant-design/compatible';
-import '@ant-design/compatible/assets/index.css';
-import { Input, Button, Checkbox, Typography, message } from "antd";
+import "@ant-design/compatible/assets/index.css";
+import { Input, Button, Checkbox, Typography, message, Form } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { Row, Col } from "antd";
 import { withRouter } from "react-router-dom";
@@ -66,7 +65,6 @@ class NormalLoginForm extends React.Component {
   };
 
   render() {
-    const { getFieldDecorator } = this.props.form;
     return (
       <Row>
         <Col xs={4} sm={4} md={6} lg={8} xl={8}></Col>
@@ -84,56 +82,47 @@ class NormalLoginForm extends React.Component {
               </Text>
             </LoginWelcome>
             <Form onSubmit={this.handleSubmit} className="login-form">
-              <Form.Item>
-                {getFieldDecorator("username", {
-                  rules: [
-                    {
-                      required: true,
-                      message: "Por favor, ingrese su usuario.",
-                    },
-                  ],
-                })(
-                  <Input
-                    prefix={
-                      <UserOutlined style={{ color: "rgba(0,0,0,.25)" }} />
-                    }
-                    placeholder="Usuario SIA"
-                    onChange={(text) => {
-                      this.setState({ username: text.target.value });
-                    }}
-                  />
-                )}
-              </Form.Item>
-              <Form.Item>
-                {getFieldDecorator("password", {
-                  rules: [
-                    {
-                      required: true,
-                      message: "Por favor, ingrese su contraseña.",
-                    },
-                  ],
-                })(
-                  <Input
-                    prefix={
-                      <LockOutlined style={{ color: "rgba(0,0,0,.25)" }} />
-                    }
-                    type="password"
-                    placeholder="Contraseña"
-                    onChange={(text) => {
-                      this.setState({ password: text.target.value });
-                    }}
-                  />
-                )}
-              </Form.Item>
-              <Form.Item>
-                {getFieldDecorator(
-                  "remember",
+              <Form.Item
+                name="username"
+                rules={[
                   {
-                    valuePropName: "checked",
-                    initialValue: true,
+                    required: true,
+                    message: "Por favor, ingrese su usuario.",
                   },
-                  ""
-                )(<Checkbox>Recuérdame</Checkbox>)}
+                ]}
+              >
+                <Input
+                  prefix={<UserOutlined style={{ color: "rgba(0,0,0,.25)" }} />}
+                  placeholder="Usuario SIA"
+                  onChange={(text) => {
+                    this.setState({ username: text.target.value });
+                  }}
+                />
+              </Form.Item>
+              <Form.Item
+                name="password"
+                rules={[
+                  {
+                    required: true,
+                    message: "Por favor, ingrese su contraseña.",
+                  },
+                ]}
+              >
+                <Input
+                  prefix={<LockOutlined style={{ color: "rgba(0,0,0,.25)" }} />}
+                  type="password"
+                  placeholder="Contraseña"
+                  onChange={(text) => {
+                    this.setState({ password: text.target.value });
+                  }}
+                />
+              </Form.Item>
+              <Form.Item
+                name="remember"
+                valuePropName="checked"
+                initialValue={true}
+              >
+                <Checkbox>Recuérdame</Checkbox>
                 <LoginFormForgot
                   className="login-form-forgot"
                   href="https://cuenta.unal.edu.co/index.php?p=recoverPassword"
@@ -156,8 +145,4 @@ class NormalLoginForm extends React.Component {
   }
 }
 
-const WrappedNormalLoginForm = Form.create({ name: "normal_login" })(
-  NormalLoginForm
-);
-
-export default withRouter(Form.create()(WrappedNormalLoginForm));
+export default withRouter(NormalLoginForm);

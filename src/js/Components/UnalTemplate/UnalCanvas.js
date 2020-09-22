@@ -213,7 +213,7 @@ class UnalCanvas extends Component {
                 </div>
                 <div className="btn-group">
                   <a
-                    href="https://ingenieria.bogota.unal.edu.co/actas/contact"
+                    href="/actas/contact"
                     className="btn btn-default dropdown-toggle"
                   >
                     Contáctenos

@@ -1,10 +1,10 @@
 import React from "react";
-import { Form } from '@ant-design/compatible';
-import '@ant-design/compatible/assets/index.css';
+import { Form } from "@ant-design/compatible";
+import "@ant-design/compatible/assets/index.css";
 import { Input, Table, Popconfirm, Button, Select, InputNumber } from "antd";
 import { withRouter } from "react-router-dom";
 import { PrimButton } from "../Home/HomeStyles";
-import { DeleteOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import { DeleteOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import _ from "lodash";
 import "./Edit.css";
 
@@ -69,98 +69,16 @@ class EditableCell extends React.Component {
       if (dataType === "String") {
         if (choices) {
           return (
-            <Form.Item>
-              {form.getFieldDecorator(dataIndex, {
-                initialValue: record[dataIndex],
-                rules: [
-                  {
-                    required: true,
-                    message: `${title} es requerido.`,
-                  },
-                ],
-              })(
-                <Select
-                  showSearch
-                  placeholder={title}
-                  ref={(node) => (this.input = node)}
-                  onPressEnter={this.save}
-                  onBlur={this.save}
-                  optionFilterProp="children"
-                  filterOption={(input, option) =>
-                    option.props.children.toLowerCase().indexOf(
-                      input
-                        .toLowerCase()
-                        .normalize("NFD")
-                        .replace(/[\u0300-\u036f]/g, "")
-                    ) >= 0
-                  }
-                >
-                  {(() => {
-                    return choices.map((ch) => {
-                      return (
-                        <Option value={ch} key={ch}>
-                          {ch.normalize("NFD").replace(/[\u0300-\u036f]/g, "")}
-                        </Option>
-                      );
-                    });
-                  })()}
-                </Select>
-              )}
-            </Form.Item>
-          );
-        } else {
-          return (
-            <Form.Item>
-              {form.getFieldDecorator(dataIndex, {
-                initialValue: record[dataIndex],
-                rules: [
-                  {
-                    required: true,
-                    message: `${title} es requerido.`,
-                  },
-                ],
-              })(
-                <Input
-                  ref={(node) => (this.input = node)}
-                  onPressEnter={this.save}
-                  onBlur={this.save}
-                  placeholder={title}
-                />
-              )}
-            </Form.Item>
-          );
-        }
-      } else if (dataType === "Integer") {
-        return (
-          <Form.Item>
-            {form.getFieldDecorator(dataIndex, {
-              initialValue: record[dataIndex],
-              rules: [
+            <Form.Item
+              name={dataIndex}
+              initialValue={record[dataIndex]}
+              rules={[
                 {
                   required: true,
                   message: `${title} es requerido.`,
                 },
-              ],
-            })(
-              <InputNumber
-                ref={(node) => (this.input = node)}
-                onPressEnter={this.save}
-                onBlur={this.save}
-              />
-            )}
-          </Form.Item>
-        );
-      } else if (dataType === "Boolean") {
-        return (
-          <Form.Item>
-            {form.getFieldDecorator(dataIndex, {
-              rules: [
-                {
-                  required: true,
-                  message: `${title} es requerido.`,
-                },
-              ],
-            })(
+              ]}
+            >
               <Select
                 showSearch
                 placeholder={title}
@@ -168,11 +86,89 @@ class EditableCell extends React.Component {
                 onPressEnter={this.save}
                 onBlur={this.save}
                 optionFilterProp="children"
+                filterOption={(input, option) =>
+                  option.props.children.toLowerCase().indexOf(
+                    input
+                      .toLowerCase()
+                      .normalize("NFD")
+                      .replace(/[\u0300-\u036f]/g, "")
+                  ) >= 0
+                }
               >
-                <Option value="True">Si</Option>
-                <Option value="False">No</Option>
+                {(() => {
+                  return choices.map((ch) => {
+                    return (
+                      <Option value={ch} key={ch}>
+                        {ch.normalize("NFD").replace(/[\u0300-\u036f]/g, "")}
+                      </Option>
+                    );
+                  });
+                })()}
               </Select>
-            )}
+            </Form.Item>
+          );
+        } else {
+          return (
+            <Form.Item
+              name={dataIndex}
+              initialValue={record[dataIndex]}
+              rules={[
+                {
+                  required: true,
+                  message: `${title} es requerido.`,
+                },
+              ]}
+            >
+              <Input
+                ref={(node) => (this.input = node)}
+                onPressEnter={this.save}
+                onBlur={this.save}
+                placeholder={title}
+              />
+            </Form.Item>
+          );
+        }
+      } else if (dataType === "Integer") {
+        return (
+          <Form.Item
+            name={dataIndex}
+            initialValue={record[dataIndex]}
+            rules={[
+              {
+                required: true,
+                message: `${title} es requerido.`,
+              },
+            ]}
+          >
+            <InputNumber
+              ref={(node) => (this.input = node)}
+              onPressEnter={this.save}
+              onBlur={this.save}
+            />
+          </Form.Item>
+        );
+      } else if (dataType === "Boolean") {
+        return (
+          <Form.Item
+            name={dataIndex}
+            rules={[
+              {
+                required: true,
+                message: `${title} es requerido.`,
+              },
+            ]}
+          >
+            <Select
+              showSearch
+              placeholder={title}
+              ref={(node) => (this.input = node)}
+              onPressEnter={this.save}
+              onBlur={this.save}
+              optionFilterProp="children"
+            >
+              <Option value="True">Si</Option>
+              <Option value="False">No</Option>
+            </Select>
           </Form.Item>
         );
       } else {
@@ -336,7 +332,6 @@ class MutableTable extends React.Component {
   }
 
   render() {
-    const { getFieldDecorator } = this.props.form;
     const { dataSource } = this.state;
     const components = {
       body: {
@@ -384,19 +379,19 @@ class MutableTable extends React.Component {
             </Button>
           </PrimButton>
         </div>
-        <Form.Item label={this.props.metadata.display}>
-          {getFieldDecorator(this.props.fieldName, {
-            initialValue: this.props.metadata.default,
-          })(
-            <Table
-              components={components}
-              rowClassName={() => "editable-row"}
-              bordered
-              dataSource={dataSource}
-              columns={columns}
-              scroll={{ x: 1800, y: 300 }}
-            />
-          )}
+        <Form.Item
+          label={this.props.metadata.display}
+          name={this.props.fieldName}
+          initialValue={this.props.metadata.default}
+        >
+          <Table
+            components={components}
+            rowClassName={() => "editable-row"}
+            bordered
+            dataSource={dataSource}
+            columns={columns}
+            scroll={{ x: 1800, y: 300 }}
+          />
         </Form.Item>
       </div>
     );
