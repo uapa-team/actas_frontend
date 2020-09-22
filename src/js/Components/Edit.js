@@ -11,11 +11,11 @@ import {
   message,
   Form,
 } from "antd";
-import MutableComponent from "./MutableComponent";
-import MutableTable from "./MutableTable";
-import Backend from "../../../serviceBackend";
+import EditComponent from "./EditComponent";
+import EditTable from "./EditTable";
+import Backend from "../Basics/serviceBackend";
 import Columns from "react-columns";
-import Functions from "../../../Functions";
+import Functions from "../Basics/serviceBackend";
 
 const { Title } = Typography;
 
@@ -42,7 +42,7 @@ class Edit extends React.Component {
       i[1].default = this.state.case[i[0]];
     }
     return (
-      <MutableComponent
+      <EditComponent
         key={i[0]}
         fieldName={i[0]}
         metadata={i[1]}
@@ -68,7 +68,7 @@ class Edit extends React.Component {
         );
       }
       return (
-        <MutableTable
+        <EditTable
           key={i[0]}
           fieldName={i[0]}
           dataSource={i[1].default}

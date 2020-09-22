@@ -204,7 +204,7 @@ class EditableCell extends React.Component {
   }
 }
 
-class MutableTable extends React.Component {
+class EditTable extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -401,4 +401,4 @@ class MutableTable extends React.Component {
   }
 }
 
-export default withRouter(MutableTable);
+export default withRouter(EditTable);

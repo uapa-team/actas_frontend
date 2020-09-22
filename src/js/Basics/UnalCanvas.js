@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-import Backend from "../../../serviceBackend";
-import "../../../css/bootstrap.min.css";
-import "../../../css/bootstrap-theme.min.css";
-import "../../../css/printer.css";
-import "../../../css/reset.css";
-import "../../../css/unal.css";
+import Backend from "./serviceBackend";
+import "../../css/bootstrap.min.css";
+import "../../css/bootstrap-theme.min.css";
+import "../../css/printer.css";
+import "../../css/reset.css";
+import "../../css/unal.css";
 
 import "./unal.js";
 import "./jquery.js";
@@ -33,19 +33,15 @@ class UnalCanvas extends Component {
         <meta name="expires" content={1} />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <meta name="robots" content="all" />
+        <link type="text/css" href="../../css/bootstrap.min.css" media="all" />
         <link
           type="text/css"
-          href="../../../css/bootstrap.min.css"
+          href="../../css/bootstrap-theme.min.css"
           media="all"
         />
-        <link
-          type="text/css"
-          href="../../../css/bootstrap-theme.min.css"
-          media="all"
-        />
-        <link type="text/css" href="../../../css/reset.css" media="all" />
-        <link type="text/css" href="../../../css/unal.css" media="all" />
-        <link type="text/css" href="../../../css/printer.css" media="print" />
+        <link type="text/css" href="../../css/reset.css" media="all" />
+        <link type="text/css" href="../../css/unal.css" media="all" />
+        <link type="text/css" href="../../css/printer.css" media="print" />
         <title>ActasApp: Universidad Nacional de Colombia</title>
         <div id="footfix">
           <div id="services">
@@ -54,7 +50,7 @@ class UnalCanvas extends Component {
               <li>
                 <a href="http://correo.unal.edu.co">
                   <img
-                    src={require("../../../images/icnServEmail.png")}
+                    src={require("../../images/icnServEmail.png")}
                     width={32}
                     height={32}
                     alt="Correo Electrónico"
@@ -65,7 +61,7 @@ class UnalCanvas extends Component {
               <li>
                 <a href="https://dninfoa.unal.edu.co">
                   <img
-                    src={require("../../../images/icnServSia.png")}
+                    src={require("../../images/icnServSia.png")}
                     width={32}
                     height={32}
                     alt="Dirección Nacional de Información Académica"
@@ -76,7 +72,7 @@ class UnalCanvas extends Component {
               <li>
                 <a href="http://bibliotecas.unal.edu.co">
                   <img
-                    src={require("../../../images/icnServLibrary.png")}
+                    src={require("../../images/icnServLibrary.png")}
                     width={32}
                     height={32}
                     alt="Biblioteca"
@@ -87,7 +83,7 @@ class UnalCanvas extends Component {
               <li>
                 <a href="http://personal.unal.edu.co">
                   <img
-                    src={require("../../../images/icnServCall.png")}
+                    src={require("../../images/icnServCall.png")}
                     width={32}
                     height={32}
                     alt="Convocatorias"
@@ -98,7 +94,7 @@ class UnalCanvas extends Component {
               <li>
                 <a href="http://identidad.unal.edu.co">
                   <img
-                    src={require("../../../images/icnServIdentidad.png")}
+                    src={require("../../images/icnServIdentidad.png")}
                     width={32}
                     height={32}
                     alt="Identidad U.N."
@@ -113,14 +109,14 @@ class UnalCanvas extends Component {
               <a href="http://unal.edu.co">
                 <svg width="93%" height="93%">
                   <image
-                    xlinkHref={require("../../../images/escudoUnal.svg")}
+                    xlinkHref={require("../../images/escudoUnal.svg")}
                     width="100%"
                     height="100%"
                     className="hidden-print"
                   />
                 </svg>
                 <img
-                  src={require("../../../images/escudoUnal_black.png")}
+                  src={require("../../images/escudoUnal_black.png")}
                   className="visible-print"
                   alt="Escudo de la Universidad Nacional de Colombia."
                 />
@@ -130,14 +126,14 @@ class UnalCanvas extends Component {
               <img
                 className="hidden-print"
                 alt="Escudo de la República de Colombia"
-                src={require("../../../images/sealColombia.png")}
+                src={require("../../images/sealColombia.png")}
                 width={66}
                 height={66}
               />
               <img
                 className="visible-print"
                 alt="Escudo de la República de Colombia"
-                src={require("../../../images/sealColombia_black.png")}
+                src={require("../../images/sealColombia_black.png")}
                 width={66}
                 height={66}
               />
@@ -388,14 +384,14 @@ class UnalCanvas extends Component {
                 <img
                   className="hidden-print"
                   alt="Orgullo UN"
-                  src={require("../../../images/log_orgullo.png")}
+                  src={require("../../images/log_orgullo.png")}
                   width={78}
                   height={21}
                 />
                 <img
                   className="visible-print"
                   alt="Orgullo UN"
-                  src={require("../../../images/log_orgullo_black.png")}
+                  src={require("../../images/log_orgullo_black.png")}
                   width={94}
                   height={37}
                 />
@@ -407,14 +403,14 @@ class UnalCanvas extends Component {
                 <img
                   className="hidden-print"
                   alt="Agencia de noticias"
-                  src={require("../../../images/log_agenc.png")}
+                  src={require("../../images/log_agenc.png")}
                   width={94}
                   height={25}
                 />
                 <img
                   className="visible-print"
                   alt="Agencia de noticias"
-                  src={require("../../../images/log_agenc_black.png")}
+                  src={require("../../images/log_agenc_black.png")}
                   width={94}
                   height={37}
                 />
@@ -427,7 +423,7 @@ class UnalCanvas extends Component {
               >
                 <img
                   alt="Trámites en línea"
-                  src={require("../../../images/log_gobiern.png")}
+                  src={require("../../images/log_gobiern.png")}
                   width={67}
                   height={51}
                 />
@@ -438,7 +434,7 @@ class UnalCanvas extends Component {
               >
                 <img
                   alt="Contaduría general de la republica"
-                  src={require("../../../images/log_contra.png")}
+                  src={require("../../images/log_contra.png")}
                   width={67}
                   height={51}
                 />

@@ -2,14 +2,14 @@ import React from "react";
 import { Table, Popconfirm, message, Input, Button } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import { withRouter } from "react-router-dom";
-import Functions from "../../../Functions";
+import Functions from "../Basics/Functions";
 import Highlighter from "react-highlight-words";
 import Columns from "react-columns";
-import Backend from "../../../serviceBackend";
+import Backend from "../Basics/serviceBackend";
 
 import moment from "moment";
 
-class CaseTable extends React.Component {
+class HomeCaseTable extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -398,4 +398,4 @@ function showTotal(total) {
   return `Hay ${total} solicitudes`;
 }
 
-export default withRouter(CaseTable);
+export default withRouter(HomeCaseTable);

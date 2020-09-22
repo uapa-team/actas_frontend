@@ -1,11 +1,11 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
-import CaseTable from "./CaseTable";
+import HomeCaseTable from "./HomeCaseTable";
 import { DownloadOutlined, PlusOutlined } from "@ant-design/icons";
 import { Typography, Row, Divider, Col, Button, message } from "antd";
-import DrawerDownload from "./DrawerDownload";
-import DrawerCreate from "./DrawerCreate";
-import Backend from "../../../serviceBackend";
+import HomeDrawerDownload from "./HomeDrawerDownload";
+import HomeDrawerCreate from "./HomeDrawerCreate";
+import Backend from "../Basics/serviceBackend";
 
 const { Title } = Typography;
 
@@ -118,7 +118,7 @@ class Home extends React.Component {
               >
                 Generar Acta
               </Button>
-              <DrawerDownload
+              <HomeDrawerDownload
                 visible={this.state.downloadDrawerVisible}
                 onClose={this.closeDrawer}
               />
@@ -134,7 +134,7 @@ class Home extends React.Component {
               >
                 Crear un nuevo caso
               </Button>
-              <DrawerCreate
+              <HomeDrawerCreate
                 visible={this.state.createDrawerVisible}
                 onClose={this.closeDrawer}
               />
@@ -164,7 +164,7 @@ class Home extends React.Component {
               >
                 Crear un nuevo caso
               </Button>
-              <DrawerCreate
+              <HomeDrawerCreate
                 visible={this.state.createDrawerVisible}
                 onClose={this.closeDrawer}
               />
@@ -172,7 +172,7 @@ class Home extends React.Component {
           </Row>
         )}
         <Row>
-          <CaseTable
+          <HomeCaseTable
             updateDataSource={this.updateDataSource}
             dataSource={
               this.state.searchTerm === "" && !this.state.filterByMinute

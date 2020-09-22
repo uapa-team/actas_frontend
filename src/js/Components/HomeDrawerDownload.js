@@ -1,9 +1,9 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
-import Backend from "../../../serviceBackend";
+import Backend from "../Basics/serviceBackend";
 import "@ant-design/compatible/assets/index.css";
 import { Drawer, Button, Col, Row, Radio, InputNumber, Spin, Form } from "antd";
-class DrawerDownload extends React.Component {
+class HomeDrawerDownload extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -171,4 +171,4 @@ class DrawerDownload extends React.Component {
   }
 }
 
-export default withRouter(DrawerDownload);
+export default withRouter(HomeDrawerDownload);

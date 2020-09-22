@@ -6,7 +6,7 @@ import { withRouter } from "react-router-dom";
 
 const { Option } = Select;
 const children = [];
-class MutableComponent extends React.Component {
+class EditComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -134,4 +134,4 @@ class MutableComponent extends React.Component {
   }
 }
 
-export default withRouter(MutableComponent);
+export default withRouter(EditComponent);
