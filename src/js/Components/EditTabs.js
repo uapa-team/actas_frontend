@@ -1,5 +1,5 @@
 import React from "react";
-import { Tabs, Col } from "antd";
+import { Tabs, Col, Form, Row } from "antd";
 import { withRouter } from "react-router-dom";
 import EditComponent from "./EditComponent";
 
@@ -14,6 +14,7 @@ class EditTabs extends React.Component {
       dataSource: this.props.dataSource,
       metadata: this.props.metadata,
       activeKey: 0,
+      readIndicator: 0,
       fillIndicator: 0,
       panes: initialPanes,
     };
@@ -23,11 +24,17 @@ class EditTabs extends React.Component {
   componentDidMount() {
     var dataFormat = [];
 
+    var x = this.state.readIndicator;
+    this.setState({
+      readIndicator: x + 1,
+    });
+
     this.state.dataSource.forEach((element) => {
+      x = element.code.concat(x);
       dataFormat.push({
         title: element.name,
-        content: this.drawFields(element),
-        key: element.code,
+        content: <Form>{this.drawFields(element)}</Form>,
+        key: x,
       });
     });
 
@@ -45,15 +52,20 @@ class EditTabs extends React.Component {
         mdata[key].default = element[key];
         auxArray.push([key, mdata[key]]);
       }
-      console.log(auxArray);
     }
-    return auxArray.map(this.createInput);
+    return <Row gutter={8}>{auxArray.map(this.createInput)}</Row>;
   };
 
   createInput = (i) => {
+    var x = this.state.fillIndicator;
+
+    this.setState({
+      fillIndicator: x + 1,
+    });
+
     return (
-      <Col span={8}>
-        <EditComponent fieldName={i[0]} metadata={i[1]} />
+      <Col span={8} key={i[0].concat(x)}>
+        <EditComponent key={i[0]} fieldName={i[0]} metadata={i[1]} />
       </Col>
     );
   };
@@ -70,9 +82,19 @@ class EditTabs extends React.Component {
     const { panes } = this.state;
     const activeKey = `newTab${this.newTabIndex++}`;
     const newPanes = [...panes];
+
+    var auxArray = [];
+    var mdata = this.state.metadata.fields;
+    for (var key in mdata) {
+      if (mdata.hasOwnProperty(key)) {
+        auxArray.push([key, mdata[key]]);
+      }
+    }
+    var components = <Row gutter={8}>{auxArray.map(this.createInput)}</Row>;
+
     newPanes.push({
       title: "Nueva entrada",
-      content: "Content of new Tab",
+      content: components,
       key: activeKey,
     });
     this.setState({

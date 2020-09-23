@@ -36,7 +36,7 @@ class Edit extends React.Component {
   }
 
   createInputs = () => {
-    return this.state.fields.map(this.createInput);
+    return <Row gutter={8}>{this.state.fields.map(this.createInput)}</Row>;
   };
 
   createInput = (i) => {
@@ -46,43 +46,28 @@ class Edit extends React.Component {
     ) {
       i[1].default = this.state.case[i[0]];
     }
-    return (
-      <Col span={8}>
-        <EditComponent
-          fieldName={i[0]}
-          metadata={i[1]}
-          form={this.props.form}
-        />
-      </Col>
-    );
-  };
-
-  createTables = () => {
-    return this.state.fields.map(this.createTable);
-  };
-
-  createTable = (i) => {
     if (i[1].type === "Table") {
-      if (
-        typeof this.state.case[i[0]] !== "undefined" &&
-        this.state.case[i[0]] !== ""
-      ) {
-        i[1].default = Array.from(
-          this.state.case[i[0]].map((i, index) => {
-            let dirResult = i["cases"][0];
-            dirResult["key"] = index;
-            return dirResult;
-          })
-        );
-      }
+      console.log("Información a ser enviada:");
+      console.log(i);
       return (
-        <EditTabs
-          key={i[0]}
-          fieldName={i[0]}
-          dataSource={i[1].default}
-          metadata={i[1]}
-          form={this.props.form}
-        />
+        <Col span={24} key={i[0]}>
+          <EditTabs
+            key={i[0]}
+            dataSource={i[1].default[0].cases}
+            metadata={i[1]}
+          />
+        </Col>
+      );
+    } else {
+      return (
+        <Col span={8} key={i[0]}>
+          <EditComponent
+            key={i[0]}
+            fieldName={i[0]}
+            metadata={i[1]}
+            form={this.props.form}
+          />
+        </Col>
       );
     }
   };
@@ -199,10 +184,7 @@ class Edit extends React.Component {
           </Col>
         </Row>
         <Divider style={{ background: "#ffffff00" }} />
-        <Form layout="vertical">
-          <Row gutter={8}>{this.createInputs()}</Row>
-          {this.createTables()}
-        </Form>
+        <Form layout="vertical">{this.createInputs()}</Form>
         <Divider style={{ background: "#ffffff00" }} />
       </>
     );
