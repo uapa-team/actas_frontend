@@ -28,6 +28,7 @@ class HomeDrawerCreate extends React.Component {
       programs: [],
       cases: [],
       periods: [],
+      edit: false,
     };
   }
 
@@ -48,30 +49,42 @@ class HomeDrawerCreate extends React.Component {
       });
   };
 
-  handleSave = (values, e, redirect) => {
+  editTrigger = () => {
+    this.setState({
+      edit: true,
+    });
+  };
+
+  handleSave = (values) => {
     values.date = values.date.utc().format();
-    this.props.onClose(e, "Create");
+    this.props.onClose("Create");
     const key = "updatable";
     message.loading({ content: "Guardando caso...", key });
     Backend.sendRequest("POST", "case", {
       items: [values],
     })
       .then((response) => {
-        this.props.onClose(e, "Create");
         if (response.status === 200) {
-          message.success({
-            content: "El caso se ha guardado exitosamente.",
-            key,
+          response.json().then((data) => {
+            this.props.onClose("Create");
+            message.success({
+              content: "El caso se ha guardado exitosamente.",
+              key,
+            });
+            let newID = data.inserted_items[0];
+            if (localStorage.getItem("type") !== "secretary") {
+              Backend.sendRequest("PATCH", "mark_received?id=".concat(newID));
+            }
+            if (this.state.edit) {
+              this.props.history.push({
+                pathname: "/edit/" + newID,
+              });
+              this.setState({
+                edit: false,
+              });
+            }
           });
-          response
-            .json()
-            .then((data) =>
-              redirect(
-                data["inserted_items"][0],
-                "Request." + this.props.form.getFieldValue("_cls")
-              )
-            );
-        } else if (response.status === 401) {
+        } else if (response.status) {
           message.error({
             content: "Usuario sin autorización para guardar casos.",
             key,
@@ -94,25 +107,6 @@ class HomeDrawerCreate extends React.Component {
         console.error(values);
         console.error(error);
       });
-  };
-
-  handleSaveAux = (e) => {
-    this.handleSave(e, (id) => {
-      if (localStorage.getItem("type") !== "secretary") {
-        Backend.sendRequest("PATCH", `mark_received?id=${id}`);
-      }
-    });
-  };
-
-  handleSaveAndEdit = (e) => {
-    this.handleSave(e, (id) => {
-      this.props.history.push({
-        pathname: "/edit/" + id,
-      });
-      if (localStorage.getItem("type") !== "secretary") {
-        Backend.sendRequest("PATCH", `mark_received?id=${id}`);
-      }
-    });
   };
 
   selectItem = (i) => {
@@ -159,7 +153,7 @@ class HomeDrawerCreate extends React.Component {
                 name="student_dni_type"
                 initialValue="CC"
               >
-                <Select key="student_dni_type">
+                <Select>
                   <Option value="Cédula de ciudadanía Colombiana">CC</Option>
                   <Option value="Tarjeta de identidad Colombiana">TI</Option>
                   <Option value="Cédula de extranjería">CE</Option>
@@ -172,17 +166,13 @@ class HomeDrawerCreate extends React.Component {
               <Form.Item label="Documento Estudiante" name="student_dni">
                 <Input
                   placeholder="Ingrese el documento del estudiante"
-                  key="student_dni"
                   onBlur={(e) => this.autofillName(e.target.value)}
                 />
               </Form.Item>
             </Col>
           </Row>
           <Form.Item label="Nombre Estudiante" name="student_name">
-            <Input
-              placeholder="Ingrese el nombre del estudiante"
-              key="student_name"
-            />
+            <Input placeholder="Ingrese el nombre del estudiante" />
           </Form.Item>
           <Form.Item
             label="Tipo de caso"
@@ -197,7 +187,6 @@ class HomeDrawerCreate extends React.Component {
             <Select
               showSearch
               placeholder="Por favor, escoja el tipo de caso"
-              key="_cls"
               filterOption={(input, option) =>
                 option.props.children
                   .toLowerCase()
@@ -218,7 +207,6 @@ class HomeDrawerCreate extends React.Component {
             <Select
               showSearch
               placeholder="Escoja el plan de estudios"
-              key="academic_program"
               filterOption={(input, option) =>
                 option.props.children.toLowerCase().indexOf(
                   input
@@ -241,7 +229,6 @@ class HomeDrawerCreate extends React.Component {
             <Select
               showSearch
               placeholder="Escoja el plan de estudios"
-              key="academic_period"
               filterOption={(input, option) =>
                 option.props.children.toLowerCase().indexOf(
                   input
@@ -261,25 +248,23 @@ class HomeDrawerCreate extends React.Component {
                 name="date"
                 initialValue={moment()}
               >
-                <DatePicker key="date" />
+                <DatePicker />
               </Form.Item>
             </Col>
             <Col span={8}>
               <Form.Item
-                label="Número del Acta"
+                label="Número de acta"
                 name="consecutive_minute"
                 initialValue={1}
                 rules={[
                   {
+                    type: "number",
                     min: 0,
                     message: "El número mínimo del acta es 0.",
                   },
                 ]}
               >
-                <InputNumber
-                  placeholder="Número de acta"
-                  key="council_minute"
-                />
+                <InputNumber placeholder="Número de acta" />
               </Form.Item>
             </Col>
             <Col span={8}>
@@ -289,50 +274,57 @@ class HomeDrawerCreate extends React.Component {
                 initialValue={2020}
                 rules={[
                   {
+                    type: "number",
                     min: 2000,
                     message: "El mínimo año para acta es 2000.",
                   },
                   {
-                    min: 2100,
+                    type: "number",
+                    max: 2100,
                     message: "El máximo año del acta es 2100.",
                   },
                 ]}
               >
-                <InputNumber placeholder="Número de acta" key="year" />
+                <InputNumber placeholder="Año" />
               </Form.Item>
             </Col>
           </Row>
-        </Form>
-        <Row gutter={8}>
-          {localStorage.getItem("type") !== "secretary" ? (
+          <Row gutter={8}>
+            {localStorage.getItem("type") !== "secretary" ? (
+              <Col>
+                <Form.Item>
+                  <Button
+                    icon={<EditOutlined />}
+                    type="primary"
+                    htmlType="submit"
+                    onClick={this.editTrigger}
+                  >
+                    Guardar y editar
+                  </Button>
+                </Form.Item>
+              </Col>
+            ) : null}
+            <Col>
+              <Form.Item>
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  icon={<SaveOutlined />}
+                >
+                  Guardar
+                </Button>
+              </Form.Item>
+            </Col>
             <Col>
               <Button
-                icon={<EditOutlined />}
-                type="primary"
-                onClick={(e) => this.handleSaveAndEdit(e)}
+                icon={<CloseCircleOutlined />}
+                onClick={(e) => this.props.onClose(e, "Create")}
               >
-                Guardar y editar
+                Cancelar
               </Button>
             </Col>
-          ) : null}
-          <Col>
-            <Button
-              type="primary"
-              onClick={(e) => this.handleSaveAux(e, (_) => {})}
-              icon={<SaveOutlined />}
-            >
-              Guardar
-            </Button>
-          </Col>
-          <Col>
-            <Button
-              icon={<CloseCircleOutlined />}
-              onClick={(e) => this.props.onClose(e, "Create")}
-            >
-              Cancelar
-            </Button>
-          </Col>
-        </Row>
+          </Row>
+        </Form>
       </Drawer>
     );
   }
