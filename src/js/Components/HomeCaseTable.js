@@ -1,9 +1,8 @@
 import React from "react";
-import { Table, Popconfirm, message, Input, Button } from "antd";
+import { Table, Popconfirm, message, Input, Button, Row, Col } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import { withRouter } from "react-router-dom";
 import Highlighter from "react-highlight-words";
-import Columns from "react-columns";
 import Backend from "../Basics/Backend";
 
 import moment from "moment";
@@ -348,31 +347,38 @@ class HomeCaseTable extends React.Component {
         }
         bordered={true}
         expandedRowRender={(record) => (
-          <Columns gap={"0px"} columns={3}>
-            <div>
-              <b>Fecha de radicación:</b> {record.date.substring(0, 10)}.
-            </div>
-            <div>
-              <b>Respuesta de Consejo de Facultad:</b> {record.approval_status}.
-            </div>
-            <div>
-              <b>Respuesta de Comité Asesor:</b> {record.advisor_response}.
-            </div>
-            <div>
-              <b>Instancia que decide:</b> {record.decision_maker}.
-            </div>
-            <div>
-              <b>Días desde la radicación:</b>{" "}
-              {this.date_diff_indays(
-                moment().format("MM/DD/YYYY"),
-                record.date
-              )}
-              .
-            </div>
-            <div>
-              <b>ID del caso:</b> {record.id}.
-            </div>
-          </Columns>
+          <Row>
+            <Col span={8}>
+              <div>
+                <b>Fecha de radicación:</b> {record.date.substring(0, 10)}.
+              </div>
+              <div>
+                <b>Respuesta de Consejo de Facultad:</b>{" "}
+                {record.approval_status}.
+              </div>
+            </Col>
+            <Col span={8}>
+              <div>
+                <b>Respuesta de Comité Asesor:</b> {record.advisor_response}.
+              </div>
+              <div>
+                <b>Instancia que decide:</b> {record.decision_maker}.
+              </div>
+            </Col>
+            <Col span={8}>
+              <div>
+                <b>Días desde la radicación:</b>{" "}
+                {this.date_diff_indays(
+                  moment().format("MM/DD/YYYY"),
+                  record.date
+                )}
+                .
+              </div>
+              <div>
+                <b>ID del caso:</b> {record.id}.
+              </div>
+            </Col>
+          </Row>
         )}
         rowKey="id"
         pagination={{

@@ -25,10 +25,6 @@ code {
     monospace;
 }
 
-.saveCaseButton {
-  margin-right: 20px;
-}
-
 /* Sobre-escribiendo estilos de AntD */
 .ant-form-item-required::before {
   font-size: 0px !important;
@@ -136,4 +132,9 @@ code {
 
 .home-case-table {
   width: "100%";
+}
+
+/* Edit buttons */
+.edit-button {
+  margin-right: 20px;
 }

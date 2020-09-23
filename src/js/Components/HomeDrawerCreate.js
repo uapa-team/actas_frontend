@@ -12,6 +12,11 @@ import {
   message,
   Form,
 } from "antd";
+import {
+  EditOutlined,
+  SaveOutlined,
+  CloseCircleOutlined,
+} from "@ant-design/icons";
 import moment from "moment";
 import Backend from "../Basics/Backend";
 const { Option } = Select;
@@ -301,7 +306,11 @@ class HomeDrawerCreate extends React.Component {
         <Row gutter={8}>
           {localStorage.getItem("type") !== "secretary" ? (
             <Col>
-              <Button type="primary" onClick={(e) => this.handleSaveAndEdit(e)}>
+              <Button
+                icon={<EditOutlined />}
+                type="primary"
+                onClick={(e) => this.handleSaveAndEdit(e)}
+              >
                 Guardar y editar
               </Button>
             </Col>
@@ -310,12 +319,16 @@ class HomeDrawerCreate extends React.Component {
             <Button
               type="primary"
               onClick={(e) => this.handleSaveAux(e, (_) => {})}
+              icon={<SaveOutlined />}
             >
               Guardar
             </Button>
           </Col>
           <Col>
-            <Button onClick={(e) => this.props.onClose(e, "Create")}>
+            <Button
+              icon={<CloseCircleOutlined />}
+              onClick={(e) => this.props.onClose(e, "Create")}
+            >
               Cancelar
             </Button>
           </Col>

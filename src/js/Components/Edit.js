@@ -1,8 +1,13 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
-import { EyeOutlined, SaveOutlined } from "@ant-design/icons";
+import {
+  EyeOutlined,
+  SaveOutlined,
+  CloseCircleOutlined,
+} from "@ant-design/icons";
 import {
   Row,
+  Col,
   Divider,
   Typography,
   Button,
@@ -13,7 +18,6 @@ import {
 import EditComponent from "./EditComponent";
 import EditTable from "./EditTable";
 import Backend from "../Basics/Backend";
-import Columns from "react-columns";
 
 const { Title } = Typography;
 
@@ -42,12 +46,14 @@ class Edit extends React.Component {
       i[1].default = this.state.case[i[0]];
     }
     return (
-      <EditComponent
-        key={i[0]}
-        fieldName={i[0]}
-        metadata={i[1]}
-        form={this.props.form}
-      />
+      <Col span={8}>
+        <EditComponent
+          key={i[0]}
+          fieldName={i[0]}
+          metadata={i[1]}
+          form={this.props.form}
+        />
+      </Col>
     );
   };
 
@@ -137,58 +143,68 @@ class Edit extends React.Component {
 
   render() {
     return (
-      <div>
+      <>
         <Divider style={{ background: "#ffffff00" }} />
         <Row>
-          <Columns gap={"50px"} columns={2}>
+          <Col span={12}>
             <Title>Edición de solicitud</Title>
-            <div>
+            <p>
+              <b>ID del caso:</b> {this.state.id}.
+            </p>
+          </Col>
+          <Col span={12}>
+            <Button
+              onClick={(e) => this.saveCase(e)}
+              type="primary"
+              className="edit-button"
+              icon={<SaveOutlined />}
+            >
+              Guardar
+            </Button>
+            <Button
+              onClick={(e) => this.saveCaseReturn(e)}
+              type="primary"
+              className="edit-button"
+              icon={<SaveOutlined />}
+            >
+              Guardar y volver
+            </Button>
+            <Popconfirm
+              title="¿Qué tipo de vista previa desea generar?"
+              onConfirm={() => Backend.generateCouncil(false, this.state.id)}
+              onCancel={() => Backend.generateCouncil(true, this.state.id)}
+              okText="Consejo"
+              cancelText="Comité"
+              placement="right"
+            >
               <Button
-                onClick={(e) => this.saveCase(e)}
+                className="edit-button"
                 type="primary"
-                className="saveCaseButton"
-                icon={<SaveOutlined />}
+                icon={<EyeOutlined />}
               >
-                Guardar
+                Vista Previa
               </Button>
-              <Button
-                onClick={(e) => this.saveCaseReturn(e)}
-                type="primary"
-                className="saveCaseButton"
-                icon={<SaveOutlined />}
-              >
-                Guardar y volver
-              </Button>
-              <Popconfirm
-                title="¿Qué tipo de vista previa desea generar?"
-                onConfirm={() => Backend.generateCouncil(false, this.state.id)}
-                onCancel={() => Backend.generateCouncil(true, this.state.id)}
-                okText="Consejo"
-                cancelText="Comité"
-                placement="right"
-              >
-                <Button type="primary" icon={<EyeOutlined />}>
-                  Vista Previa
-                </Button>
-              </Popconfirm>
-            </div>
-          </Columns>
+            </Popconfirm>
+            <Button
+              className="edit-button"
+              onClick={(e) => {
+                this.props.history.push({
+                  pathname: "/home/",
+                });
+              }}
+              icon={<CloseCircleOutlined />}
+            >
+              Volver sin guardar
+            </Button>
+          </Col>
         </Row>
-        <Row>
-          <p>
-            <b>ID del caso:</b> {this.state.id}.
-          </p>
-
-          <Form>
-            <Columns gap={"50px"} columns={2}>
-              {this.createInputs()}
-            </Columns>
-            <Divider style={{ background: "#ffffff00" }} />
-            {this.createTables()}
-          </Form>
-        </Row>
-        <Divider />
-      </div>
+        <Divider style={{ background: "#ffffff00" }} />
+        <Form layout="vertical">
+          <Row gutter={8}>{this.createInputs()}</Row>
+          {this.createTables()}
+        </Form>
+        <Divider style={{ background: "#ffffff00" }} />
+      </>
     );
   }
   componentDidMount() {

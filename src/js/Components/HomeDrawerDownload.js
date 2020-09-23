@@ -2,6 +2,7 @@ import React from "react";
 import { withRouter } from "react-router-dom";
 import Backend from "../Basics/Backend";
 import { Drawer, Button, Col, Row, Radio, InputNumber, Spin, Form } from "antd";
+import { CheckCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
 class HomeDrawerDownload extends React.Component {
   constructor(props) {
     super(props);
@@ -138,17 +139,21 @@ class HomeDrawerDownload extends React.Component {
           <Row gutter={8}>
             <Col>
               <Button
+                icon={<CheckCircleOutlined />}
                 onClick={(e) => {
                   this.handleGenerate();
                   this.props.onClose(e, "Download");
                 }}
                 type="primary"
               >
-                Generar
+                Generar y descargar
               </Button>
             </Col>
             <Col>
-              <Button onClick={(e) => this.props.onClose(e, "Download")}>
+              <Button
+                icon={<CloseCircleOutlined />}
+                onClick={(e) => this.props.onClose(e, "Download")}
+              >
                 Cancelar
               </Button>
             </Col>
