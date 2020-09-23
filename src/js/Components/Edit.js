@@ -16,7 +16,7 @@ import {
   Form,
 } from "antd";
 import EditComponent from "./EditComponent";
-import EditTable from "./EditTable";
+import EditTabs from "./EditTabs";
 import Backend from "../Basics/Backend";
 
 const { Title } = Typography;
@@ -31,6 +31,7 @@ class Edit extends React.Component {
       fields: [],
       cls: "",
       id: this.props.match.params.id,
+      fillIndicator: 0,
     };
   }
 
@@ -48,7 +49,6 @@ class Edit extends React.Component {
     return (
       <Col span={8}>
         <EditComponent
-          key={i[0]}
           fieldName={i[0]}
           metadata={i[1]}
           form={this.props.form}
@@ -76,7 +76,7 @@ class Edit extends React.Component {
         );
       }
       return (
-        <EditTable
+        <EditTabs
           key={i[0]}
           fieldName={i[0]}
           dataSource={i[1].default}

@@ -321,7 +321,6 @@ class EditTable extends React.Component {
     toReturn[`${this.props.fieldName}`].value.forEach((i) => {
       delete i.key;
     });
-    console.log(this.props);
     //this.props.form.setFields(toReturn);
   }
 
@@ -340,7 +339,6 @@ class EditTable extends React.Component {
       },
     };
     const columns = this.columns.map((col) => {
-      console.log(col);
       if (!col.editable) {
         return col;
       }
