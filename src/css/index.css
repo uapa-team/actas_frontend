@@ -125,17 +125,6 @@ code {
   margin-bottom: "10px";
 }
 
-.home-drawer-div {
-  position: "absolute";
-  right: 0;
-  bottom: 0;
-  width: "100%";
-  border-top: "1px solid #e9e9e9";
-  padding: "10px 16px";
-  background: "#fff";
-  text-align: "right";
-}
-
 .home-drawer-radio-style {
   display: "flex";
   white-space: "normal";
@@ -143,4 +132,8 @@ code {
 
 .home-title {
   margin-bottom: 0 !important;
+}
+
+.home-case-table {
+  width: "100%";
 }

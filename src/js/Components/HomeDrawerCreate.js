@@ -39,7 +39,7 @@ class HomeDrawerCreate extends React.Component {
         }
       })
       .then((data) => {
-        this.props.form.setFieldsValue({ student_name: data.student_name });
+        //this.props.form.setFieldsValue({ student_name: data.student_name });
       });
   };
 
@@ -142,31 +142,30 @@ class HomeDrawerCreate extends React.Component {
     return (
       <Drawer
         title="Crear un nuevo caso"
-        width={"40%"}
+        width={"50%"}
         onClose={(e) => this.props.onClose(e, "Create")}
         visible={this.props.visible}
-        bodyStyle={{ paddingBottom: 80, paddingRight: 60 }}
       >
         <Form onFinish={this.handleSave} layout="vertical">
-          <Row>
-            <Col>
+          <Row gutter={16}>
+            <Col span={6}>
+              <Form.Item
+                label="Tipo de documento"
+                name="student_dni_type"
+                initialValue="CC"
+              >
+                <Select key="student_dni_type">
+                  <Option value="Cédula de ciudadanía Colombiana">CC</Option>
+                  <Option value="Tarjeta de identidad Colombiana">TI</Option>
+                  <Option value="Cédula de extranjería">CE</Option>
+                  <Option value="Pasaporte">PS</Option>
+                  <Option value="Otro">OT</Option>
+                </Select>
+              </Form.Item>
+            </Col>
+            <Col span={12}>
               <Form.Item label="Documento Estudiante" name="student_dni">
                 <Input
-                  addonBefore={
-                    <Form.Item name="student_dni_type" initialValue="CC">
-                      <Select style={{ width: "5em" }} key="student_dni_type">
-                        <Option value="Cédula de ciudadanía Colombiana">
-                          CC
-                        </Option>
-                        <Option value="Tarjeta de identidad Colombiana">
-                          TI
-                        </Option>
-                        <Option value="Cédula de extranjería">CE</Option>
-                        <Option value="Pasaporte">PS</Option>
-                        <Option value="Otro">OT</Option>
-                      </Select>
-                    </Form.Item>
-                  }
                   placeholder="Ingrese el documento del estudiante"
                   key="student_dni"
                   onBlur={(e) => this.autofillName(e.target.value)}
@@ -174,111 +173,93 @@ class HomeDrawerCreate extends React.Component {
               </Form.Item>
             </Col>
           </Row>
-          <Row>
-            <Col>
-              <Form.Item label="Nombre Estudiante" name="student_name">
-                <Input
-                  placeholder="Ingrese el nombre del estudiante"
-                  key="student_name"
-                />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <Form.Item
-                label="Tipo de caso"
-                name="_cls"
-                rules={[
-                  {
-                    required: true,
-                    message: "Por favor, escoja el tipo de caso",
-                  },
-                ]}
-              >
-                <Select
-                  showSearch
-                  placeholder="Por favor, escoja el tipo de caso"
-                  key="_cls"
-                  filterOption={(input, option) =>
-                    option.props.children
+          <Form.Item label="Nombre Estudiante" name="student_name">
+            <Input
+              placeholder="Ingrese el nombre del estudiante"
+              key="student_name"
+            />
+          </Form.Item>
+          <Form.Item
+            label="Tipo de caso"
+            name="_cls"
+            rules={[
+              {
+                required: true,
+                message: "Por favor, escoja el tipo de caso",
+              },
+            ]}
+          >
+            <Select
+              showSearch
+              placeholder="Por favor, escoja el tipo de caso"
+              key="_cls"
+              filterOption={(input, option) =>
+                option.props.children
+                  .toLowerCase()
+                  .normalize("NFD")
+                  .replace(/[\u0300-\u036f]/g, "")
+                  .indexOf(
+                    input
                       .toLowerCase()
                       .normalize("NFD")
                       .replace(/[\u0300-\u036f]/g, "")
-                      .indexOf(
-                        input
-                          .toLowerCase()
-                          .normalize("NFD")
-                          .replace(/[\u0300-\u036f]/g, "")
-                      ) >= 0
-                  }
-                >
-                  {this.menuJSCases()}
-                </Select>
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <Form.Item label="Plan de estudios" name="academic_program">
-                <Select
-                  showSearch
-                  placeholder="Escoja el plan de estudios"
-                  key="academic_program"
-                  filterOption={(input, option) =>
-                    option.props.children.toLowerCase().indexOf(
-                      input
-                        .toLowerCase()
-                        .normalize("NFD")
-                        .replace(/[\u0300-\u036f]/g, "")
-                    ) >= 0
-                  }
-                >
-                  {this.menuJSPrograms()}
-                </Select>
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <Form.Item
-                label="Periodo académico"
-                name="academic_period"
-                initialValue={
-                  moment().year() + (moment().month() < 6 ? "-1S" : "-2S")
-                }
-              >
-                <Select
-                  showSearch
-                  placeholder="Escoja el plan de estudios"
-                  key="academic_period"
-                  filterOption={(input, option) =>
-                    option.props.children.toLowerCase().indexOf(
-                      input
-                        .toLowerCase()
-                        .normalize("NFD")
-                        .replace(/[\u0300-\u036f]/g, "")
-                    ) >= 0
-                  }
-                >
-                  {this.menuJSPperiods()}
-                </Select>
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row>
-            <Col>
+                  ) >= 0
+              }
+            >
+              {this.menuJSCases()}
+            </Select>
+          </Form.Item>
+          <Form.Item label="Plan de estudios" name="academic_program">
+            <Select
+              showSearch
+              placeholder="Escoja el plan de estudios"
+              key="academic_program"
+              filterOption={(input, option) =>
+                option.props.children.toLowerCase().indexOf(
+                  input
+                    .toLowerCase()
+                    .normalize("NFD")
+                    .replace(/[\u0300-\u036f]/g, "")
+                ) >= 0
+              }
+            >
+              {this.menuJSPrograms()}
+            </Select>
+          </Form.Item>
+          <Form.Item
+            label="Periodo académico"
+            name="academic_period"
+            initialValue={
+              moment().year() + (moment().month() < 6 ? "-1S" : "-2S")
+            }
+          >
+            <Select
+              showSearch
+              placeholder="Escoja el plan de estudios"
+              key="academic_period"
+              filterOption={(input, option) =>
+                option.props.children.toLowerCase().indexOf(
+                  input
+                    .toLowerCase()
+                    .normalize("NFD")
+                    .replace(/[\u0300-\u036f]/g, "")
+                ) >= 0
+              }
+            >
+              {this.menuJSPperiods()}
+            </Select>
+          </Form.Item>
+          <Row gutter={16}>
+            <Col span={8}>
               <Form.Item
                 label="Fecha de radicación"
                 name="date"
                 initialValue={moment()}
               >
-                <DatePicker key="date" style={{ width: "100%" }} />
+                <DatePicker key="date" />
               </Form.Item>
             </Col>
-          </Row>
-          <Row>
-            <Col span={12}>
+            <Col span={8}>
               <Form.Item
                 label="Número del Acta"
                 name="consecutive_minute"
@@ -286,18 +267,17 @@ class HomeDrawerCreate extends React.Component {
                 rules={[
                   {
                     min: 0,
-                    message: "El número mínimo del acta es 0",
+                    message: "El número mínimo del acta es 0.",
                   },
                 ]}
               >
                 <InputNumber
                   placeholder="Número de acta"
                   key="council_minute"
-                  style={{ width: "75%" }}
                 />
               </Form.Item>
             </Col>
-            <Col span={12}>
+            <Col span={8}>
               <Form.Item
                 label="Año"
                 name="year"
@@ -305,47 +285,41 @@ class HomeDrawerCreate extends React.Component {
                 rules={[
                   {
                     min: 2000,
-                    message: "El mínimo año para acta",
+                    message: "El mínimo año para acta es 2000.",
                   },
                   {
                     min: 2100,
-                    message: "El máximo año del acta es 0",
+                    message: "El máximo año del acta es 2100.",
                   },
                 ]}
               >
-                <InputNumber
-                  placeholder="Número de acta"
-                  key="year"
-                  style={{ width: "75%", parginRight: 8 }}
-                />
+                <InputNumber placeholder="Número de acta" key="year" />
               </Form.Item>
             </Col>
           </Row>
         </Form>
-        <div className="home-drawer-div">
-          <Button
-            onClick={(e) => this.props.onClose(e, "Create")}
-            style={{ marginRight: 8 }}
-          >
-            Cancelar
-          </Button>
-          <Button
-            type="primary"
-            onClick={(e) => this.handleSaveAux(e, (_) => {})}
-            style={{ marginRight: 8 }}
-          >
-            Guardar
-          </Button>
+        <Row gutter={8}>
           {localStorage.getItem("type") !== "secretary" ? (
+            <Col>
+              <Button type="primary" onClick={(e) => this.handleSaveAndEdit(e)}>
+                Guardar y editar
+              </Button>
+            </Col>
+          ) : null}
+          <Col>
             <Button
               type="primary"
-              onClick={(e) => this.handleSaveAndEdit(e)}
-              style={{ marginRight: 8 }}
+              onClick={(e) => this.handleSaveAux(e, (_) => {})}
             >
-              Guardar y editar
+              Guardar
             </Button>
-          ) : null}
-        </div>
+          </Col>
+          <Col>
+            <Button onClick={(e) => this.props.onClose(e, "Create")}>
+              Cancelar
+            </Button>
+          </Col>
+        </Row>
       </Drawer>
     );
   }

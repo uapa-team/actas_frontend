@@ -7,7 +7,7 @@ class HomeDrawerDownload extends React.Component {
     super(props);
     this.state = {
       councilNumber: 1,
-      councliYear: 2020,
+      councilYear: 2020,
       isPre: true,
       target: "",
       allowed: [],
@@ -19,7 +19,7 @@ class HomeDrawerDownload extends React.Component {
     this.setState({ spinning: true });
     let query = `pre=${this.state.isPre}&consecutive_minute${
       this.state.isPre ? "_ac" : ""
-    }=${this.state.councilNumber}&year=${this.state.councliYear}&${
+    }=${this.state.councilNumber}&year=${this.state.councilYear}&${
       this.state.target
     }`;
     Backend.sendRequest("GET", `generate?${query}`)
@@ -51,14 +51,14 @@ class HomeDrawerDownload extends React.Component {
       <Spin spinning={this.state.spinning}>
         <Drawer
           title="Generar Acta del Consejo de Facultad o Comité Asesor"
-          width={420}
+          width={"50%"}
           onClose={(e) => this.props.onClose(e, "Download")}
           visible={this.props.visible}
           bodyStyle={{ paddingBottom: 80 }}
         >
-          <Form layout="vertical" hideRequiredMark>
-            <Row gutter={16}>
-              <Col span={12}>
+          <Form layout="vertical">
+            <Row>
+              <Col span={8}>
                 <Form.Item
                   label="Número del Acta"
                   name="number"
@@ -79,11 +79,11 @@ class HomeDrawerDownload extends React.Component {
                   />
                 </Form.Item>
               </Col>
-              <Col span={12}>
+              <Col span={8}>
                 <Form.Item
                   label="Año"
                   name="year"
-                  initialValue={this.state.councliYear}
+                  initialValue={this.state.councilYear}
                   rules={[
                     {
                       required: true,
@@ -93,13 +93,13 @@ class HomeDrawerDownload extends React.Component {
                 >
                   <InputNumber
                     placeholder="Número de acta"
-                    onChange={(value) => this.setState({ councliYear: value })}
+                    onChange={(value) => this.setState({ councilYear: value })}
                     min={2000}
                   />
                 </Form.Item>
               </Col>
             </Row>
-            <Row gutter={16}>
+            <Row>
               <Col span={24}>
                 <Form.Item
                   label="Tipo de Acta"
@@ -111,15 +111,15 @@ class HomeDrawerDownload extends React.Component {
                     onChange={(v) => this.setState({ isPre: v.target.value })}
                     buttonStyle="solid"
                   >
-                    <Radio.Button value={false}>
+                    <Radio.Button value={true}>
                       Consejo de Facultad
                     </Radio.Button>
-                    <Radio.Button value={true}>Comité Asesor</Radio.Button>
+                    <Radio.Button value={false}>Comité Asesor</Radio.Button>
                   </Radio.Group>
                 </Form.Item>
               </Col>
             </Row>
-            <Row gutter={16}>
+            <Row>
               <Col span={24}>
                 <Form.Item
                   label="Solicitudes a generar"
@@ -135,23 +135,24 @@ class HomeDrawerDownload extends React.Component {
               </Col>
             </Row>
           </Form>
-          <div className="home-drawer-div">
-            <Button
-              onClick={(e) => this.props.onClose(e, "Download")}
-              style={{ marginRight: 8 }}
-            >
-              Cancelar
-            </Button>
-            <Button
-              onClick={(e) => {
-                this.handleGenerate();
-                this.props.onClose(e, "Download");
-              }}
-              type="primary"
-            >
-              Generar
-            </Button>
-          </div>
+          <Row gutter={8}>
+            <Col>
+              <Button
+                onClick={(e) => {
+                  this.handleGenerate();
+                  this.props.onClose(e, "Download");
+                }}
+                type="primary"
+              >
+                Generar
+              </Button>
+            </Col>
+            <Col>
+              <Button onClick={(e) => this.props.onClose(e, "Download")}>
+                Cancelar
+              </Button>
+            </Col>
+          </Row>
         </Drawer>
       </Spin>
     );

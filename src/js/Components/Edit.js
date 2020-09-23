@@ -29,9 +29,11 @@ class Edit extends React.Component {
       id: this.props.match.params.id,
     };
   }
+
   createInputs = () => {
     return this.state.fields.map(this.createInput);
   };
+
   createInput = (i) => {
     if (
       typeof this.state.case[i[0]] !== "undefined" &&
@@ -48,9 +50,11 @@ class Edit extends React.Component {
       />
     );
   };
+
   createTables = () => {
     return this.state.fields.map(this.createTable);
   };
+
   createTable = (i) => {
     if (i[1].type === "Table") {
       if (
@@ -76,6 +80,7 @@ class Edit extends React.Component {
       );
     }
   };
+
   saveCase = (values) => {
     const key = "updatable";
     message.loading({ content: "Guardando cambios...", key });

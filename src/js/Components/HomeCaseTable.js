@@ -13,6 +13,8 @@ class HomeCaseTable extends React.Component {
     super(props);
     this.state = {
       info_case: {},
+      searchText: "",
+      searchedColumn: "",
     };
   }
 
@@ -71,11 +73,6 @@ class HomeCaseTable extends React.Component {
           });
         });
     }
-  };
-
-  state = {
-    searchText: "",
-    searchedColumn: "",
   };
 
   getColumnSearchProps = (dataIndex, searchTerm) => ({
@@ -195,7 +192,6 @@ class HomeCaseTable extends React.Component {
         title: "DNI",
         dataIndex: "student_dni",
         key: "student_dni",
-        //sorter: (a, b) => a.student_dni.localeCompare(b.student_dni),
         ...this.getColumnSearchProps("student_dni", "DNI"),
       },
       {
@@ -276,7 +272,6 @@ class HomeCaseTable extends React.Component {
           ) : (
             //Else - If it hasn't being marked as recieved:
             <span>
-              {/* eslint-disable-next-line */}
               <Popconfirm
                 title="¿Desea marcar como recibido?"
                 onConfirm={() => this.markAsRecieved(record.id)}
@@ -344,6 +339,7 @@ class HomeCaseTable extends React.Component {
 
     return (
       <Table
+        className="home-case-table"
         dataSource={this.props.dataSource}
         columns={
           localStorage.getItem("type") !== "secretary"
@@ -354,7 +350,7 @@ class HomeCaseTable extends React.Component {
         expandedRowRender={(record) => (
           <Columns gap={"0px"} columns={3}>
             <div>
-              <b>Fecha de radicación:</b> {record.date}.
+              <b>Fecha de radicación:</b> {record.date.substring(0, 10)}.
             </div>
             <div>
               <b>Respuesta de Consejo de Facultad:</b> {record.approval_status}.
