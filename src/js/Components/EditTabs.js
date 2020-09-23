@@ -1,5 +1,5 @@
 import React from "react";
-import { Tabs, Col, Form, Row } from "antd";
+import { Tabs, Col, Row } from "antd";
 import { withRouter } from "react-router-dom";
 import EditComponent from "./EditComponent";
 
@@ -33,7 +33,7 @@ class EditTabs extends React.Component {
       x = element.code.concat(x);
       dataFormat.push({
         title: element.name,
-        content: <Form>{this.drawFields(element)}</Form>,
+        content: this.drawFields(element),
         key: x,
       });
     });
@@ -57,15 +57,13 @@ class EditTabs extends React.Component {
   };
 
   createInput = (i) => {
-    var x = this.state.fillIndicator;
-
-    this.setState({
-      fillIndicator: x + 1,
-    });
-
     return (
-      <Col span={8} key={i[0].concat(x)}>
-        <EditComponent key={i[0]} fieldName={i[0]} metadata={i[1]} />
+      <Col span={8} key={i[0].concat(this.state.activeKey)}>
+        <EditComponent
+          key={i[0].concat(this.state.activeKey)}
+          fieldName={i[0]}
+          metadata={i[1]}
+        />
       </Col>
     );
   };

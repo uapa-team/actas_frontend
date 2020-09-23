@@ -39,6 +39,10 @@ class Edit extends React.Component {
     return <Row gutter={8}>{this.state.fields.map(this.createInput)}</Row>;
   };
 
+  createTabs = () => {
+    return <Row gutter={8}>{this.state.fields.map(this.createTab)}</Row>;
+  };
+
   createInput = (i) => {
     if (
       typeof this.state.case[i[0]] !== "undefined" &&
@@ -46,19 +50,7 @@ class Edit extends React.Component {
     ) {
       i[1].default = this.state.case[i[0]];
     }
-    if (i[1].type === "Table") {
-      console.log("Información a ser enviada:");
-      console.log(i);
-      return (
-        <Col span={24} key={i[0]}>
-          <EditTabs
-            key={i[0]}
-            dataSource={i[1].default[0].cases}
-            metadata={i[1]}
-          />
-        </Col>
-      );
-    } else {
+    if (i[1].type !== "Table") {
       return (
         <Col span={8} key={i[0]}>
           <EditComponent
@@ -66,6 +58,23 @@ class Edit extends React.Component {
             fieldName={i[0]}
             metadata={i[1]}
             form={this.props.form}
+          />
+        </Col>
+      );
+    }
+  };
+
+  createTab = (i) => {
+    if (i[1].type === "Table") {
+      console.log("Información a ser enviada:");
+      console.log(i);
+      return (
+        <Col span={24} key={i[0]}>
+          <Title level={5}>{i[1].display.concat(":")}</Title>
+          <EditTabs
+            key={i[0]}
+            dataSource={i[1].default[0].cases}
+            metadata={i[1]}
           />
         </Col>
       );
@@ -184,7 +193,10 @@ class Edit extends React.Component {
           </Col>
         </Row>
         <Divider style={{ background: "#ffffff00" }} />
-        <Form layout="vertical">{this.createInputs()}</Form>
+        <Form layout="vertical">
+          {this.createInputs()}
+          {this.createTabs()}
+        </Form>
         <Divider style={{ background: "#ffffff00" }} />
       </>
     );
