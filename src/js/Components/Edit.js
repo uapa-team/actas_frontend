@@ -66,15 +66,13 @@ class Edit extends React.Component {
 
   createTab = (i) => {
     if (i[1].type === "Table") {
-      console.log("Información a ser enviada:");
-      console.log(i);
       return (
         <Col span={24} key={i[0]}>
           <Title level={5}>{i[1].display.concat(":")}</Title>
           <EditTabs
             key={i[0]}
-            dataSource={i[1].default[0].cases}
-            metadata={i[1]}
+            dataSource={i[1].default}
+            metadata={i[1].fields}
           />
         </Col>
       );
