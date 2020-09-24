@@ -14,6 +14,9 @@ module.exports = override(
         "@border-radius-base": "4px",
         "@border-color-base": "#2d2656",
         "@box-shadow-base": "0 0 0 1px rgba(18,15,34,0.2)",
+        /*Tabs styling */
+        "@tabs-card-tab-active-border-top": "2px solid #2d2656",
+        "@tabs-highlight-color": "white",
       },
     },
   })

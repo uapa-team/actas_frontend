@@ -40,6 +40,19 @@ code {
   box-shadow: -1px 0 0 0 #2d2656 !important;
 }
 
+.ant-tabs-card > .ant-tabs-nav .ant-tabs-tab-active {
+  background: #2d2656da !important;
+  border-color: #2d2656 !important;
+}
+
+.ant-tabs-tab-active > .ant-tabs-tab-remove:hover {
+  color: grey !important;
+}
+
+.ant-tabs-tab-active > .ant-tabs-tab-remove {
+  color: white !important;
+}
+
 .editable-cell {
   position: relative;
 }
@@ -125,4 +138,13 @@ code {
 /* Edit buttons */
 .edit-button {
   margin-right: 20px;
+}
+
+.edit-title {
+  margin-bottom: 0px !important;
+}
+
+.edit-p {
+  font-size: 120%;
+  line-height: 20px;
 }

@@ -19,7 +19,7 @@ import EditComponent from "./EditComponent";
 import EditTabs from "./EditTabs";
 import Backend from "../Basics/Backend";
 
-const { Title } = Typography;
+const { Title, Text } = Typography;
 
 class Edit extends React.Component {
   constructor(props) {
@@ -32,6 +32,7 @@ class Edit extends React.Component {
       cls: "",
       id: this.props.match.params.id,
       fillIndicator: 0,
+      visibleFlag: false,
     };
   }
 
@@ -133,16 +134,50 @@ class Edit extends React.Component {
     });
   };
 
+  componentDidMount() {
+    Backend.sendRequest("GET", `case?id=${this.state.id}`)
+      .then((response) => response.json())
+      .then((json) => {
+        this.setState({
+          case: json["cases"][0],
+        });
+        Backend.sendRequest(
+          "GET",
+          `infocase?cls=${json.cases[0]._cls.split(".")[1]}`
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            this.setState({ full_name: data.full_name });
+            this.setState({ decision_maker: data.decision_maker });
+            delete data.full_name;
+            delete data.decision_maker;
+            this.setState({ fields: Object.entries(data), visibleFlag: true });
+          });
+      });
+  }
+
   render() {
     return (
       <>
         <Divider style={{ background: "#ffffff00" }} />
         <Row>
           <Col span={12}>
-            <Title>Edición de solicitud</Title>
-            <p>
-              <b>ID del caso:</b> {this.state.id}.
-            </p>
+            <Title className="edit-title">Edición de solicitud</Title>
+            {this.state.visibleFlag ? (
+              <p className="edit-p">
+                <b>Nombre del caso: </b>
+                {this.state.full_name}
+                <br />
+                <b>ID del caso: </b>{" "}
+                <Text
+                  copyable={{
+                    tooltips: ["Copiar ID en el portapapeles", "¡ID Copiado!"],
+                  }}
+                >
+                  {this.state.id}
+                </Text>
+              </p>
+            ) : null}
           </Col>
           <Col span={12}>
             <Button
@@ -198,25 +233,6 @@ class Edit extends React.Component {
         <Divider style={{ background: "#ffffff00" }} />
       </>
     );
-  }
-  componentDidMount() {
-    Backend.sendRequest("GET", `case?id=${this.state.id}`)
-      .then((response) => response.json())
-      .then((json) => {
-        this.setState({ case: json["cases"][0] });
-        Backend.sendRequest(
-          "GET",
-          `infocase?cls=${json.cases[0]._cls.split(".")[1]}`
-        )
-          .then((response) => response.json())
-          .then((data) => {
-            this.setState({ full_name: data.full_name });
-            this.setState({ decision_maker: data.decision_maker });
-            delete data.full_name;
-            delete data.decision_maker;
-            this.setState({ fields: Object.entries(data) });
-          });
-      });
   }
 }
 

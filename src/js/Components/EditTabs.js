@@ -64,7 +64,6 @@ class EditTabs extends React.Component {
   };
 
   add = () => {
-    console.log(this.state.panes);
     const { panes } = this.state;
     const newKey = (++this.currentlyFilling).toString();
     const newPanes = [...panes];
@@ -88,7 +87,6 @@ class EditTabs extends React.Component {
       panes: newPanes,
       activeKey: newKey,
     });
-    console.log(this.state.activeKey);
   };
 
   remove = (targetKey) => {
@@ -117,6 +115,7 @@ class EditTabs extends React.Component {
         onChange={this.onChange}
         activeKey={this.state.activeKey}
         onEdit={this.onEdit}
+        size={"small"}
       >
         {this.state.panes.map((pane) => (
           <TabPane tab={pane.title} key={pane.key} closable={pane.closable}>
