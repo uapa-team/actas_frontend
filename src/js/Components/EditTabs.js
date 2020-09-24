@@ -5,39 +5,33 @@ import EditComponent from "./EditComponent";
 
 const { TabPane } = Tabs;
 
-const initialPanes = [
-  { title: "Cargando...", content: "Cargando...", key: "0" },
-];
-
 class EditTabs extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       dataSource: this.props.dataSource,
       metadata: this.props.metadata,
-      activeKey: initialPanes[0].key,
-      panes: initialPanes,
+      activeKey: "1",
+      panes: [],
     };
   }
-  newTabIndex = 0;
+  currentlyFilling = 0;
 
   componentDidMount() {
     var dataFormat = [];
 
     for (let i = 0; i < this.state.dataSource.length; i++) {
       dataFormat.push({
-        title: "Asignatura ".concat(this.newTabIndex + 1),
-        key: this.newTabIndex++,
-        content: this.drawFields(i),
+        title: "Asignatura ".concat(this.currentlyFilling + 1),
+        key: (i + 1).toString(),
+        content: this.drawFields(),
       });
     }
 
-    this.setState({
-      panes: dataFormat,
-    });
+    this.setState({ panes: dataFormat });
   }
 
-  drawFields = (pos) => {
+  drawFields = () => {
     let auxArray = [];
     for (const key in this.state.metadata) {
       if (this.state.metadata.hasOwnProperty(key)) {
@@ -45,33 +39,34 @@ class EditTabs extends React.Component {
         auxArray.push([key, element]);
       }
     }
+    this.currentlyFilling++;
     return <Row gutter={8}>{auxArray.map(this.createInput)}</Row>;
   };
 
   createInput = (info) => {
     return (
-      <Col span={8} key={info[0].concat(this.newTabIndex - 1)}>
+      <Col span={8} key={info[0].concat(this.currentlyFilling)}>
         <EditComponent
-          key={info[0].concat(this.newTabIndex - 1)}
-          fieldName={info[0].concat(this.newTabIndex - 1)}
+          key={info[0].concat(this.currentlyFilling)}
+          fieldName={info[0].concat(this.currentlyFilling)}
           metadata={info[1]}
         />
       </Col>
     );
   };
 
-  onChange = (activeKey) => {
-    console.log(activeKey);
-    this.setState({ activeKey });
-  };
-
   onEdit = (targetKey, action) => {
     this[action](targetKey);
   };
 
+  onChange = (activeKey) => {
+    this.setState({ activeKey });
+  };
+
   add = () => {
+    console.log(this.state.panes);
     const { panes } = this.state;
-    const tempKey = this.newTabIndex++;
+    const newKey = (++this.currentlyFilling).toString();
     const newPanes = [...panes];
 
     var auxArray = [];
@@ -81,41 +76,38 @@ class EditTabs extends React.Component {
         auxArray.push([key, mdata[key]]);
       }
     }
+
     var components = <Row gutter={8}>{auxArray.map(this.createInput)}</Row>;
 
     newPanes.push({
-      title: "Asignatura ".concat(tempKey + 1),
-      key: tempKey,
+      title: "Asignatura ".concat(this.currentlyFilling),
+      key: newKey,
       content: components,
     });
-
     this.setState({
       panes: newPanes,
-      activeKey: tempKey,
+      activeKey: newKey,
     });
+    console.log(this.state.activeKey);
   };
 
   remove = (targetKey) => {
-    const { panes, activeKey } = this.state;
-    let newActiveKey = activeKey;
+    let { activeKey } = this.state;
     let lastIndex;
-    panes.forEach((pane, i) => {
+    this.state.panes.forEach((pane, i) => {
       if (pane.key === targetKey) {
         lastIndex = i - 1;
       }
     });
-    const newPanes = panes.filter((pane) => pane.key !== targetKey);
-    if (newPanes.length && newActiveKey === targetKey) {
+    const panes = this.state.panes.filter((pane) => pane.key !== targetKey);
+    if (panes.length && activeKey === targetKey) {
       if (lastIndex >= 0) {
-        newActiveKey = newPanes[lastIndex].key;
+        activeKey = panes[lastIndex].key;
       } else {
-        newActiveKey = newPanes[0].key;
+        activeKey = panes[0].key;
       }
     }
-    this.setState({
-      panes: newPanes,
-      activeKey: newActiveKey,
-    });
+    this.setState({ panes, activeKey });
   };
 
   render() {
