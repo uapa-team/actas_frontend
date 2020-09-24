@@ -165,7 +165,7 @@ class Edit extends React.Component {
             <Title className="edit-title">Edición de solicitud</Title>
             {this.state.visibleFlag ? (
               <p className="edit-p">
-                <b>Nombre del caso: </b>
+                <b>Tipo de caso: </b>
                 {this.state.full_name}
                 <br />
                 <b>ID del caso: </b>{" "}
