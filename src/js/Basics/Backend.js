@@ -2,6 +2,7 @@ import { message } from "antd";
 
 export default class Backend {
   static backEndUrl = "https://ingenieria.bogota.unal.edu.co/actas-api/";
+  static uapappUrl = "https://www.ingenieria.bogota.unal.edu.co/uapapp_api/";
   //static backEndUrl = "http://127.0.0.1:8000/council_minutes/";
 
   static openLink(url) {
@@ -9,16 +10,16 @@ export default class Backend {
   }
 
   static sendRequest(method, path, body) {
-    return this.request(
-      method,
-      path,
-      {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        Authorization: "Token " + localStorage.getItem("jwt"),
-      },
-      body
-    );
+    let headers = {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    };
+
+    if (path !== "make_suggestion") {
+      headers["Authorization"] = "Token " + localStorage.getItem("jwt");
+    }
+
+    return this.request(method, path, headers, body);
   }
 
   static sendLogin(username, password) {
@@ -50,7 +51,11 @@ export default class Backend {
   }
 
   static request(method, path, headers, body) {
-    let answer = fetch(this.backEndUrl + path, {
+    let fullURL = this.backEndUrl + path;
+    if (path === "make_suggestion") {
+      fullURL = this.uapappUrl + path;
+    }
+    let answer = fetch(fullURL, {
       method: method,
       headers: headers,
       body: JSON.stringify(body),

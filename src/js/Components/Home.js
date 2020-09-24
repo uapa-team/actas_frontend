@@ -98,11 +98,12 @@ class Home extends React.Component {
 
   updateCases() {
     let key = "updatable";
+    this.setState({ loading: true });
     message.loading({ content: "Actualizando casos...", key, duration: 50 });
     Backend.sendRequest("GET", "case")
       .then((response) => response.json())
       .then((data) => {
-        this.setState({ dataSource: data["cases"] });
+        this.setState({ dataSource: data["cases"], loading: false });
         message.success({
           content: "Casos actualizados correctamente.",
           key,
@@ -142,6 +143,7 @@ class Home extends React.Component {
                 type="primary"
                 icon={<ReloadOutlined />}
                 onClick={() => this.updateCases()}
+                disabled={this.state.loading}
               >
                 Actualizar casos
               </Button>

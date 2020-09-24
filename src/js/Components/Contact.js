@@ -28,9 +28,11 @@ class Contact extends React.Component {
       name: values.name,
       email: values.mail,
       sugtype: values.type,
-      content: values.message,
+      content: values.message.concat(
+        "\nNota: Este mensaje se envió desde la aplicación de Actas."
+      ),
     }).then(async (response) => {
-      if (response.status === 200) {
+      if (response.status === 200 || response.status === 204) {
         message.success({
           content: "Leeremos su mensaje cuanto antes. ¡Gracias!",
           key,
