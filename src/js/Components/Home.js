@@ -1,7 +1,11 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
 import HomeCaseTable from "./HomeCaseTable";
-import { DownloadOutlined, PlusOutlined } from "@ant-design/icons";
+import {
+  DownloadOutlined,
+  PlusOutlined,
+  ReloadOutlined,
+} from "@ant-design/icons";
 import { Typography, Row, Divider, Col, Button, message } from "antd";
 import HomeDrawerDownload from "./HomeDrawerDownload";
 import HomeDrawerCreate from "./HomeDrawerCreate";
@@ -24,6 +28,7 @@ class Home extends React.Component {
       filterByMinute: false,
       minuteSearch: 1,
       yearSearch: 2020,
+      loading: true,
     };
   }
 
@@ -91,17 +96,71 @@ class Home extends React.Component {
     }
   };
 
+  updateCases() {
+    let key = "updatable";
+    message.loading({ content: "Actualizando casos...", key, duration: 50 });
+    Backend.sendRequest("GET", "case")
+      .then((response) => response.json())
+      .then((data) => {
+        this.setState({ dataSource: data["cases"] });
+        message.success({
+          content: "Casos actualizados correctamente.",
+          key,
+          duration: 2,
+        });
+      });
+  }
+
+  componentDidMount() {
+    let key = "updatable";
+    message.loading({ content: "Cargando casos...", key, duration: 50 });
+    Backend.sendRequest("GET", "case")
+      .then((response) => response.json())
+      .then((data) => {
+        this.setState({ dataSource: data["cases"], loading: false });
+        message.success({
+          content: "Casos cargados correctamente.",
+          key,
+          duration: 2,
+        });
+      });
+  }
+
   render() {
     return (
       <div>
         <Divider style={{ background: "#ffffff00" }} />
         {localStorage.getItem("type") !== "secretary" ? ( //When not secretary:
-          <Row className="home-main-row">
+          <Row gutter={8} className="home-main-row">
             <Col span={2} />
             <Col span={10}>
               <Title className="home-title">Casos Estudiantiles</Title>
             </Col>
-            <Col span={4}>
+            <Col span={3}>
+              <Button
+                block
+                type="primary"
+                icon={<ReloadOutlined />}
+                onClick={() => this.updateCases()}
+              >
+                Actualizar casos
+              </Button>
+            </Col>
+            <Col span={3}>
+              <Button
+                block
+                type="primary"
+                icon={<PlusOutlined />}
+                onClick={(e) => this.showDrawer("Create")}
+              >
+                Crear nuevo caso
+              </Button>
+              <HomeDrawerCreate
+                visible={this.state.createDrawerVisible}
+                onClose={(e) => this.closeDrawer("Create")}
+              />
+            </Col>
+            <Col span={3}>
               <Button
                 block
                 type="primary"
@@ -113,21 +172,6 @@ class Home extends React.Component {
               <HomeDrawerDownload
                 visible={this.state.downloadDrawerVisible}
                 onClose={(e) => this.closeDrawer("Download")}
-              />
-            </Col>
-            <Col span={1} />
-            <Col span={4}>
-              <Button
-                block
-                type="primary"
-                icon={<PlusOutlined />}
-                onClick={(e) => this.showDrawer("Create")}
-              >
-                Crear un nuevo caso
-              </Button>
-              <HomeDrawerCreate
-                visible={this.state.createDrawerVisible}
-                onClose={(e) => this.closeDrawer("Create")}
               />
             </Col>
           </Row>
@@ -160,6 +204,7 @@ class Home extends React.Component {
         <Row>
           <HomeCaseTable
             updateDataSource={this.updateDataSource}
+            loading={this.state.loading}
             dataSource={
               this.state.searchTerm === "" && !this.state.filterByMinute
                 ? this.state.dataSource
@@ -170,16 +215,6 @@ class Home extends React.Component {
         <Divider style={{ background: "#ffffff00" }} />
       </div>
     );
-  }
-
-  componentDidMount() {
-    message.loading("Cargando casos...", 7);
-    Backend.sendRequest("GET", "case")
-      .then((response) => response.json())
-      .then((data) => {
-        this.setState({ dataSource: data["cases"] });
-        message.success("Casos cargados correctamente.");
-      });
   }
 }
 

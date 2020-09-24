@@ -183,52 +183,58 @@ class HomeCaseTable extends React.Component {
         title: "Tipo de solicitud",
         dataIndex: "_cls_display",
         key: "_cls_display",
-        width: "20%",
-        sorter: (a, b) => a._cls_display.localeCompare(b._cls_display),
+        width: "25%",
+        //sorter: (a, b) => a._cls_display.localeCompare(b._cls_display),
         ...this.getColumnSearchProps("_cls_display", "tipo de solicitud"),
       },
       {
         title: "DNI",
         dataIndex: "student_dni",
         key: "student_dni",
+        width: "10%",
         ...this.getColumnSearchProps("student_dni", "DNI"),
       },
       {
         title: "Nombres",
         dataIndex: "student_name",
         key: "student_name",
-        sorter: (a, b) => a.student_name.localeCompare(b.student_name),
+        width: "10%",
+        //sorter: (a, b) => a.student_name.localeCompare(b.student_name),
         ...this.getColumnSearchProps("student_name", "nombres"),
       },
       {
         title: "Plan de estudios",
         dataIndex: "academic_program",
         key: "academic_program",
-        sorter: (a, b) => a.academic_program.localeCompare(b.academic_program),
+        width: "10%",
+        //sorter: (a, b) => a.academic_program.localeCompare(b.academic_program),
         ...this.getColumnSearchProps("academic_program", "programa"),
       },
       {
         title: "Acta #",
         dataIndex: "consecutive_minute",
         key: "consecutive_minute",
-        width: "10%",
+        width: "8%",
         ...this.getColumnSearchProps("consecutive_minute", "acta"),
       },
       {
         title: "Año",
         dataIndex: "year",
         key: "year",
+        width: "8%",
         ...this.getColumnSearchProps("year", "año"),
       },
       {
         title: "Periodo",
         dataIndex: "academic_period",
         key: "academic_period",
+        width: "10%",
         ...this.getColumnSearchProps("academic_period", "periodo"),
       },
       {
         title: "Editar",
         key: "edit",
+        width: "10%",
         render: (text, record) =>
           record.received_date !== "None" ? ( //If it has been recieved:
             <span>
@@ -291,8 +297,7 @@ class HomeCaseTable extends React.Component {
         title: "Tipo de solicitud",
         dataIndex: "_cls_display",
         key: "_cls_display",
-        width: "20%",
-        sorter: (a, b) => a._cls_display.localeCompare(b._cls_display),
+        //sorter: (a, b) => a._cls_display.localeCompare(b._cls_display),
         ...this.getColumnSearchProps("_cls_display", "tipo de solicitud"),
       },
       {
@@ -305,21 +310,20 @@ class HomeCaseTable extends React.Component {
         title: "Nombres",
         dataIndex: "student_name",
         key: "student_name",
-        sorter: (a, b) => a.student_name.localeCompare(b.student_name),
+        //sorter: (a, b) => a.student_name.localeCompare(b.student_name),
         ...this.getColumnSearchProps("student_name", "nombres"),
       },
       {
         title: "Plan de estudios",
         dataIndex: "academic_program",
         key: "academic_program",
-        sorter: (a, b) => a.academic_program.localeCompare(b.academic_program),
+        //sorter: (a, b) => a.academic_program.localeCompare(b.academic_program),
         ...this.getColumnSearchProps("academic_program", "programa"),
       },
       {
         title: "Acta #",
         dataIndex: "consecutive_minute",
         key: "consecutive_minute",
-        width: "10%",
         ...this.getColumnSearchProps("consecutive_minute", "acta"),
       },
       {
@@ -338,16 +342,29 @@ class HomeCaseTable extends React.Component {
 
     return (
       <Table
-        className="home-case-table"
+        loading={this.props.loading}
+        tableLayout="fixed"
         dataSource={this.props.dataSource}
+        rowKey="id"
+        bordered={true}
+        size="small"
         columns={
           localStorage.getItem("type") !== "secretary"
             ? columns
             : columnsSecretary
         }
-        bordered={true}
+        pagination={{
+          defaultPageSize: 10,
+          showSizeChanger: true,
+          locale: { items_per_page: "por página" },
+          pageSizeOptions: ["10", "20", "50", "100"],
+          position: "bottom",
+          size: "small",
+          showTotal: showTotal,
+        }}
         expandedRowRender={(record) => (
           <Row>
+            <Col span={1} />
             <Col span={8}>
               <div>
                 <b>Fecha de radicación:</b> {record.date.substring(0, 10)}.
@@ -365,7 +382,7 @@ class HomeCaseTable extends React.Component {
                 <b>Instancia que decide:</b> {record.decision_maker}.
               </div>
             </Col>
-            <Col span={8}>
+            <Col span={7}>
               <div>
                 <b>Días desde la radicación:</b>{" "}
                 {this.date_diff_indays(
@@ -380,16 +397,6 @@ class HomeCaseTable extends React.Component {
             </Col>
           </Row>
         )}
-        rowKey="id"
-        pagination={{
-          defaultPageSize: 10,
-          showSizeChanger: true,
-          locale: { items_per_page: "por página" },
-          pageSizeOptions: ["10", "20", "50", "100"],
-          position: "bottom",
-          size: "small",
-          showTotal: showTotal,
-        }}
       />
     );
   }

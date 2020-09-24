@@ -55,14 +55,6 @@ code {
   padding: 4px 11px;
 }
 
-.ant-table-tbody tr:nth-child(odd) {
-  background-color: white;
-}
-
-.ant-table-tbody tr:nth-child(even) {
-  background-color: whitesmoke;
-}
-
 /* Login y Contact */
 .main-row-container {
   padding: 1em;
@@ -128,10 +120,6 @@ code {
 
 .home-title {
   margin-bottom: 0 !important;
-}
-
-.home-case-table {
-  width: "100%";
 }
 
 /* Edit buttons */
