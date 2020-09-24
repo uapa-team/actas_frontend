@@ -38,7 +38,7 @@ class HomeDrawerDownload extends React.Component {
   radioBtn = (value) => {
     return (
       <Radio
-        className="home-drawer-radio-style"
+        style={{ display: "block" }}
         key={value[0]}
         value={value[1].filter}
       >

@@ -33,6 +33,7 @@ class Edit extends React.Component {
       id: this.props.match.params.id,
       fillIndicator: 0,
       visibleFlag: false,
+      return: false,
     };
   }
 
@@ -129,9 +130,21 @@ class Edit extends React.Component {
 
   saveCaseReturn = (e) => {
     this.saveCase(e);
-    this.props.history.push({
-      pathname: "/home/",
+  };
+
+  returnTrigger = () => {
+    this.setState({
+      return: true,
     });
+  };
+
+  onFinish = (values) => {
+    console.log(values);
+    if (this.state.return) {
+      this.props.history.push({
+        pathname: "/home/",
+      });
+    }
   };
 
   componentDidMount() {
@@ -160,73 +173,81 @@ class Edit extends React.Component {
     return (
       <>
         <Divider style={{ background: "#ffffff00" }} />
-        <Row>
-          <Col span={12}>
-            <Title className="edit-title">Edición de solicitud</Title>
-            {this.state.visibleFlag ? (
-              <p className="edit-p">
-                <b>Tipo de caso: </b>
-                {this.state.full_name}
-                <br />
-                <b>ID del caso: </b>{" "}
-                <Text
-                  copyable={{
-                    tooltips: ["Copiar ID en el portapapeles", "¡ID Copiado!"],
-                  }}
+        <Form onFinish={this.onFinish} layout="vertical">
+          <Row>
+            <Col span={12}>
+              <Title className="edit-title">Edición de solicitud</Title>
+              {this.state.visibleFlag ? (
+                <div className="edit-p">
+                  <b>Tipo de caso: </b>
+                  {this.state.full_name}
+                  <br />
+                  <b>ID del caso: </b>{" "}
+                  <Text
+                    copyable={{
+                      tooltips: [
+                        "Copiar ID en el portapapeles",
+                        "¡ID Copiado!",
+                      ],
+                    }}
+                  >
+                    {this.state.id}
+                  </Text>
+                </div>
+              ) : null}
+            </Col>
+            <Col span={12}>
+              <Form.Item>
+                <Button
+                  htmlType="submit"
+                  type="primary"
+                  className="edit-button"
+                  icon={<SaveOutlined />}
                 >
-                  {this.state.id}
-                </Text>
-              </p>
-            ) : null}
-          </Col>
-          <Col span={12}>
-            <Button
-              onClick={(e) => this.saveCase(e)}
-              type="primary"
-              className="edit-button"
-              icon={<SaveOutlined />}
-            >
-              Guardar
-            </Button>
-            <Button
-              onClick={(e) => this.saveCaseReturn(e)}
-              type="primary"
-              className="edit-button"
-              icon={<SaveOutlined />}
-            >
-              Guardar y volver
-            </Button>
-            <Popconfirm
-              title="¿Qué tipo de vista previa desea generar?"
-              onConfirm={() => Backend.generateCouncil(false, this.state.id)}
-              onCancel={() => Backend.generateCouncil(true, this.state.id)}
-              okText="Consejo"
-              cancelText="Comité"
-              placement="right"
-            >
-              <Button
-                className="edit-button"
-                type="primary"
-                icon={<EyeOutlined />}
-              >
-                Vista Previa
-              </Button>
-            </Popconfirm>
-            <Button
-              className="edit-button"
-              onClick={(e) => {
-                this.props.history.push({
-                  pathname: "/home/",
-                });
-              }}
-              icon={<CloseCircleOutlined />}
-            >
-              Volver sin guardar
-            </Button>
-          </Col>
-        </Row>
-        <Divider style={{ background: "#ffffff00" }} />
-        <Form layout="vertical">
+                  Guardar
+                </Button>
+                <Button
+                  onClick={this.returnTrigger}
+                  htmlType="submit"
+                  type="primary"
+                  className="edit-button"
+                  icon={<SaveOutlined />}
+                >
+                  Guardar y volver
+                </Button>
+                <Popconfirm
+                  title="¿Qué tipo de vista previa desea generar?"
+                  onConfirm={() =>
+                    Backend.generateCouncil(false, this.state.id)
+                  }
+                  onCancel={() => Backend.generateCouncil(true, this.state.id)}
+                  okText="Consejo"
+                  cancelText="Comité"
+                  placement="right"
+                >
+                  <Button
+                    className="edit-button"
+                    type="primary"
+                    icon={<EyeOutlined />}
+                  >
+                    Vista Previa
+                  </Button>
+                </Popconfirm>
+                <Button
+                  className="edit-button"
+                  onClick={(e) => {
+                    this.props.history.push({
+                      pathname: "/home/",
+                    });
+                  }}
+                  icon={<CloseCircleOutlined />}
+                >
+                  Volver sin guardar
+                </Button>
+              </Form.Item>
+            </Col>
+          </Row>
+          <Divider style={{ background: "#ffffff00" }} />
           {this.createInputs()}
           {this.createTabs()}
         </Form>
