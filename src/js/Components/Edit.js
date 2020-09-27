@@ -75,6 +75,7 @@ class Edit extends React.Component {
           <Title level={5}>{i[1].display.concat(":")}</Title>
           <EditTabs
             key={i[0]}
+            name={i[0]}
             dataSource={i[1].default}
             metadata={i[1].fields}
           />
@@ -83,20 +84,53 @@ class Edit extends React.Component {
     }
   };
 
-  saveCase = (values) => {
+  returnTrigger = () => {
+    this.setState({
+      return: true,
+    });
+  };
+
+  onFinish = (values) => {
     const key = "updatable";
     message.loading({ content: "Guardando cambios...", key });
-
     values["id"] = this.state.id;
-    for (var i in values) {
+
+    //Search, retrieve and format tabs data (and time format fix):
+    for (let i = 0; i < this.state.fields.length; i++) {
+      let field = this.state.fields[i];
+
+      //Time format fix:
       if (
         typeof values[i] !== "undefined" &&
         values[i]._isAMomentObject === true
       ) {
         values[i] = values[i].utc().format();
       }
+
+      //Table search, retrieve and format process:
+      if (field[1].type === "Table") {
+        let saveData = {};
+        let knownTabs = [];
+
+        for (let value in values) {
+          if (value.startsWith(field[0])) {
+            let search = value.match(/\d+$/);
+            let tabNum = search[0];
+            let clean = value.replace(field[0], "");
+            let varName = clean.replace(search[0], "");
+            if (!knownTabs.includes(tabNum)) {
+              knownTabs.push(tabNum);
+              saveData[tabNum] = {};
+            }
+            saveData[tabNum][varName] = values[value];
+            delete values[value];
+          }
+        }
+        values[field[0]] = Object.values(saveData);
+      }
     }
 
+    //Send request to save case:
     Backend.sendRequest("PATCH", "case", {
       items: [values],
     })
@@ -128,20 +162,8 @@ class Edit extends React.Component {
         console.error("Error en guardando el caso");
         console.error(error);
       });
-  };
 
-  saveCaseReturn = (e) => {
-    this.saveCase(e);
-  };
-
-  returnTrigger = () => {
-    this.setState({
-      return: true,
-    });
-  };
-
-  onFinish = (values) => {
-    console.log(values);
+    //Return to home if the button was clicked:
     if (this.state.return) {
       this.props.history.push({
         pathname: "/home/",

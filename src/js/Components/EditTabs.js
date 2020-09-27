@@ -12,6 +12,7 @@ class EditTabs extends React.Component {
     this.state = {
       dataSource: this.props.dataSource,
       metadata: this.props.metadata,
+      name: this.props.name,
       activeKey: "1",
       panes: [],
     };
@@ -49,7 +50,8 @@ class EditTabs extends React.Component {
   };
 
   createInput = (info) => {
-    let key = info[0].concat(this.currentlyFilling);
+    let name = _.cloneDeep(this.state.name);
+    let key = name.concat(info[0].concat(this.currentlyFilling));
     let md = info[1];
     return (
       <Col span={8} key={key}>
@@ -73,7 +75,6 @@ class EditTabs extends React.Component {
 
     var auxArray = [];
     var mdata = _.cloneDeep(this.state.metadata);
-    console.log(mdata);
     for (var key in mdata) {
       if (mdata.hasOwnProperty(key)) {
         auxArray.push([key, mdata[key]]);
