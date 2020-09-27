@@ -22,6 +22,8 @@ import Backend from "../Basics/Backend";
 const { Title, Text } = Typography;
 
 class Edit extends React.Component {
+  formRef = React.createRef();
+
   constructor(props) {
     super(props);
     this.state = {
@@ -160,8 +162,10 @@ class Edit extends React.Component {
         )
           .then((response) => response.json())
           .then((data) => {
-            this.setState({ full_name: data.full_name });
-            this.setState({ decision_maker: data.decision_maker });
+            this.setState({
+              full_name: data.full_name,
+              decision_maker: data.decision_maker,
+            });
             delete data.full_name;
             delete data.decision_maker;
             this.setState({ fields: Object.entries(data), visibleFlag: true });
@@ -169,88 +173,90 @@ class Edit extends React.Component {
       });
   }
 
+  renderForm = () => {
+    let form = (
+      <Form onFinish={this.onFinish} layout="vertical" ref={this.formRef}>
+        <Row>
+          <Col span={12}>
+            <Title className="edit-title">Edición de solicitud</Title>
+            {this.state.visibleFlag ? (
+              <div className="edit-p">
+                <b>Tipo de caso: </b>
+                {this.state.full_name}
+                <br />
+                <b>ID del caso: </b>{" "}
+                <Text
+                  copyable={{
+                    tooltips: ["Copiar ID en el portapapeles", "¡ID Copiado!"],
+                  }}
+                >
+                  {this.state.id}
+                </Text>
+              </div>
+            ) : null}
+          </Col>
+          <Col span={12}>
+            <Form.Item>
+              <Button
+                htmlType="submit"
+                type="primary"
+                className="edit-button"
+                icon={<SaveOutlined />}
+              >
+                Guardar
+              </Button>
+              <Button
+                onClick={this.returnTrigger}
+                htmlType="submit"
+                type="primary"
+                className="edit-button"
+                icon={<SaveOutlined />}
+              >
+                Guardar y volver
+              </Button>
+              <Popconfirm
+                title="¿Qué tipo de vista previa desea generar?"
+                onConfirm={() => Backend.generateCouncil(false, this.state.id)}
+                onCancel={() => Backend.generateCouncil(true, this.state.id)}
+                okText="Consejo"
+                cancelText="Comité"
+                placement="right"
+              >
+                <Button
+                  className="edit-button"
+                  type="primary"
+                  icon={<EyeOutlined />}
+                >
+                  Vista Previa
+                </Button>
+              </Popconfirm>
+              <Button
+                className="edit-button"
+                onClick={(e) => {
+                  this.props.history.push({
+                    pathname: "/home/",
+                  });
+                }}
+                icon={<CloseCircleOutlined />}
+              >
+                Volver sin guardar
+              </Button>
+            </Form.Item>
+          </Col>
+        </Row>
+        <Divider style={{ background: "#ffffff00" }} />
+        {this.createInputs()}
+        {this.createTabs()}
+      </Form>
+    );
+    return form;
+  };
+
   render() {
     return (
       <>
         <Divider style={{ background: "#ffffff00" }} />
-        <Form onFinish={this.onFinish} layout="vertical">
-          <Row>
-            <Col span={12}>
-              <Title className="edit-title">Edición de solicitud</Title>
-              {this.state.visibleFlag ? (
-                <div className="edit-p">
-                  <b>Tipo de caso: </b>
-                  {this.state.full_name}
-                  <br />
-                  <b>ID del caso: </b>{" "}
-                  <Text
-                    copyable={{
-                      tooltips: [
-                        "Copiar ID en el portapapeles",
-                        "¡ID Copiado!",
-                      ],
-                    }}
-                  >
-                    {this.state.id}
-                  </Text>
-                </div>
-              ) : null}
-            </Col>
-            <Col span={12}>
-              <Form.Item>
-                <Button
-                  htmlType="submit"
-                  type="primary"
-                  className="edit-button"
-                  icon={<SaveOutlined />}
-                >
-                  Guardar
-                </Button>
-                <Button
-                  onClick={this.returnTrigger}
-                  htmlType="submit"
-                  type="primary"
-                  className="edit-button"
-                  icon={<SaveOutlined />}
-                >
-                  Guardar y volver
-                </Button>
-                <Popconfirm
-                  title="¿Qué tipo de vista previa desea generar?"
-                  onConfirm={() =>
-                    Backend.generateCouncil(false, this.state.id)
-                  }
-                  onCancel={() => Backend.generateCouncil(true, this.state.id)}
-                  okText="Consejo"
-                  cancelText="Comité"
-                  placement="right"
-                >
-                  <Button
-                    className="edit-button"
-                    type="primary"
-                    icon={<EyeOutlined />}
-                  >
-                    Vista Previa
-                  </Button>
-                </Popconfirm>
-                <Button
-                  className="edit-button"
-                  onClick={(e) => {
-                    this.props.history.push({
-                      pathname: "/home/",
-                    });
-                  }}
-                  icon={<CloseCircleOutlined />}
-                >
-                  Volver sin guardar
-                </Button>
-              </Form.Item>
-            </Col>
-          </Row>
-          <Divider style={{ background: "#ffffff00" }} />
-          {this.createInputs()}
-          {this.createTabs()}
-        </Form>
+        {this.renderForm()}
         <Divider style={{ background: "#ffffff00" }} />
       </>
     );

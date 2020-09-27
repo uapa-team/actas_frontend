@@ -2,6 +2,7 @@ import React from "react";
 import { Tabs, Col, Row } from "antd";
 import { withRouter } from "react-router-dom";
 import EditComponent from "./EditComponent";
+import _ from "lodash";
 
 const { TabPane } = Tabs;
 
@@ -33,24 +34,26 @@ class EditTabs extends React.Component {
 
   drawFields = () => {
     let auxArray = [];
-    for (const key in this.state.metadata) {
+    for (let key in this.state.metadata) {
       if (this.state.metadata.hasOwnProperty(key)) {
-        const element = this.state.metadata[key];
+        let element = _.cloneDeep(this.state.metadata[key]);
+        element.default = this.state.dataSource[this.currentlyFilling].cases[0][
+          key
+        ];
         auxArray.push([key, element]);
       }
     }
     this.currentlyFilling++;
-    return <Row gutter={8}>{auxArray.map(this.createInput)}</Row>;
+    let aux2Array = _.cloneDeep(auxArray);
+    return <Row gutter={8}>{aux2Array.map(this.createInput)}</Row>;
   };
 
   createInput = (info) => {
+    let key = info[0].concat(this.currentlyFilling);
+    let md = info[1];
     return (
-      <Col span={8} key={info[0].concat(this.currentlyFilling)}>
-        <EditComponent
-          key={info[0].concat(this.currentlyFilling)}
-          fieldName={info[0].concat(this.currentlyFilling)}
-          metadata={info[1]}
-        />
+      <Col span={8} key={key}>
+        <EditComponent key={key} fieldName={key} metadata={md} />
       </Col>
     );
   };
@@ -69,14 +72,16 @@ class EditTabs extends React.Component {
     const newPanes = [...panes];
 
     var auxArray = [];
-    var mdata = this.state.metadata;
+    var mdata = _.cloneDeep(this.state.metadata);
+    console.log(mdata);
     for (var key in mdata) {
       if (mdata.hasOwnProperty(key)) {
         auxArray.push([key, mdata[key]]);
       }
     }
 
-    var components = <Row gutter={8}>{auxArray.map(this.createInput)}</Row>;
+    let aux2Array = _.cloneDeep(auxArray);
+    let components = <Row gutter={8}>{aux2Array.map(this.createInput)}</Row>;
 
     newPanes.push({
       title: "Asignatura ".concat(this.currentlyFilling),
@@ -118,7 +123,12 @@ class EditTabs extends React.Component {
         size={"small"}
       >
         {this.state.panes.map((pane) => (
-          <TabPane tab={pane.title} key={pane.key} closable={pane.closable}>
+          <TabPane
+            tab={pane.title}
+            key={pane.key}
+            closable={pane.closable}
+            forceRender={true}
+          >
             {pane.content}
           </TabPane>
         ))}
