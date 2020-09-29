@@ -370,13 +370,14 @@ class HomeCaseTable extends React.Component {
                 <b>Fecha de radicación:</b> {record.date.substring(0, 10)}.
               </div>
               <div>
-                <b>Respuesta de Consejo de Facultad:</b>{" "}
+                <b>Respuesta del Consejo de Facultad:</b>{" "}
                 {record.approval_status}.
               </div>
             </Col>
             <Col span={8}>
               <div>
-                <b>Respuesta de Comité Asesor:</b> {record.advisor_response}.
+                <b>Existe respuesta del Comité Asesor: </b>
+                {record.advisor_response === "En espera" ? "No" : "Si"}.
               </div>
               <div>
                 <b>Instancia que decide:</b> {record.decision_maker}.
