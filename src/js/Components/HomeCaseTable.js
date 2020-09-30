@@ -1,18 +1,19 @@
 import React from "react";
-import { Table, Popconfirm, message, Input, Button, Icon } from "antd";
+import { Table, Popconfirm, message, Input, Button, Row, Col } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
 import { withRouter } from "react-router-dom";
-import Functions from "../../../Functions";
 import Highlighter from "react-highlight-words";
-import Columns from "react-columns";
-import Backend from "../../../serviceBackend";
+import Backend from "../Basics/Backend";
 
 import moment from "moment";
 
-class CaseTable extends React.Component {
+class HomeCaseTable extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       info_case: {},
+      searchText: "",
+      searchedColumn: "",
     };
   }
 
@@ -73,11 +74,6 @@ class CaseTable extends React.Component {
     }
   };
 
-  state = {
-    searchText: "",
-    searchedColumn: "",
-  };
-
   getColumnSearchProps = (dataIndex, searchTerm) => ({
     filterDropdown: ({
       setSelectedKeys,
@@ -103,7 +99,7 @@ class CaseTable extends React.Component {
         <Button
           type="primary"
           onClick={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
-          icon="search"
+          icon={<SearchOutlined />}
           size="small"
           style={{ width: 90, marginRight: 8 }}
         >
@@ -119,7 +115,7 @@ class CaseTable extends React.Component {
       </div>
     ),
     filterIcon: (filtered) => (
-      <Icon type="search" style={{ color: filtered ? "#1890ff" : "#000000" }} />
+      <SearchOutlined style={{ color: filtered ? "#1890ff" : "#000000" }} />
     ),
     onFilter: (value, record) =>
       record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
@@ -187,53 +183,58 @@ class CaseTable extends React.Component {
         title: "Tipo de solicitud",
         dataIndex: "_cls_display",
         key: "_cls_display",
-        width: "20%",
-        sorter: (a, b) => a._cls_display.localeCompare(b._cls_display),
+        width: "25%",
+        //sorter: (a, b) => a._cls_display.localeCompare(b._cls_display),
         ...this.getColumnSearchProps("_cls_display", "tipo de solicitud"),
       },
       {
         title: "DNI",
         dataIndex: "student_dni",
         key: "student_dni",
-        //sorter: (a, b) => a.student_dni.localeCompare(b.student_dni),
+        width: "10%",
         ...this.getColumnSearchProps("student_dni", "DNI"),
       },
       {
         title: "Nombres",
         dataIndex: "student_name",
         key: "student_name",
-        sorter: (a, b) => a.student_name.localeCompare(b.student_name),
+        width: "10%",
+        //sorter: (a, b) => a.student_name.localeCompare(b.student_name),
         ...this.getColumnSearchProps("student_name", "nombres"),
       },
       {
         title: "Plan de estudios",
         dataIndex: "academic_program",
         key: "academic_program",
-        sorter: (a, b) => a.academic_program.localeCompare(b.academic_program),
+        width: "10%",
+        //sorter: (a, b) => a.academic_program.localeCompare(b.academic_program),
         ...this.getColumnSearchProps("academic_program", "programa"),
       },
       {
         title: "Acta #",
         dataIndex: "consecutive_minute",
         key: "consecutive_minute",
-        width: "10%",
+        width: "8%",
         ...this.getColumnSearchProps("consecutive_minute", "acta"),
       },
       {
         title: "Año",
         dataIndex: "year",
         key: "year",
+        width: "8%",
         ...this.getColumnSearchProps("year", "año"),
       },
       {
         title: "Periodo",
         dataIndex: "academic_period",
         key: "academic_period",
+        width: "10%",
         ...this.getColumnSearchProps("academic_period", "periodo"),
       },
       {
         title: "Editar",
         key: "edit",
+        width: "10%",
         render: (text, record) =>
           record.received_date !== "None" ? ( //If it has been recieved:
             <span>
@@ -263,8 +264,8 @@ class CaseTable extends React.Component {
               <br />
               <Popconfirm
                 title="¿Qué tipo de vista previa desea generar?"
-                onConfirm={() => Functions.generateCouncil(false, record.id)}
-                onCancel={() => Functions.generateCouncil(true, record.id)}
+                onConfirm={() => Backend.generateCouncil(false, record.id)}
+                onCancel={() => Backend.generateCouncil(true, record.id)}
                 okText="Consejo"
                 cancelText="Comité"
                 placement="left"
@@ -276,7 +277,6 @@ class CaseTable extends React.Component {
           ) : (
             //Else - If it hasn't being marked as recieved:
             <span>
-              {/* eslint-disable-next-line */}
               <Popconfirm
                 title="¿Desea marcar como recibido?"
                 onConfirm={() => this.markAsRecieved(record.id)}
@@ -297,88 +297,69 @@ class CaseTable extends React.Component {
         title: "Tipo de solicitud",
         dataIndex: "_cls_display",
         key: "_cls_display",
-        width: "20%",
-        sorter: (a, b) => a._cls_display.localeCompare(b._cls_display),
+        width: "25%",
+        //sorter: (a, b) => a._cls_display.localeCompare(b._cls_display),
         ...this.getColumnSearchProps("_cls_display", "tipo de solicitud"),
       },
       {
         title: "DNI",
         dataIndex: "student_dni",
         key: "student_dni",
+        width: "10%",
         ...this.getColumnSearchProps("student_dni", "DNI"),
       },
       {
         title: "Nombres",
         dataIndex: "student_name",
         key: "student_name",
-        sorter: (a, b) => a.student_name.localeCompare(b.student_name),
+        width: "10%",
+        //sorter: (a, b) => a.student_name.localeCompare(b.student_name),
         ...this.getColumnSearchProps("student_name", "nombres"),
       },
       {
         title: "Plan de estudios",
         dataIndex: "academic_program",
         key: "academic_program",
-        sorter: (a, b) => a.academic_program.localeCompare(b.academic_program),
+        width: "10%",
+        //sorter: (a, b) => a.academic_program.localeCompare(b.academic_program),
         ...this.getColumnSearchProps("academic_program", "programa"),
       },
       {
         title: "Acta #",
         dataIndex: "consecutive_minute",
         key: "consecutive_minute",
-        width: "10%",
+        width: "8%",
         ...this.getColumnSearchProps("consecutive_minute", "acta"),
       },
       {
         title: "Año",
         dataIndex: "year",
         key: "year",
+        width: "8%",
         ...this.getColumnSearchProps("year", "año"),
       },
       {
         title: "Periodo",
         dataIndex: "academic_period",
         key: "academic_period",
+        width: "10%",
         ...this.getColumnSearchProps("academic_period", "periodo"),
       },
     ];
 
     return (
       <Table
+        loading={this.props.loading}
+        tableLayout="fixed"
         dataSource={this.props.dataSource}
+        rowKey="id"
+        bordered={true}
+        size="small"
         columns={
           localStorage.getItem("type") !== "secretary"
             ? columns
             : columnsSecretary
         }
-        bordered={true}
-        expandedRowRender={(record) => (
-          <Columns gap={"0px"} columns={3}>
-            <div>
-              <b>Fecha de radicación:</b> {record.date}.
-            </div>
-            <div>
-              <b>Respuesta de Consejo de Facultad:</b> {record.approval_status}.
-            </div>
-            <div>
-              <b>Respuesta de Comité Asesor:</b> {record.advisor_response}.
-            </div>
-            <div>
-              <b>Instancia que decide:</b> {record.decision_maker}.
-            </div>
-            <div>
-              <b>Días desde la radicación:</b>{" "}
-              {this.date_diff_indays(
-                moment().format("MM/DD/YYYY"),
-                record.date
-              )}
-              .
-            </div>
-            <div>
-              <b>ID del caso:</b> {record.id}.
-            </div>
-          </Columns>
-        )}
-        rowKey="id"
         pagination={{
           defaultPageSize: 10,
           showSizeChanger: true,
@@ -388,6 +369,42 @@ class CaseTable extends React.Component {
           size: "small",
           showTotal: showTotal,
         }}
+        expandedRowRender={(record) => (
+          <Row>
+            <Col span={1} />
+            <Col span={8}>
+              <div>
+                <b>Fecha de radicación:</b> {record.date.substring(0, 10)}.
+              </div>
+              <div>
+                <b>Respuesta del Consejo de Facultad:</b>{" "}
+                {record.approval_status}.
+              </div>
+            </Col>
+            <Col span={8}>
+              <div>
+                <b>Existe respuesta del Comité Asesor: </b>
+                {record.advisor_response === "En espera" ? "No" : "Si"}.
+              </div>
+              <div>
+                <b>Instancia que decide:</b> {record.decision_maker}.
+              </div>
+            </Col>
+            <Col span={7}>
+              <div>
+                <b>Días desde la radicación:</b>{" "}
+                {this.date_diff_indays(
+                  moment().format("MM/DD/YYYY"),
+                  record.date
+                )}
+                .
+              </div>
+              <div>
+                <b>ID del caso:</b> {record.id}.
+              </div>
+            </Col>
+          </Row>
+        )}
       />
     );
   }
@@ -397,4 +414,4 @@ function showTotal(total) {
   return `Hay ${total} solicitudes`;
 }
 
-export default withRouter(CaseTable);
+export default withRouter(HomeCaseTable);

@@ -1,10 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import UnalCanvas from "./js/Components/UnalTemplate/UnalCanvas";
-import LoginForm from "./js/Components/Login/Login";
-import Home from "./js/Components/Home/Home";
-import Edit from "./js/Components/Edit/Edit";
-import Contact from "./js/Components/Contact/Contact";
+import UnalCanvas from "./js/Basics/UnalCanvas";
+import LoginForm from "./js/Components/Login";
+import Home from "./js/Components/Home";
+import Edit from "./js/Components/Edit";
+import Contact from "./js/Components/Contact";
 import * as serviceWorker from "./serviceWorker";
 import { BrowserRouter, Route, Redirect, Switch } from "react-router-dom";
 import "./css/index.css";
@@ -12,7 +12,7 @@ import "./css/index.css";
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route
     {...rest}
-    render={props =>
+    render={(props) =>
       localStorage.getItem("jwt") != null ? (
         <Component {...props} />
       ) : (
@@ -25,7 +25,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
 const PublicRoute = ({ component: Component, ...rest }) => (
   <Route
     {...rest}
-    render={props =>
+    render={(props) =>
       localStorage.getItem("jwt") === null ? (
         <Component {...props} />
       ) : (
