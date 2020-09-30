@@ -179,25 +179,35 @@ class Home extends React.Component {
           </Row>
         ) : (
           //When secretary:
-          <Row className="home-main-row">
+          <Row gutter={8} className="home-main-row">
             <Col span={2} />
             <Col span={10}>
               <Title className="home-title">Casos Estudiantiles</Title>
             </Col>
-            <Col span={1} />
-            <Col span={4}>
+            <Col span={2} />
+            <Col span={3}>
+              <Button
+                block
+                type="primary"
+                icon={<ReloadOutlined />}
+                onClick={() => this.updateCases()}
+                disabled={this.state.loading}
+              >
+                Actualizar casos
+              </Button>
+            </Col>
+            <Col span={3}>
               <Button
                 block
                 type="primary"
                 icon={<PlusOutlined />}
                 onClick={(e) => this.showDrawer("Create")}
-                className="createCM_button"
               >
-                Crear un nuevo caso
+                Crear nuevo caso
               </Button>
               <HomeDrawerCreate
                 visible={this.state.createDrawerVisible}
-                onClose={this.closeDrawer("Create")}
+                onClose={(e) => this.closeDrawer("Create")}
               />
             </Col>
           </Row>
