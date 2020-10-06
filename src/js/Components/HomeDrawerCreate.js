@@ -152,11 +152,11 @@ class HomeDrawerCreate extends React.Component {
               initialValue="CC"
             >
               <Select>
-                <Option value="Cédula de ciudadanía Colombiana">CC</Option>
-                <Option value="Tarjeta de identidad Colombiana">TI</Option>
-                <Option value="Cédula de extranjería">CE</Option>
-                <Option value="Pasaporte">PS</Option>
-                <Option value="Otro">OT</Option>
+                <Option value="CC">CC</Option>
+                <Option value="TI">TI</Option>
+                <Option value="CE">CE</Option>
+                <Option value="PS">PS</Option>
+                <Option value="OT">OT</Option>
               </Select>
             </Form.Item>
           </Col>
