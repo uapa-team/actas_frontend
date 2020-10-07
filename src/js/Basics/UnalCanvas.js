@@ -235,10 +235,13 @@ class UnalCanvas extends Component {
                         {/*eslint-disable-next-line*/}
                         <a
                           onClick={() => {
-                            Backend.sendRequest("GET", "logout");
-                            localStorage.removeItem("jwt");
-                            localStorage.removeItem("type");
-                            window.location.reload();
+                            Backend.sendRequest("GET", "logout").then(
+                              async () => {
+                                localStorage.removeItem("jwt");
+                                localStorage.removeItem("type");
+                                window.location.reload();
+                              }
+                            );
                           }}
                           className="btn btn-default dropdown-toggle"
                         >

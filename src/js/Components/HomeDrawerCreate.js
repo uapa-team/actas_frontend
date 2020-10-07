@@ -75,6 +75,7 @@ class HomeDrawerCreate extends React.Component {
               content: "El caso se ha guardado exitosamente.",
               key,
             });
+            this.formRef.current.resetFields();
             let newID = data.inserted_items[0];
             if (localStorage.getItem("type") !== "secretary") {
               Backend.sendRequest("PATCH", "mark_received?id=".concat(newID));
@@ -161,7 +162,11 @@ class HomeDrawerCreate extends React.Component {
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item label="Documento Estudiante" name="student_dni">
+            <Form.Item
+              label="Documento Estudiante"
+              name="student_dni"
+              initialValue={""}
+            >
               <Input
                 placeholder="Ingrese el documento del estudiante"
                 onBlur={(e) => this.autofillName(e.target.value)}
@@ -169,12 +174,17 @@ class HomeDrawerCreate extends React.Component {
             </Form.Item>
           </Col>
         </Row>
-        <Form.Item label="Nombre Estudiante" name="student_name">
+        <Form.Item
+          label="Nombre Estudiante"
+          name="student_name"
+          initialValue={""}
+        >
           <Input placeholder="Ingrese el nombre del estudiante" />
         </Form.Item>
         <Form.Item
           label="Tipo de caso"
           name="_cls"
+          initialValue={""}
           rules={[
             {
               required: true,
@@ -201,7 +211,11 @@ class HomeDrawerCreate extends React.Component {
             {this.menuJSCases()}
           </Select>
         </Form.Item>
-        <Form.Item label="Plan de estudios" name="academic_program">
+        <Form.Item
+          label="Plan de estudios"
+          name="academic_program"
+          initialValue={""}
+        >
           <Select
             showSearch
             placeholder="Escoja el plan de estudios"
