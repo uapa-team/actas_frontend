@@ -112,10 +112,10 @@ class HomeDrawerDownload extends React.Component {
                     onChange={(v) => this.setState({ isPre: v.target.value })}
                     buttonStyle="solid"
                   >
-                    <Radio.Button value={true}>
+                    <Radio.Button value={true}>Comité Asesor</Radio.Button>
+                    <Radio.Button value={false}>
                       Consejo de Facultad
                     </Radio.Button>
-                    <Radio.Button value={false}>Comité Asesor</Radio.Button>
                   </Radio.Group>
                 </Form.Item>
               </Col>
