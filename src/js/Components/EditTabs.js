@@ -1,5 +1,5 @@
 import React from "react";
-import { Tabs, Col, Row } from "antd";
+import { Tabs, Row } from "antd";
 import { withRouter } from "react-router-dom";
 import EditComponent from "./EditComponent";
 import _ from "lodash";
@@ -53,11 +53,7 @@ class EditTabs extends React.Component {
     let name = _.cloneDeep(this.state.name);
     let key = name.concat(info[0].concat(this.currentlyFilling));
     let md = info[1];
-    return (
-      <Col span={8} key={key}>
-        <EditComponent key={key} fieldName={key} metadata={md} />
-      </Col>
-    );
+    return <EditComponent key={key} fieldName={key} metadata={md} />;
   };
 
   onEdit = (targetKey, action) => {

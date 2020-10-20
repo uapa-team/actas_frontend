@@ -56,14 +56,12 @@ class Edit extends React.Component {
     }
     if (i[1].type !== "Table") {
       return (
-        <Col span={8} key={i[0]}>
-          <EditComponent
-            key={i[0]}
-            fieldName={i[0]}
-            metadata={i[1]}
-            form={this.props.form}
-          />
-        </Col>
+        <EditComponent
+          key={i[0]}
+          fieldName={i[0]}
+          metadata={i[1]}
+          form={this.props.form}
+        />
       );
     }
   };
@@ -197,7 +195,14 @@ class Edit extends React.Component {
 
   renderForm = () => {
     let form = (
-      <Form onFinish={this.onFinish} layout="vertical" ref={this.formRef}>
+      <Form
+        onKeyPress={(e) => {
+          e.key === "Enter" && e.preventDefault();
+        }}
+        onFinish={this.onFinish}
+        layout="vertical"
+        ref={this.formRef}
+      >
         <Row>
           <Col span={12}>
             <Title className="edit-title">Edición de solicitud</Title>
