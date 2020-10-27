@@ -139,3 +139,14 @@ code {
   font-size: 120%;
   line-height: 20px;
 }
+
+/* Edit Notes */
+.ant-list-split {
+  border-top: 1px solid #2d2656 !important;
+  border-left: 1px solid #2d2656 !important;
+  border-right: 1px solid #2d2656 !important;
+}
+
+.ant-list-split .ant-list-item {
+  border-bottom: 1px solid #2d2656 !important;
+}
