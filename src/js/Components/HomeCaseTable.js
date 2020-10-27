@@ -418,6 +418,8 @@ class HomeCaseTable extends React.Component {
           position: "bottom",
           size: "small",
           showTotal: showTotal,
+          onChange: this.props.pagChange,
+          onShowSizeChange: this.props.pagChange,
         }}
         expandedRowRender={(record) => (
           <Row>

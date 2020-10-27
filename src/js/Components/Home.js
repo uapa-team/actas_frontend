@@ -19,6 +19,7 @@ class Home extends React.Component {
     super(props);
     this.closeDrawer = this.closeDrawer.bind(this);
     this.updateDataSource = this.updateDataSource.bind(this);
+    this.pagChange = this.pagChange.bind(this);
     this.state = {
       dataSource: [],
       dataMatches: [],
@@ -29,6 +30,8 @@ class Home extends React.Component {
       minuteSearch: 1,
       yearSearch: 2020,
       loading: true,
+      page: 1,
+      pageSize: 10,
     };
   }
 
@@ -42,6 +45,32 @@ class Home extends React.Component {
     this.setState({
       dataSource: newDataSource,
     });
+  };
+
+  pagChange = (currentPage, pageSize) => {
+    this.setState({ loading: true, page: currentPage, pageSize: pageSize });
+    Backend.sendRequest("POST", "cases", {
+      page_number: currentPage,
+      page_size: pageSize,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        let totalCases = data["total_cases"];
+        let casesLoaded = data["cases"];
+        if (totalCases !== casesLoaded.length) {
+          if (currentPage > 1) {
+            let auxArray = new Array((currentPage - 1) * pageSize);
+            auxArray.fill({});
+            casesLoaded = auxArray.concat(casesLoaded);
+          }
+          if (totalCases !== casesLoaded.length) {
+            let auxArray = new Array(totalCases - casesLoaded.length);
+            auxArray.fill({});
+            casesLoaded = casesLoaded.concat(auxArray);
+          }
+        }
+        this.setState({ dataSource: casesLoaded, loading: false });
+      });
   };
 
   performSearch = (keyTerm) => {
@@ -100,10 +129,27 @@ class Home extends React.Component {
     let key = "updatable";
     this.setState({ loading: true });
     message.loading({ content: "Actualizando casos...", key, duration: 50 });
-    Backend.sendRequest("GET", "case")
+    Backend.sendRequest("POST", "cases", {
+      page_number: this.state.page,
+      page_size: this.state.pageSize,
+    })
       .then((response) => response.json())
       .then((data) => {
-        this.setState({ dataSource: data["cases"], loading: false });
+        let totalCases = data["total_cases"];
+        let casesLoaded = data["cases"];
+        if (totalCases !== casesLoaded.length) {
+          if (this.state.page > 1) {
+            let auxArray = new Array(this.state.page * this.state.pageSize);
+            auxArray.fill({});
+            casesLoaded = auxArray.concat(casesLoaded);
+          }
+          if (totalCases !== casesLoaded.length) {
+            let auxArray = new Array(totalCases - casesLoaded.length);
+            auxArray.fill({});
+            casesLoaded = casesLoaded.concat(auxArray);
+          }
+        }
+        this.setState({ dataSource: casesLoaded, loading: false });
         message.success({
           content: "Casos actualizados correctamente.",
           key,
@@ -115,10 +161,20 @@ class Home extends React.Component {
   componentDidMount() {
     let key = "updatable";
     message.loading({ content: "Cargando casos...", key, duration: 50 });
-    Backend.sendRequest("GET", "case")
+    Backend.sendRequest("POST", "cases", {
+      page_number: this.state.page,
+      page_size: this.state.pageSize,
+    })
       .then((response) => response.json())
       .then((data) => {
-        this.setState({ dataSource: data["cases"], loading: false });
+        let totalCases = data["total_cases"];
+        let casesLoaded = data["cases"];
+        if (totalCases !== casesLoaded.length) {
+          let auxArray = new Array(totalCases - casesLoaded.length);
+          auxArray.fill({});
+          casesLoaded = casesLoaded.concat(auxArray);
+        }
+        this.setState({ dataSource: casesLoaded, loading: false });
         message.success({
           content: "Casos cargados correctamente.",
           key,
@@ -216,6 +272,7 @@ class Home extends React.Component {
         <Row>
           <HomeCaseTable
             updateDataSource={this.updateDataSource}
+            pagChange={this.pagChange}
             loading={this.state.loading}
             dataSource={
               this.state.searchTerm === "" && !this.state.filterByMinute
