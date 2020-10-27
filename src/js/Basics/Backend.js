@@ -1,8 +1,9 @@
 import { message } from "antd";
 
 export default class Backend {
-  static backEndUrl = "https://ingenieria.bogota.unal.edu.co/actas-api/";
+  //static backEndUrl = "https://ingenieria.bogota.unal.edu.co/actas-api/";
   //static backEndUrl = "http://127.0.0.1:8000/council_minutes/";
+  static backEndUrl = "http://168.176.26.91:9900/council_minutes/";
   static uapappUrl = "https://www.ingenieria.bogota.unal.edu.co/uapapp_api/";
 
   static openLink(url) {

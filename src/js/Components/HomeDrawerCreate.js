@@ -10,7 +10,7 @@ import {
   Select,
   DatePicker,
   message,
-  Form
+  Form,
 } from "antd";
 import {
   EditOutlined,
@@ -307,10 +307,7 @@ class HomeDrawerCreate extends React.Component {
             </Form.Item>
           </Col>
         </Row>
-        <Form.Item
-            label="Notas Adicionales"
-            name="notes"
-          >
+        <Form.Item label="Notas adicionales" name="notes">
           <TextArea rows={3} />
         </Form.Item>
         <Row gutter={8}>
