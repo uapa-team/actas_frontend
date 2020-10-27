@@ -20,6 +20,7 @@ import {
 import moment from "moment";
 import Backend from "../Basics/Backend";
 const { Option } = Select;
+const { TextArea } = Input;
 
 class HomeDrawerCreate extends React.Component {
   formRef = React.createRef();
@@ -59,8 +60,13 @@ class HomeDrawerCreate extends React.Component {
     });
   };
 
+  listNotes = (values) => {
+    values.notes = values.notes.split("\n");
+  };
+
   handleSave = (values) => {
     values.date = values.date.utc().format();
+    this.listNotes(values);
     this.props.onClose("Create");
     const key = "updatable";
     message.loading({ content: "Guardando caso...", key });
@@ -301,6 +307,9 @@ class HomeDrawerCreate extends React.Component {
             </Form.Item>
           </Col>
         </Row>
+        <Form.Item label="Notas adicionales" name="notes">
+          <TextArea rows={3} />
+        </Form.Item>
         <Row gutter={8}>
           {localStorage.getItem("type") !== "secretary" ? (
             <Col>
