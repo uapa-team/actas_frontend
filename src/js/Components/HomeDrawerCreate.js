@@ -60,13 +60,13 @@ class HomeDrawerCreate extends React.Component {
     });
   };
 
-  listNotes = (values) => {
-    values.notes = values.notes.split("\n");
-  };
-
   handleSave = (values) => {
     values.date = values.date.utc().format();
-    this.listNotes(values);
+    if (values.notes !== undefined) {
+      values.notes = values.notes.split("\n");
+    } else {
+      delete values.notes;
+    }
     this.props.onClose("Create");
     const key = "updatable";
     message.loading({ content: "Guardando caso...", key });
@@ -97,12 +97,12 @@ class HomeDrawerCreate extends React.Component {
           });
         } else if (response.status) {
           message.error({
-            content: "Usuario sin autorización para guardar casos.",
+            content: "Ha ocurrido un error guardando el caso.",
             key,
           });
         } else {
           message.error({
-            content: "Ha habido un error guardando el caso.",
+            content: "Ha ocurrido un error guardando el caso.",
             key,
           });
           console.error("Login Error: Backend HTTP code " + response.status);
@@ -217,11 +217,7 @@ class HomeDrawerCreate extends React.Component {
             {this.menuJSCases()}
           </Select>
         </Form.Item>
-        <Form.Item
-          label="Plan de estudios"
-          name="academic_program"
-          initialValue={""}
-        >
+        <Form.Item label="Plan de estudios" name="academic_program">
           <Select
             showSearch
             placeholder="Escoja el plan de estudios"
