@@ -47,19 +47,20 @@ class Home extends React.Component {
     });
   };
 
-  pagChange = (currentPage, pageSize) => {
-    this.setState({ loading: true, page: currentPage, pageSize: pageSize });
-    Backend.sendRequest("POST", "cases", {
-      page_number: currentPage,
-      page_size: pageSize,
+  makeCasesQuery = () => {
+    Backend.sendRequest("POST", this.state.searchQuery, {
+      page_number: this.state.page,
+      page_size: this.state.pageSize,
     })
       .then((response) => response.json())
       .then((data) => {
         let totalCases = data["total_cases"];
         let casesLoaded = data["cases"];
         if (totalCases !== casesLoaded.length) {
-          if (currentPage > 1) {
-            let auxArray = new Array((currentPage - 1) * pageSize);
+          if (this.state.page > 1) {
+            let auxArray = new Array(
+              (this.state.page - 1) * this.state.pageSize
+            );
             auxArray.fill({});
             casesLoaded = auxArray.concat(casesLoaded);
           }
@@ -71,6 +72,18 @@ class Home extends React.Component {
         }
         this.setState({ dataSource: casesLoaded, loading: false });
       });
+    return true;
+  };
+
+  pagChange = (currentPage, pageSize) => {
+    this.setState(
+      {
+        loading: true,
+        page: currentPage,
+        pageSize: pageSize,
+      },
+      () => this.makeCasesQuery()
+    );
   };
 
   findCases = (selectedKeys, confirm, dataIndex) => {
@@ -131,58 +144,23 @@ class Home extends React.Component {
     let key = "updatable";
     this.setState({ loading: true });
     message.loading({ content: "Actualizando casos...", key, duration: 50 });
-    Backend.sendRequest("POST", "cases", {
-      page_number: this.state.page,
-      page_size: this.state.pageSize,
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        let totalCases = data["total_cases"];
-        let casesLoaded = data["cases"];
-        if (totalCases !== casesLoaded.length) {
-          if (this.state.page > 1) {
-            let auxArray = new Array(this.state.page * this.state.pageSize);
-            auxArray.fill({});
-            casesLoaded = auxArray.concat(casesLoaded);
-          }
-          if (totalCases !== casesLoaded.length) {
-            let auxArray = new Array(totalCases - casesLoaded.length);
-            auxArray.fill({});
-            casesLoaded = casesLoaded.concat(auxArray);
-          }
-        }
-        this.setState({ dataSource: casesLoaded, loading: false });
-        message.success({
-          content: "Casos actualizados correctamente.",
-          key,
-          duration: 2,
-        });
-      });
+    this.makeCasesQuery();
+    message.success({
+      content: "Casos actualizados correctamente.",
+      key,
+      duration: 2,
+    });
   }
 
   componentDidMount() {
     let key = "updatable";
     message.loading({ content: "Cargando casos...", key, duration: 50 });
-    Backend.sendRequest("POST", "cases", {
-      page_number: this.state.page,
-      page_size: this.state.pageSize,
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        let totalCases = data["total_cases"];
-        let casesLoaded = data["cases"];
-        if (totalCases !== casesLoaded.length) {
-          let auxArray = new Array(totalCases - casesLoaded.length);
-          auxArray.fill({});
-          casesLoaded = casesLoaded.concat(auxArray);
-        }
-        this.setState({ dataSource: casesLoaded, loading: false });
-        message.success({
-          content: "Casos cargados correctamente.",
-          key,
-          duration: 2,
-        });
-      });
+    this.makeCasesQuery();
+    message.success({
+      content: "Casos cargados correctamente.",
+      key,
+      duration: 2,
+    });
   }
 
   render() {

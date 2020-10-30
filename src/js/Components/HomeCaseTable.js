@@ -2,7 +2,6 @@ import React from "react";
 import { Table, Popconfirm, message, Input, Button, Row, Col } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import { withRouter } from "react-router-dom";
-import Highlighter from "react-highlight-words";
 import Backend from "../Basics/Backend";
 
 import moment from "moment";
@@ -147,17 +146,7 @@ class HomeCaseTable extends React.Component {
         setTimeout(() => this.searchInput.select());
       }
     },
-    render: (text) =>
-      this.state.searchedColumn === dataIndex ? (
-        <Highlighter
-          highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
-          searchWords={[this.state.searchText]}
-          autoEscape
-          textToHighlight={text.toString()}
-        />
-      ) : (
-        text
-      ),
+    render: (text) => text,
   });
 
   handleSearch = (selectedKeys, confirm, dataIndex) => {
