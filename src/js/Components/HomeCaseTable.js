@@ -11,8 +11,6 @@ class HomeCaseTable extends React.Component {
     super(props);
     this.state = {
       info_case: {},
-      searchText: "",
-      searchedColumn: "",
     };
   }
 
@@ -88,9 +86,6 @@ class HomeCaseTable extends React.Component {
               message.error("Usuario sin autorización.");
             } else {
               message.error("Ha ocurrido un error desistiendo el caso.");
-              console.error(
-                "Login Error: Backend HTTP code " + response.status
-              );
             }
           });
         });
@@ -129,7 +124,7 @@ class HomeCaseTable extends React.Component {
           Buscar
         </Button>
         <Button
-          onClick={() => this.handleReset(clearFilters)}
+          onClick={() => this.handleReset(clearFilters, dataIndex)}
           size="small"
           style={{ width: 90 }}
         >
@@ -151,16 +146,12 @@ class HomeCaseTable extends React.Component {
 
   handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
-    this.props.findCases(selectedKeys, confirm, dataIndex);
-    this.setState({
-      searchText: selectedKeys[0],
-      searchedColumn: dataIndex,
-    });
+    this.props.findCases(selectedKeys, dataIndex);
   };
 
-  handleReset = (clearFilters) => {
+  handleReset = (clearFilters, dataIndex) => {
     clearFilters();
-    this.setState({ searchText: "" });
+    this.props.cleanQuery(dataIndex);
   };
 
   date_diff_indays = (now, created) => {
@@ -201,7 +192,6 @@ class HomeCaseTable extends React.Component {
         dataIndex: "_cls_display",
         key: "_cls_display",
         width: "25%",
-        //sorter: (a, b) => a._cls_display.localeCompare(b._cls_display),
         ...this.getColumnSearchProps("_cls_display", "tipo de solicitud"),
       },
       {
@@ -216,7 +206,6 @@ class HomeCaseTable extends React.Component {
         dataIndex: "student_name",
         key: "student_name",
         width: "10%",
-        //sorter: (a, b) => a.student_name.localeCompare(b.student_name),
         ...this.getColumnSearchProps("student_name", "nombres"),
       },
       {
@@ -224,7 +213,6 @@ class HomeCaseTable extends React.Component {
         dataIndex: "academic_program",
         key: "academic_program",
         width: "10%",
-        //sorter: (a, b) => a.academic_program.localeCompare(b.academic_program),
         ...this.getColumnSearchProps("academic_program", "programa"),
       },
       {
@@ -315,7 +303,6 @@ class HomeCaseTable extends React.Component {
         dataIndex: "_cls_display",
         key: "_cls_display",
         width: "25%",
-        //sorter: (a, b) => a._cls_display.localeCompare(b._cls_display),
         ...this.getColumnSearchProps("_cls_display", "tipo de solicitud"),
       },
       {
@@ -330,7 +317,6 @@ class HomeCaseTable extends React.Component {
         dataIndex: "student_name",
         key: "student_name",
         width: "10%",
-        //sorter: (a, b) => a.student_name.localeCompare(b.student_name),
         ...this.getColumnSearchProps("student_name", "nombres"),
       },
       {
@@ -338,7 +324,6 @@ class HomeCaseTable extends React.Component {
         dataIndex: "academic_program",
         key: "academic_program",
         width: "10%",
-        //sorter: (a, b) => a.academic_program.localeCompare(b.academic_program),
         ...this.getColumnSearchProps("academic_program", "programa"),
       },
       {

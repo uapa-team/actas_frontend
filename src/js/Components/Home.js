@@ -21,6 +21,13 @@ class Home extends React.Component {
     this.updateDataSource = this.updateDataSource.bind(this);
     this.pagChange = this.pagChange.bind(this);
     this.findCases = this.findCases.bind(this);
+    this.cleanQuery = this.cleanQuery.bind(this);
+    this.caseFilter = "&_cls_display__icontains=";
+    this.idFilter = "&student_dni__istartswith=";
+    this.nameFilter = "&student_name__icontains=";
+    this.programFilter = "&academic_program__icontains=";
+    this.cmFilter = "&consecutive_minute=";
+    this.yearFilter = "&year=";
     this.state = {
       dataSource: [],
       downloadDrawerVisible: false,
@@ -31,7 +38,7 @@ class Home extends React.Component {
       loading: true,
       page: 1,
       pageSize: 10,
-      searchQuery: "cases",
+      searchQuery: "cases?",
     };
   }
 
@@ -47,7 +54,7 @@ class Home extends React.Component {
     });
   };
 
-  makeCasesQuery = () => {
+  makeCasesQuery = (callback) => {
     Backend.sendRequest("POST", this.state.searchQuery, {
       page_number: this.state.page,
       page_size: this.state.pageSize,
@@ -71,6 +78,9 @@ class Home extends React.Component {
           }
         }
         this.setState({ dataSource: casesLoaded, loading: false });
+        if (typeof callback === "function") {
+          callback();
+        }
       });
     return true;
   };
@@ -86,34 +96,58 @@ class Home extends React.Component {
     );
   };
 
-  findCases = (selectedKeys, confirm, dataIndex) => {
-    let caseFilter = "?_cls_display__icontains=";
-    let idFilter = "?student_dni__istartswith=";
-    let nameFilter = "?student_name__icontains=";
-    let programFilter = "?academic_program__icontains=";
-    let cmFilter = "?consecutive_minute=";
-    let yearfilter = "?year=";
-
+  findCases = (selectedKeys, dataIndex) => {
     let query = this.state.searchQuery;
 
     if (dataIndex === "_cls_display") {
-      query = query.concat(caseFilter.concat(selectedKeys[0]));
+      query = query.concat(this.caseFilter.concat(selectedKeys[0]));
     } else if (dataIndex === "student_dni") {
-      query = query.concat(idFilter.concat(selectedKeys[0]));
+      query = query.concat(this.idFilter.concat(selectedKeys[0]));
     } else if (dataIndex === "student_name") {
-      query = query.concat(nameFilter.concat(selectedKeys[0]));
+      query = query.concat(this.nameFilter.concat(selectedKeys[0]));
     } else if (dataIndex === "academic_program") {
-      query = query.concat(programFilter.concat(selectedKeys[0]));
+      query = query.concat(this.programFilter.concat(selectedKeys[0]));
     } else if (dataIndex === "consecutive_minute") {
-      query = query.concat(cmFilter.concat(selectedKeys[0]));
+      query = query.concat(this.cmFilter.concat(selectedKeys[0]));
     } else if (dataIndex === "year") {
-      query = query.concat(yearfilter.concat(selectedKeys[0]));
+      query = query.concat(this.yearFilter.concat(selectedKeys[0]));
     }
-
     this.setState({
       searchQuery: query,
     });
-    console.log(query);
+  };
+
+  cleanQuery = (dataIndex) => {
+    let query = this.state.searchQuery;
+    let exp = "[^&$]*";
+    let newQuery = "";
+
+    if (dataIndex === "_cls_display") {
+      let reg = new RegExp(this.caseFilter.concat(exp));
+      newQuery = query.replace(reg, "");
+    } else if (dataIndex === "student_dni") {
+      let reg = new RegExp(this.idFilter.concat(exp));
+      newQuery = query.replace(reg, "");
+    } else if (dataIndex === "student_name") {
+      let reg = new RegExp(this.nameFilter.concat(exp));
+      newQuery = query.replace(reg, "");
+    } else if (dataIndex === "academic_program") {
+      let reg = new RegExp(this.programFilter.concat(exp));
+      newQuery = query.replace(reg, "");
+    } else if (dataIndex === "consecutive_minute") {
+      let reg = new RegExp(this.cmFilter.concat(exp));
+      newQuery = query.replace(reg, "");
+    } else if (dataIndex === "year") {
+      let reg = new RegExp(this.yearFilter.concat(exp));
+      newQuery = query.replace(reg, "");
+    }
+
+    this.setState(
+      {
+        searchQuery: newQuery,
+      },
+      () => this.makeCasesQuery()
+    );
   };
 
   showDrawer = (drw) => {
@@ -144,23 +178,25 @@ class Home extends React.Component {
     let key = "updatable";
     this.setState({ loading: true });
     message.loading({ content: "Actualizando casos...", key, duration: 50 });
-    this.makeCasesQuery();
-    message.success({
-      content: "Casos actualizados correctamente.",
-      key,
-      duration: 2,
-    });
+    this.makeCasesQuery(
+      message.success({
+        content: "Casos actualizados correctamente.",
+        key,
+        duration: 2,
+      })
+    );
   }
 
   componentDidMount() {
     let key = "updatable";
     message.loading({ content: "Cargando casos...", key, duration: 50 });
-    this.makeCasesQuery();
-    message.success({
-      content: "Casos cargados correctamente.",
-      key,
-      duration: 2,
-    });
+    this.makeCasesQuery(
+      message.success({
+        content: "Casos cargados correctamente.",
+        key,
+        duration: 2,
+      })
+    );
   }
 
   render() {
@@ -254,6 +290,7 @@ class Home extends React.Component {
             updateDataSource={this.updateDataSource}
             pagChange={this.pagChange}
             findCases={this.findCases}
+            cleanQuery={this.cleanQuery}
             loading={this.state.loading}
             dataSource={this.state.dataSource}
           />
