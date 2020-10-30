@@ -1,30 +1,55 @@
 import React from "react";
-import { Table, Popconfirm, message, Input, Button, Row, Col } from "antd";
-import { SearchOutlined } from "@ant-design/icons";
+import {
+  Table,
+  Popconfirm,
+  message,
+  Input,
+  Button,
+  Row,
+  Col,
+  Modal,
+  Form,
+} from "antd";
+import { SearchOutlined, CloseCircleOutlined } from "@ant-design/icons";
 import { withRouter } from "react-router-dom";
 import Backend from "../Basics/Backend";
 
 import moment from "moment";
+const { TextArea } = Input;
 
 class HomeCaseTable extends React.Component {
+  formRef = React.createRef();
+
   constructor(props) {
     super(props);
     this.state = {
       info_case: {},
+      visible: false,
+      id_case_modal: "",
     };
   }
 
-  confirmCancel = (archiveType, id) => {
+  showModal = (id) => {
+    this.setState({
+      visible: true,
+      id_case_modal: id,
+    });
+  };
+
+  handleSend = (archiveType, id) => {
     var values = {};
     values["id"] = id;
 
-    if (archiveType) {
+    if (archiveType === "Anular") {
       Backend.sendRequest("GET", `case?id=${id}`)
         .then((response) => {
           return response.json();
         })
         .then((data) => {
           data.cases[0]["approval_status"] = "Anular";
+          data.cases[0]["archive_note"] = this.formRef.current.getFieldsValue(
+            "archive_note"
+          )["archive_note"];
 
           //Fix for tables (request returns each element in table within 'cases'):
           for (const key in data.cases[0]) {
@@ -45,6 +70,9 @@ class HomeCaseTable extends React.Component {
           }).then((response) => {
             if (response.status === 200) {
               message.success("Solicitud anulada exitosamente.");
+              this.formRef.current.setFieldsValue({
+                archive_note: "",
+              });
             } else if (response.status === 401) {
               message.error("Usuario sin autorización.");
             } else {
@@ -62,6 +90,9 @@ class HomeCaseTable extends React.Component {
         })
         .then((data) => {
           data.cases[0]["approval_status"] = "Desistir";
+          data.cases[0]["archive_note"] = this.formRef.current.getFieldsValue(
+            "archive_note"
+          )["archive_note"];
 
           //Fix for tables (request returns each element in table within 'cases'):
           for (const key in data.cases[0]) {
@@ -82,6 +113,9 @@ class HomeCaseTable extends React.Component {
           }).then((response) => {
             if (response.status === 200) {
               message.success("Solicitud desistida exitosamente.");
+              this.formRef.current.setFieldsValue({
+                archive_note: "",
+              });
             } else if (response.status === 401) {
               message.error("Usuario sin autorización.");
             } else {
@@ -90,6 +124,9 @@ class HomeCaseTable extends React.Component {
           });
         });
     }
+    this.setState({
+      visible: false,
+    });
   };
 
   getColumnSearchProps = (dataIndex, searchTerm) => ({
@@ -185,6 +222,19 @@ class HomeCaseTable extends React.Component {
     });
   };
 
+  renderForm = () => {
+    return (
+      <Form layout="vertical" ref={this.formRef}>
+        <Form.Item label="Motivo" name="archive_note" initialValue="">
+          <TextArea
+            placeholder="Inserte el motivo para desistir o anular el caso."
+            rows={4}
+          ></TextArea>
+        </Form.Item>
+      </Form>
+    );
+  };
+
   render() {
     var columns = [
       {
@@ -255,17 +305,8 @@ class HomeCaseTable extends React.Component {
                 Editar
               </a>
               <br />
-              <Popconfirm
-                title="¿Qué acción desea tomar con la solicitud?"
-                onConfirm={() => this.confirmCancel(true, record.id)}
-                onCancel={() => this.confirmCancel(false, record.id)}
-                okText="Anular"
-                cancelText="Desistir"
-                placement="left"
-              >
-                {/* eslint-disable-next-line */}
-                <a>Archivar</a>
-              </Popconfirm>
+              {/* eslint-disable-next-line */}
+              <a onClick={() => this.showModal(record.id)}>Archivar</a>
               <br />
               <Popconfirm
                 title="¿Qué tipo de vista previa desea generar?"
@@ -372,66 +413,102 @@ class HomeCaseTable extends React.Component {
     ];
 
     return (
-      <Table
-        loading={this.props.loading}
-        tableLayout="fixed"
-        dataSource={this.props.dataSource}
-        rowKey="id"
-        bordered={true}
-        size="small"
-        columns={
-          localStorage.getItem("type") !== "secretary"
-            ? columns
-            : columnsSecretary
-        }
-        pagination={{
-          defaultPageSize: 10,
-          showSizeChanger: true,
-          locale: { items_per_page: "por página" },
-          pageSizeOptions: ["10", "20", "50", "100"],
-          position: "bottom",
-          size: "small",
-          showTotal: showTotal,
-          onChange: this.props.pagChange,
-          onShowSizeChange: this.props.pagChange,
-        }}
-        expandedRowRender={(record) => (
-          <Row>
-            <Col span={1} />
-            <Col span={8}>
-              <div>
-                <b>Fecha de radicación:</b> {record.date.substring(0, 10)}.
-              </div>
-              <div>
-                <b>Respuesta del Consejo de Facultad:</b>{" "}
-                {record.approval_status}.
-              </div>
-            </Col>
-            <Col span={8}>
-              <div>
-                <b>Existe respuesta del Comité Asesor: </b>
-                {record.advisor_response === "En espera" ? "No" : "Si"}.
-              </div>
-              <div>
-                <b>Instancia que decide:</b> {record.decision_maker}.
-              </div>
-            </Col>
-            <Col span={7}>
-              <div>
-                <b>Días desde la radicación:</b>{" "}
-                {this.date_diff_indays(
-                  moment().format("MM/DD/YYYY"),
-                  record.date
-                )}
-                .
-              </div>
-              <div>
-                <b>ID del caso:</b> {record.id}.
-              </div>
-            </Col>
-          </Row>
-        )}
-      />
+      <>
+        <Table
+          loading={this.props.loading}
+          tableLayout="fixed"
+          dataSource={this.props.dataSource}
+          rowKey="id"
+          bordered={true}
+          size="small"
+          columns={
+            localStorage.getItem("type") !== "secretary"
+              ? columns
+              : columnsSecretary
+          }
+          pagination={{
+            defaultPageSize: 10,
+            showSizeChanger: true,
+            locale: { items_per_page: "por página" },
+            pageSizeOptions: ["10", "20", "50", "100"],
+            position: "bottom",
+            size: "small",
+            showTotal: showTotal,
+            onChange: this.props.pagChange,
+            onShowSizeChange: this.props.pagChange,
+          }}
+          expandedRowRender={(record) => (
+            <Row>
+              <Col span={1} />
+              <Col span={8}>
+                <div>
+                  <b>Fecha de radicación:</b> {record.date.substring(0, 10)}.
+                </div>
+                <div>
+                  <b>Respuesta del Consejo de Facultad:</b>{" "}
+                  {record.approval_status}.
+                </div>
+              </Col>
+              <Col span={8}>
+                <div>
+                  <b>Existe respuesta del Comité Asesor: </b>
+                  {record.advisor_response === "En espera" ? "No" : "Si"}.
+                </div>
+                <div>
+                  <b>Instancia que decide:</b> {record.decision_maker}.
+                </div>
+              </Col>
+              <Col span={7}>
+                <div>
+                  <b>Días desde la radicación:</b>{" "}
+                  {this.date_diff_indays(
+                    moment().format("MM/DD/YYYY"),
+                    record.date
+                  )}
+                  .
+                </div>
+                <div>
+                  <b>ID del caso:</b> {record.id}.
+                </div>
+              </Col>
+            </Row>
+          )}
+        />
+        <Modal
+          visible={this.state.visible}
+          title="Archivar caso"
+          onCancel={() => this.setState({ visible: false })}
+          footer={[
+            <Button
+              key="desistir"
+              type="primary"
+              onClick={() =>
+                this.handleSend("Desistir", this.state.id_case_modal)
+              }
+            >
+              Desistir caso
+            </Button>,
+            <Button
+              key="anular"
+              type="primary"
+              onClick={() =>
+                this.handleSend("Anular", this.state.id_case_modal)
+              }
+            >
+              Anular caso
+            </Button>,
+            <Button
+              icon={<CloseCircleOutlined />}
+              key="cancelar"
+              onClick={() => this.setState({ visible: false })}
+            >
+              Cancelar acción
+            </Button>,
+          ]}
+        >
+          {this.renderForm()}
+        </Modal>
+      </>
     );
   }
 }
