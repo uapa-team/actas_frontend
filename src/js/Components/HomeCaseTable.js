@@ -141,8 +141,7 @@ class HomeCaseTable extends React.Component {
     filterIcon: (filtered) => (
       <SearchOutlined style={{ color: filtered ? "#1890ff" : "#000000" }} />
     ),
-    onFilter: (value, record) =>
-      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
+    onFilter: (value, record) => true,
     onFilterDropdownVisibleChange: (visible) => {
       if (visible) {
         setTimeout(() => this.searchInput.select());
@@ -163,6 +162,7 @@ class HomeCaseTable extends React.Component {
 
   handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
+    this.props.findCases(selectedKeys, confirm, dataIndex);
     this.setState({
       searchText: selectedKeys[0],
       searchedColumn: dataIndex,

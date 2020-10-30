@@ -20,10 +20,9 @@ class Home extends React.Component {
     this.closeDrawer = this.closeDrawer.bind(this);
     this.updateDataSource = this.updateDataSource.bind(this);
     this.pagChange = this.pagChange.bind(this);
+    this.findCases = this.findCases.bind(this);
     this.state = {
       dataSource: [],
-      dataMatches: [],
-      searchTerm: "",
       downloadDrawerVisible: false,
       createDrawerVisible: false,
       filterByMinute: false,
@@ -32,6 +31,7 @@ class Home extends React.Component {
       loading: true,
       page: 1,
       pageSize: 10,
+      searchQuery: "cases",
     };
   }
 
@@ -73,32 +73,34 @@ class Home extends React.Component {
       });
   };
 
-  performSearch = (keyTerm) => {
-    this.setState({ searchTerm: keyTerm });
-    this.setState({ filterByMinute: false });
-    let matches = [];
-    this.state.dataSource.forEach((i) => {
-      if (i.student_dni.includes(keyTerm)) {
-        matches.push(i);
-      }
-    });
-    this.setState({ dataMatches: matches });
-  };
+  findCases = (selectedKeys, confirm, dataIndex) => {
+    let caseFilter = "?_cls_display__icontains=";
+    let idFilter = "?student_dni__istartswith=";
+    let nameFilter = "?student_name__icontains=";
+    let programFilter = "?academic_program__icontains=";
+    let cmFilter = "?consecutive_minute=";
+    let yearfilter = "?year=";
 
-  filerByMinute = (checked, minute, year) => {
-    this.setState({ filterByMinute: checked });
-    this.setState({ minuteSearch: minute });
-    this.setState({ yearSearch: year });
-    this.setState({ searchTerm: "" });
-    let newMatches = [];
-    if (checked) {
-      this.state.dataSource.forEach((i) => {
-        if (i.consecutive_minute === minute && i.year === year) {
-          newMatches.push(i);
-        }
-      });
-      this.setState({ dataMatches: newMatches });
+    let query = this.state.searchQuery;
+
+    if (dataIndex === "_cls_display") {
+      query = query.concat(caseFilter.concat(selectedKeys[0]));
+    } else if (dataIndex === "student_dni") {
+      query = query.concat(idFilter.concat(selectedKeys[0]));
+    } else if (dataIndex === "student_name") {
+      query = query.concat(nameFilter.concat(selectedKeys[0]));
+    } else if (dataIndex === "academic_program") {
+      query = query.concat(programFilter.concat(selectedKeys[0]));
+    } else if (dataIndex === "consecutive_minute") {
+      query = query.concat(cmFilter.concat(selectedKeys[0]));
+    } else if (dataIndex === "year") {
+      query = query.concat(yearfilter.concat(selectedKeys[0]));
     }
+
+    this.setState({
+      searchQuery: query,
+    });
+    console.log(query);
   };
 
   showDrawer = (drw) => {
@@ -273,12 +275,9 @@ class Home extends React.Component {
           <HomeCaseTable
             updateDataSource={this.updateDataSource}
             pagChange={this.pagChange}
+            findCases={this.findCases}
             loading={this.state.loading}
-            dataSource={
-              this.state.searchTerm === "" && !this.state.filterByMinute
-                ? this.state.dataSource
-                : this.state.dataMatches
-            }
+            dataSource={this.state.dataSource}
           />
         </Row>
         <Divider style={{ background: "#ffffff00" }} />
