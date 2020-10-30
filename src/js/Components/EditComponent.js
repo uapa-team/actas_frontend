@@ -1,6 +1,6 @@
 import React from "react";
 import moment from "moment";
-import { Input, DatePicker, Select, InputNumber, Radio, Form } from "antd";
+import { Input, DatePicker, Select, InputNumber, Radio, Form, Col } from "antd";
 import { withRouter } from "react-router-dom";
 
 const { Option } = Select;
@@ -37,94 +37,128 @@ class EditComponent extends React.Component {
     if (this.props.metadata.type === "String") {
       if (Object.keys(this.props.metadata).includes("choices")) {
         return (
-          <Form.Item
-            label={this.props.metadata.display}
-            name={this.props.fieldName}
-            initialValue={this.props.metadata.default}
-          >
-            <Select
-              showSearch
-              placeholder={this.props.metadata.display}
-              optionFilterProp="children"
-              filterOption={(input, option) =>
-                option.props.children.toLowerCase().indexOf(
-                  input
-                    .toLowerCase()
-                    .normalize("NFD")
-                    .replace(/[\u0300-\u036f]/g, "")
-                ) >= 0
-              }
+          <Col span={8}>
+            <Form.Item
+              label={this.props.metadata.display}
+              name={this.props.fieldName}
+              initialValue={this.props.metadata.default}
             >
-              {this.menuJS()}
-            </Select>
-          </Form.Item>
+              <Select
+                showSearch
+                placeholder={this.props.metadata.display}
+                optionFilterProp="children"
+                filterOption={(input, option) =>
+                  option.props.children.toLowerCase().indexOf(
+                    input
+                      .toLowerCase()
+                      .normalize("NFD")
+                      .replace(/[\u0300-\u036f]/g, "")
+                  ) >= 0
+                }
+              >
+                {this.menuJS()}
+              </Select>
+            </Form.Item>
+          </Col>
         );
       } else {
         return (
-          <Form.Item
-            label={this.props.metadata.display}
-            name={this.props.fieldName}
-            initialValue={this.props.metadata.default}
-          >
-            <Input placeholder={this.props.metadata.display} />
-          </Form.Item>
+          <Col span={8}>
+            <Form.Item
+              label={this.props.metadata.display}
+              name={this.props.fieldName}
+              initialValue={this.props.metadata.default}
+            >
+              <Input placeholder={this.props.metadata.display} />
+            </Form.Item>
+          </Col>
         );
       }
     } else if (this.props.metadata.type === "Integer") {
       return (
-        <Form.Item
-          label={this.props.metadata.display}
-          name={this.props.fieldName}
-          initialValue={this.props.metadata.default}
-        >
-          <InputNumber />
-        </Form.Item>
+        <Col span={8}>
+          <Form.Item
+            label={this.props.metadata.display}
+            name={this.props.fieldName}
+            initialValue={this.props.metadata.default}
+          >
+            <InputNumber />
+          </Form.Item>
+        </Col>
       );
     } else if (this.props.metadata.type === "Float") {
       return (
-        <Form.Item
-          label={this.props.metadata.display}
-          name={this.props.fieldName}
-          initialValue={this.props.metadata.default}
-        >
-          <InputNumber step={0.1} />
-        </Form.Item>
+        <Col span={8}>
+          <Form.Item
+            label={this.props.metadata.display}
+            name={this.props.fieldName}
+            initialValue={this.props.metadata.default}
+          >
+            <InputNumber step={0.1} />
+          </Form.Item>
+        </Col>
       );
     } else if (this.props.metadata.type === "Date") {
       return (
-        <Form.Item
-          label={this.props.metadata.display}
-          name={this.props.fieldName}
-          initialValue={moment(this.props.metadata.default, "YYYY-MM-DD")}
-        >
-          <DatePicker placeholder="Seleccione fecha" />
-        </Form.Item>
+        <Col span={8}>
+          <Form.Item
+            label={this.props.metadata.display}
+            name={this.props.fieldName}
+            initialValue={moment(this.props.metadata.default, "YYYY-MM-DD")}
+          >
+            <DatePicker placeholder="Seleccione fecha" />
+          </Form.Item>
+        </Col>
       );
     } else if (this.props.metadata.type === "Boolean") {
       return (
-        <Form.Item
-          label={this.props.metadata.display}
-          name={this.props.fieldName}
-          initialValue={this.props.metadata.default === "True"}
-        >
-          <Radio.Group buttonStyle="solid">
-            <Radio.Button value={true}>Sí</Radio.Button>
-            <Radio.Button value={false}>No</Radio.Button>
-          </Radio.Group>
-        </Form.Item>
+        <Col span={8}>
+          <Form.Item
+            label={this.props.metadata.display}
+            name={this.props.fieldName}
+            initialValue={this.props.metadata.default === "True"}
+          >
+            <Radio.Group buttonStyle="solid">
+              <Radio.Button value={true}>Sí</Radio.Button>
+              <Radio.Button value={false}>No</Radio.Button>
+            </Radio.Group>
+          </Form.Item>
+        </Col>
       );
     } else if (this.props.metadata.type === "List:String") {
-      return (
-        <Form.Item
-          label={this.props.metadata.display}
-          name={this.props.fieldName}
-          initialValue={this.props.metadata.default}
-        >
-          <Select mode="tags" style={{ width: "100%" }} tokenSeparators={[","]}>
-            {children}
-          </Select>
-        </Form.Item>
-      );
+      if (this.props.metadata.display === "Analisis Extra") {
+        return (
+          <Col span={24}>
+            <Form.Item
+              label={this.props.metadata.display.concat(
+                " (presione enter para añadir múltiples elementos)"
+              )}
+              name={this.props.fieldName}
+              initialValue={this.props.metadata.default}
+            >
+              <Select mode="tags" open={false}>
+                {children}
+              </Select>
+            </Form.Item>
+          </Col>
+        );
+      } else {
+        return (
+          <Col span={8}>
+            <Form.Item
+              label={this.props.metadata.display.concat(
+                " (presione enter para añadir múltiples elementos)"
+              )}
+              name={this.props.fieldName}
+              initialValue={this.props.metadata.default}
+            >
+              <Select mode="tags" open={false}>
+                {children}
+              </Select>
+            </Form.Item>
+          </Col>
+        );
+      }
     } else if (this.props.metadata.type === "Table") {
       return <div />;
     } else {

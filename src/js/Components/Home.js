@@ -169,7 +169,7 @@ class Home extends React.Component {
                 icon={<DownloadOutlined />}
                 onClick={(e) => this.showDrawer("Download")}
               >
-                Generar Acta
+                Generar acta
               </Button>
               <HomeDrawerDownload
                 visible={this.state.downloadDrawerVisible}

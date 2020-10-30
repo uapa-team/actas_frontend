@@ -14,6 +14,7 @@ import {
   Popconfirm,
   message,
   Form,
+  List,
 } from "antd";
 import EditComponent from "./EditComponent";
 import EditTabs from "./EditTabs";
@@ -36,6 +37,7 @@ class Edit extends React.Component {
       fillIndicator: 0,
       visibleFlag: false,
       return: false,
+      notes: [],
     };
   }
 
@@ -56,14 +58,12 @@ class Edit extends React.Component {
     }
     if (i[1].type !== "Table") {
       return (
-        <Col span={8} key={i[0]}>
-          <EditComponent
-            key={i[0]}
-            fieldName={i[0]}
-            metadata={i[1]}
-            form={this.props.form}
-          />
-        </Col>
+        <EditComponent
+          key={i[0]}
+          fieldName={i[0]}
+          metadata={i[1]}
+          form={this.props.form}
+        />
       );
     }
   };
@@ -177,6 +177,7 @@ class Edit extends React.Component {
       .then((json) => {
         this.setState({
           case: json["cases"][0],
+          notes: json["cases"][0].notes,
         });
         Backend.sendRequest(
           "GET",
@@ -197,7 +198,14 @@ class Edit extends React.Component {
 
   renderForm = () => {
     let form = (
-      <Form onFinish={this.onFinish} layout="vertical" ref={this.formRef}>
+      <Form
+        onKeyPress={(e) => {
+          e.key === "Enter" && e.preventDefault();
+        }}
+        onFinish={this.onFinish}
+        layout="vertical"
+        ref={this.formRef}
+      >
         <Row>
           <Col span={12}>
             <Title className="edit-title">Edición de solicitud</Title>
@@ -214,6 +222,8 @@ class Edit extends React.Component {
                 >
                   {this.state.id}
                 </Text>
+                <br />
+                {this.state.notes.length > 0 ? <b>Notas adicionales:</b> : null}
               </div>
             ) : null}
           </Col>
@@ -266,6 +276,13 @@ class Edit extends React.Component {
             </Form.Item>
           </Col>
         </Row>
+        {this.state.notes.length > 0 ? (
+          <List
+            size="small"
+            dataSource={this.state.notes}
+            renderItem={(item) => <List.Item>{item}</List.Item>}
+          />
+        ) : null}
         <Divider style={{ background: "#ffffff00" }} />
         {this.createInputs()}
         {this.createTabs()}

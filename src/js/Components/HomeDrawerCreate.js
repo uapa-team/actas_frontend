@@ -20,6 +20,7 @@ import {
 import moment from "moment";
 import Backend from "../Basics/Backend";
 const { Option } = Select;
+const { TextArea } = Input;
 
 class HomeDrawerCreate extends React.Component {
   formRef = React.createRef();
@@ -61,6 +62,11 @@ class HomeDrawerCreate extends React.Component {
 
   handleSave = (values) => {
     values.date = values.date.utc().format();
+    if (values.notes !== undefined) {
+      values.notes = values.notes.split("\n");
+    } else {
+      delete values.notes;
+    }
     this.props.onClose("Create");
     const key = "updatable";
     message.loading({ content: "Guardando caso...", key });
@@ -75,6 +81,7 @@ class HomeDrawerCreate extends React.Component {
               content: "El caso se ha guardado exitosamente.",
               key,
             });
+            this.formRef.current.resetFields();
             let newID = data.inserted_items[0];
             if (localStorage.getItem("type") !== "secretary") {
               Backend.sendRequest("PATCH", "mark_received?id=".concat(newID));
@@ -90,12 +97,12 @@ class HomeDrawerCreate extends React.Component {
           });
         } else if (response.status) {
           message.error({
-            content: "Usuario sin autorización para guardar casos.",
+            content: "Ha ocurrido un error guardando el caso.",
             key,
           });
         } else {
           message.error({
-            content: "Ha habido un error guardando el caso.",
+            content: "Ha ocurrido un error guardando el caso.",
             key,
           });
           console.error("Login Error: Backend HTTP code " + response.status);
@@ -152,16 +159,20 @@ class HomeDrawerCreate extends React.Component {
               initialValue="CC"
             >
               <Select>
-                <Option value="Cédula de ciudadanía Colombiana">CC</Option>
-                <Option value="Tarjeta de identidad Colombiana">TI</Option>
-                <Option value="Cédula de extranjería">CE</Option>
-                <Option value="Pasaporte">PS</Option>
-                <Option value="Otro">OT</Option>
+                <Option value="CC">CC</Option>
+                <Option value="TI">TI</Option>
+                <Option value="CE">CE</Option>
+                <Option value="PS">PS</Option>
+                <Option value="OT">OT</Option>
               </Select>
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item label="Documento Estudiante" name="student_dni">
+            <Form.Item
+              label="Documento Estudiante"
+              name="student_dni"
+              initialValue={""}
+            >
               <Input
                 placeholder="Ingrese el documento del estudiante"
                 onBlur={(e) => this.autofillName(e.target.value)}
@@ -169,12 +180,17 @@ class HomeDrawerCreate extends React.Component {
             </Form.Item>
           </Col>
         </Row>
-        <Form.Item label="Nombre Estudiante" name="student_name">
+        <Form.Item
+          label="Nombre Estudiante"
+          name="student_name"
+          initialValue={""}
+        >
           <Input placeholder="Ingrese el nombre del estudiante" />
         </Form.Item>
         <Form.Item
           label="Tipo de caso"
           name="_cls"
+          initialValue={""}
           rules={[
             {
               required: true,
@@ -287,6 +303,9 @@ class HomeDrawerCreate extends React.Component {
             </Form.Item>
           </Col>
         </Row>
+        <Form.Item label="Notas adicionales" name="notes">
+          <TextArea rows={3} />
+        </Form.Item>
         <Row gutter={8}>
           {localStorage.getItem("type") !== "secretary" ? (
             <Col>

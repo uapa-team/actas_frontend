@@ -28,6 +28,18 @@ class HomeCaseTable extends React.Component {
         })
         .then((data) => {
           data.cases[0]["approval_status"] = "Anular";
+
+          //Fix for tables (request returns each element in table within 'cases'):
+          for (const key in data.cases[0]) {
+            if (data.cases[0].hasOwnProperty(key)) {
+              const element = data.cases[0][key];
+              if (element[0] !== undefined) {
+                if (element[0].cases !== undefined) {
+                  data.cases[0][key] = element[0].cases;
+                }
+              }
+            }
+          }
           return this.setState({ info_case: data.cases[0] });
         })
         .then((_) => {
@@ -53,6 +65,18 @@ class HomeCaseTable extends React.Component {
         })
         .then((data) => {
           data.cases[0]["approval_status"] = "Desistir";
+
+          //Fix for tables (request returns each element in table within 'cases'):
+          for (const key in data.cases[0]) {
+            if (data.cases[0].hasOwnProperty(key)) {
+              const element = data.cases[0][key];
+              if (element[0] !== undefined) {
+                if (element[0].cases !== undefined) {
+                  data.cases[0][key] = element[0].cases;
+                }
+              }
+            }
+          }
           return this.setState({ info_case: data.cases[0] });
         })
         .then((_) => {
@@ -164,15 +188,19 @@ class HomeCaseTable extends React.Component {
     return parseInt((dt1 - dt2) / (1000 * 60 * 60 * 24), 10);
   };
 
-  markAsRecieved = (id) => {
+  markAsRecieved = (id, show) => {
     Backend.sendRequest("PATCH", `mark_received?id=${id}`).then((response) => {
       if (response.status === 200) {
-        message.success("Solicitud recibida correctamente.");
+        if (show) {
+          message.success("Solicitud recibida correctamente.");
+        }
         this.props.updateDataSource(id);
       } else {
-        message.error(
-          "No se ha podido marcar como recibido. Es posible que falte un campo por llenar."
-        );
+        if (show) {
+          message.error(
+            "No se ha podido marcar como recibido. Es posible que falte un campo por llenar."
+          );
+        }
       }
     });
   };
@@ -279,7 +307,7 @@ class HomeCaseTable extends React.Component {
             <span>
               <Popconfirm
                 title="¿Desea marcar como recibido?"
-                onConfirm={() => this.markAsRecieved(record.id)}
+                onConfirm={() => this.markAsRecieved(record.id, true)}
                 okText="Sí"
                 cancelText="No"
                 placement="left"
@@ -344,6 +372,28 @@ class HomeCaseTable extends React.Component {
         key: "academic_period",
         width: "10%",
         ...this.getColumnSearchProps("academic_period", "periodo"),
+      },
+      {
+        title: "Editar",
+        key: "edit",
+        width: "10%",
+        render: (text, record) => (
+          <span>
+            <Popconfirm
+              title="¿Desea eliminar el caso?"
+              onConfirm={async () => {
+                await this.markAsRecieved(record.id, false);
+                this.confirmCancel(true, record.id);
+              }}
+              okText="Sí"
+              cancelText="No"
+              placement="left"
+            >
+              {/* eslint-disable-next-line */}
+              <a>Eliminar caso</a>
+            </Popconfirm>
+          </span>
+        ),
       },
     ];
 
