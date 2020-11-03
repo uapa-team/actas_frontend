@@ -70,6 +70,7 @@ class HomeCaseTable extends React.Component {
           }).then((response) => {
             if (response.status === 200) {
               message.success("Solicitud anulada exitosamente.");
+              this.props.makeCasesQuery();
               this.formRef.current.setFieldsValue({
                 archive_note: "",
               });
@@ -113,6 +114,7 @@ class HomeCaseTable extends React.Component {
           }).then((response) => {
             if (response.status === 200) {
               message.success("Solicitud desistida exitosamente.");
+              this.props.makeCasesQuery();
               this.formRef.current.setFieldsValue({
                 archive_note: "",
               });

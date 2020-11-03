@@ -22,6 +22,7 @@ class Home extends React.Component {
     this.pagChange = this.pagChange.bind(this);
     this.findCases = this.findCases.bind(this);
     this.cleanQuery = this.cleanQuery.bind(this);
+    this.makeCasesQuery = this.makeCasesQuery.bind(this);
     this.caseFilter = "&_cls_display__icontains=";
     this.idFilter = "&student_dni__istartswith=";
     this.nameFilter = "&student_name__icontains=";
@@ -231,6 +232,7 @@ class Home extends React.Component {
               </Button>
               <HomeDrawerCreate
                 visible={this.state.createDrawerVisible}
+                makeCasesQuery={this.makeCasesQuery}
                 onClose={(e) => this.closeDrawer("Create")}
               />
             </Col>
@@ -279,6 +281,7 @@ class Home extends React.Component {
               </Button>
               <HomeDrawerCreate
                 visible={this.state.createDrawerVisible}
+                makeCasesQuery={this.makeCasesQuery}
                 onClose={(e) => this.closeDrawer("Create")}
               />
             </Col>
@@ -291,6 +294,7 @@ class Home extends React.Component {
             pagChange={this.pagChange}
             findCases={this.findCases}
             cleanQuery={this.cleanQuery}
+            makeCasesQuery={this.makeCasesQuery}
             loading={this.state.loading}
             dataSource={this.state.dataSource}
           />
