@@ -29,6 +29,7 @@ class Home extends React.Component {
     this.programFilter = "&academic_program__icontains=";
     this.cmFilter = "&consecutive_minute=";
     this.yearFilter = "&year=";
+    this.periodFilter = "&academic_period__icontains=";
     this.state = {
       dataSource: [],
       downloadDrawerVisible: false,
@@ -99,22 +100,40 @@ class Home extends React.Component {
 
   findCases = (selectedKeys, dataIndex) => {
     let query = this.state.searchQuery;
+    let exp = "[^&$]*";
+    let newQuery = "";
 
     if (dataIndex === "_cls_display") {
-      query = query.concat(this.caseFilter.concat(selectedKeys[0]));
+      let reg = new RegExp(this.caseFilter.concat(exp));
+      newQuery = query.replace(reg, "");
+      newQuery = newQuery.concat(this.caseFilter.concat(selectedKeys[0]));
     } else if (dataIndex === "student_dni") {
-      query = query.concat(this.idFilter.concat(selectedKeys[0]));
+      let reg = new RegExp(this.idFilter.concat(exp));
+      newQuery = query.replace(reg, "");
+      newQuery = newQuery.concat(this.idFilter.concat(selectedKeys[0]));
     } else if (dataIndex === "student_name") {
-      query = query.concat(this.nameFilter.concat(selectedKeys[0]));
+      let reg = new RegExp(this.nameFilter.concat(exp));
+      newQuery = query.replace(reg, "");
+      newQuery = newQuery.concat(this.nameFilter.concat(selectedKeys[0]));
     } else if (dataIndex === "academic_program") {
-      query = query.concat(this.programFilter.concat(selectedKeys[0]));
+      let reg = new RegExp(this.programFilter.concat(exp));
+      newQuery = query.replace(reg, "");
+      newQuery = newQuery.concat(this.programFilter.concat(selectedKeys[0]));
     } else if (dataIndex === "consecutive_minute") {
-      query = query.concat(this.cmFilter.concat(selectedKeys[0]));
+      let reg = new RegExp(this.cmFilter.concat(exp));
+      newQuery = query.replace(reg, "");
+      newQuery = newQuery.concat(this.cmFilter.concat(selectedKeys[0]));
     } else if (dataIndex === "year") {
-      query = query.concat(this.yearFilter.concat(selectedKeys[0]));
+      let reg = new RegExp(this.yearFilter.concat(exp));
+      newQuery = query.replace(reg, "");
+      newQuery = newQuery.concat(this.yearFilter.concat(selectedKeys[0]));
+    } else if (dataIndex === "academic_period") {
+      let reg = new RegExp(this.periodFilter.concat(exp));
+      newQuery = query.replace(reg, "");
+      newQuery = newQuery.concat(this.periodFilter.concat(selectedKeys[0]));
     }
     this.setState({
-      searchQuery: query,
+      searchQuery: newQuery,
     });
   };
 
@@ -140,6 +159,9 @@ class Home extends React.Component {
       newQuery = query.replace(reg, "");
     } else if (dataIndex === "year") {
       let reg = new RegExp(this.yearFilter.concat(exp));
+      newQuery = query.replace(reg, "");
+    } else if (dataIndex === "academic_period") {
+      let reg = new RegExp(this.periodFilter.concat(exp));
       newQuery = query.replace(reg, "");
     }
 
