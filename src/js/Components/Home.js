@@ -19,16 +19,27 @@ class Home extends React.Component {
     super(props);
     this.closeDrawer = this.closeDrawer.bind(this);
     this.updateDataSource = this.updateDataSource.bind(this);
+    this.pagChange = this.pagChange.bind(this);
+    this.findCases = this.findCases.bind(this);
+    this.cleanQuery = this.cleanQuery.bind(this);
+    this.makeCasesQuery = this.makeCasesQuery.bind(this);
+    this.caseFilter = "&_cls_display__icontains=";
+    this.idFilter = "&student_dni__istartswith=";
+    this.nameFilter = "&student_name__icontains=";
+    this.programFilter = "&academic_program__icontains=";
+    this.cmFilter = "&consecutive_minute=";
+    this.yearFilter = "&year=";
     this.state = {
       dataSource: [],
-      dataMatches: [],
-      searchTerm: "",
       downloadDrawerVisible: false,
       createDrawerVisible: false,
       filterByMinute: false,
       minuteSearch: 1,
       yearSearch: 2020,
       loading: true,
+      page: 1,
+      pageSize: 10,
+      searchQuery: "cases?",
     };
   }
 
@@ -44,32 +55,100 @@ class Home extends React.Component {
     });
   };
 
-  performSearch = (keyTerm) => {
-    this.setState({ searchTerm: keyTerm });
-    this.setState({ filterByMinute: false });
-    let matches = [];
-    this.state.dataSource.forEach((i) => {
-      if (i.student_dni.includes(keyTerm)) {
-        matches.push(i);
-      }
-    });
-    this.setState({ dataMatches: matches });
-  };
-
-  filerByMinute = (checked, minute, year) => {
-    this.setState({ filterByMinute: checked });
-    this.setState({ minuteSearch: minute });
-    this.setState({ yearSearch: year });
-    this.setState({ searchTerm: "" });
-    let newMatches = [];
-    if (checked) {
-      this.state.dataSource.forEach((i) => {
-        if (i.consecutive_minute === minute && i.year === year) {
-          newMatches.push(i);
+  makeCasesQuery = (callback) => {
+    Backend.sendRequest("POST", this.state.searchQuery, {
+      page_number: this.state.page,
+      page_size: this.state.pageSize,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        let totalCases = data["total_cases"];
+        let casesLoaded = data["cases"];
+        if (totalCases !== casesLoaded.length) {
+          if (this.state.page > 1) {
+            let auxArray = new Array(
+              (this.state.page - 1) * this.state.pageSize
+            );
+            auxArray.fill({});
+            casesLoaded = auxArray.concat(casesLoaded);
+          }
+          if (totalCases !== casesLoaded.length) {
+            let auxArray = new Array(totalCases - casesLoaded.length);
+            auxArray.fill({});
+            casesLoaded = casesLoaded.concat(auxArray);
+          }
+        }
+        this.setState({ dataSource: casesLoaded, loading: false });
+        if (typeof callback === "function") {
+          callback();
         }
       });
-      this.setState({ dataMatches: newMatches });
+    return true;
+  };
+
+  pagChange = (currentPage, pageSize) => {
+    this.setState(
+      {
+        loading: true,
+        page: currentPage,
+        pageSize: pageSize,
+      },
+      () => this.makeCasesQuery()
+    );
+  };
+
+  findCases = (selectedKeys, dataIndex) => {
+    let query = this.state.searchQuery;
+
+    if (dataIndex === "_cls_display") {
+      query = query.concat(this.caseFilter.concat(selectedKeys[0]));
+    } else if (dataIndex === "student_dni") {
+      query = query.concat(this.idFilter.concat(selectedKeys[0]));
+    } else if (dataIndex === "student_name") {
+      query = query.concat(this.nameFilter.concat(selectedKeys[0]));
+    } else if (dataIndex === "academic_program") {
+      query = query.concat(this.programFilter.concat(selectedKeys[0]));
+    } else if (dataIndex === "consecutive_minute") {
+      query = query.concat(this.cmFilter.concat(selectedKeys[0]));
+    } else if (dataIndex === "year") {
+      query = query.concat(this.yearFilter.concat(selectedKeys[0]));
     }
+    this.setState({
+      searchQuery: query,
+    });
+  };
+
+  cleanQuery = (dataIndex) => {
+    let query = this.state.searchQuery;
+    let exp = "[^&$]*";
+    let newQuery = "";
+
+    if (dataIndex === "_cls_display") {
+      let reg = new RegExp(this.caseFilter.concat(exp));
+      newQuery = query.replace(reg, "");
+    } else if (dataIndex === "student_dni") {
+      let reg = new RegExp(this.idFilter.concat(exp));
+      newQuery = query.replace(reg, "");
+    } else if (dataIndex === "student_name") {
+      let reg = new RegExp(this.nameFilter.concat(exp));
+      newQuery = query.replace(reg, "");
+    } else if (dataIndex === "academic_program") {
+      let reg = new RegExp(this.programFilter.concat(exp));
+      newQuery = query.replace(reg, "");
+    } else if (dataIndex === "consecutive_minute") {
+      let reg = new RegExp(this.cmFilter.concat(exp));
+      newQuery = query.replace(reg, "");
+    } else if (dataIndex === "year") {
+      let reg = new RegExp(this.yearFilter.concat(exp));
+      newQuery = query.replace(reg, "");
+    }
+
+    this.setState(
+      {
+        searchQuery: newQuery,
+      },
+      () => this.makeCasesQuery()
+    );
   };
 
   showDrawer = (drw) => {
@@ -100,31 +179,25 @@ class Home extends React.Component {
     let key = "updatable";
     this.setState({ loading: true });
     message.loading({ content: "Actualizando casos...", key, duration: 50 });
-    Backend.sendRequest("GET", "case")
-      .then((response) => response.json())
-      .then((data) => {
-        this.setState({ dataSource: data["cases"], loading: false });
-        message.success({
-          content: "Casos actualizados correctamente.",
-          key,
-          duration: 2,
-        });
-      });
+    this.makeCasesQuery(
+      message.success({
+        content: "Casos actualizados correctamente.",
+        key,
+        duration: 2,
+      })
+    );
   }
 
   componentDidMount() {
     let key = "updatable";
     message.loading({ content: "Cargando casos...", key, duration: 50 });
-    Backend.sendRequest("GET", "case")
-      .then((response) => response.json())
-      .then((data) => {
-        this.setState({ dataSource: data["cases"], loading: false });
-        message.success({
-          content: "Casos cargados correctamente.",
-          key,
-          duration: 2,
-        });
-      });
+    this.makeCasesQuery(
+      message.success({
+        content: "Casos cargados correctamente.",
+        key,
+        duration: 2,
+      })
+    );
   }
 
   render() {
@@ -159,6 +232,7 @@ class Home extends React.Component {
               </Button>
               <HomeDrawerCreate
                 visible={this.state.createDrawerVisible}
+                makeCasesQuery={this.makeCasesQuery}
                 onClose={(e) => this.closeDrawer("Create")}
               />
             </Col>
@@ -207,6 +281,7 @@ class Home extends React.Component {
               </Button>
               <HomeDrawerCreate
                 visible={this.state.createDrawerVisible}
+                makeCasesQuery={this.makeCasesQuery}
                 onClose={(e) => this.closeDrawer("Create")}
               />
             </Col>
@@ -216,12 +291,12 @@ class Home extends React.Component {
         <Row>
           <HomeCaseTable
             updateDataSource={this.updateDataSource}
+            pagChange={this.pagChange}
+            findCases={this.findCases}
+            cleanQuery={this.cleanQuery}
+            makeCasesQuery={this.makeCasesQuery}
             loading={this.state.loading}
-            dataSource={
-              this.state.searchTerm === "" && !this.state.filterByMinute
-                ? this.state.dataSource
-                : this.state.dataMatches
-            }
+            dataSource={this.state.dataSource}
           />
         </Row>
         <Divider style={{ background: "#ffffff00" }} />
