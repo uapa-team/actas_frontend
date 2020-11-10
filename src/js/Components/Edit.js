@@ -181,7 +181,7 @@ class Edit extends React.Component {
         });
         Backend.sendRequest(
           "GET",
-          `infocase?cls=${json.cases[0]._cls.split(".")[1]}`
+          `infocase?cls=${json.cases[0]._cls.split(".").pop()}`
         )
           .then((response) => response.json())
           .then((data) => {
