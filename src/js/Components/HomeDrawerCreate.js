@@ -93,6 +93,8 @@ class HomeDrawerCreate extends React.Component {
               this.setState({
                 edit: false,
               });
+            } else {
+              this.props.makeCasesQuery();
             }
           });
         } else if (response.status) {
