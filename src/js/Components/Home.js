@@ -120,18 +120,29 @@ class Home extends React.Component {
       newQuery = query.replace(reg, "");
       newQuery = newQuery.concat(this.programFilter.concat(selectedKeys[0]));
     } else if (dataIndex === "consecutive_minute") {
+      let isnum = /^\d*$/.test(selectedKeys[0]);
       let reg = new RegExp(this.cmFilter.concat(exp));
       newQuery = query.replace(reg, "");
-      newQuery = newQuery.concat(this.cmFilter.concat(selectedKeys[0]));
+      if (isnum) {
+        newQuery = newQuery.concat(this.cmFilter.concat(selectedKeys[0]));
+      } else {
+        newQuery = newQuery.concat(this.cmFilter.concat("-1"));
+      }
     } else if (dataIndex === "year") {
+      let isnum = /^\d*$/.test(selectedKeys[0]);
       let reg = new RegExp(this.yearFilter.concat(exp));
       newQuery = query.replace(reg, "");
-      newQuery = newQuery.concat(this.yearFilter.concat(selectedKeys[0]));
+      if (isnum) {
+        newQuery = newQuery.concat(this.yearFilter.concat(selectedKeys[0]));
+      } else {
+        newQuery = newQuery.concat(this.yearFilter.concat("-1"));
+      }
     } else if (dataIndex === "academic_period") {
       let reg = new RegExp(this.periodFilter.concat(exp));
       newQuery = query.replace(reg, "");
       newQuery = newQuery.concat(this.periodFilter.concat(selectedKeys[0]));
     }
+
     this.setState({
       searchQuery: newQuery,
     });
