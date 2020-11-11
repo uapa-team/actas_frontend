@@ -31,7 +31,7 @@ class Home extends React.Component {
     this.yearFilter = "&year=";
     this.periodFilter = "&academic_period__icontains=";
     this.dateStartFilter = "&date__gte=";
-    this.dateEndFilter = "&date__lte=";
+    this.dateEndFilter = "&date__lt=";
     this.state = {
       dataSource: [],
       downloadDrawerVisible: false,
@@ -43,8 +43,8 @@ class Home extends React.Component {
       page: 1,
       pageSize: 10,
       searchQuery: "cases?",
-      datesStart: null,
-      datesEnd: null,
+      datesStart: "",
+      datesEnd: "",
     };
   }
 
@@ -61,8 +61,6 @@ class Home extends React.Component {
   };
 
   makeCasesQuery = (callback) => {
-    console.log("QUERY")
-    console.log(this.state.searchQuery)
     Backend.sendRequest("POST", this.state.searchQuery, {
       page_number: this.state.page,
       page_size: this.state.pageSize,
@@ -105,9 +103,6 @@ class Home extends React.Component {
   };
 
   findCases = (selectedKeys, dataIndex) => {
-    console.log("findCases:")
-    console.log(selectedKeys)
-    console.log(dataIndex)
     let query = this.state.searchQuery;
     let exp = "[^&$]*";
     let newQuery = "";
@@ -151,36 +146,22 @@ class Home extends React.Component {
       newQuery = query.replace(reg, "");
       newQuery = newQuery.concat(this.periodFilter.concat(selectedKeys[0]));
     } else if (dataIndex === "dateStart"){
-      console.log("aquí estoy1")
       let reg = new RegExp(this.dateStartFilter.concat(exp));
-      console.log("1\t"+newQuery)
       newQuery = query.replace(reg, "");
-      console.log("2\t"+newQuery)
       newQuery = newQuery.concat(this.dateStartFilter.concat(selectedKeys[0]));
-      console.log("3\t"+newQuery)
-
     } else if (dataIndex === "dateEnd"){
-      console.log("aquí estoy2")
       let reg = new RegExp(this.dateEndFilter.concat(exp));
       newQuery = query.replace(reg, "");
       newQuery = newQuery.concat(this.dateEndFilter.concat(selectedKeys[0]));
     }
-    console.log("4\t"+newQuery)
     this.setState({
       searchQuery: newQuery,
     },
-    () => {
-      this.makeCasesQuery()
-      console.log("6 end set FINDCASES \t"+this.state.searchQuery);
-    })
-    console.log("5\t"+this.state.searchQuery)
+    () => this.makeCasesQuery())
   };
 
   cleanQuery = (dataIndex) => {
-    console.log("cleanQuery:")
-    console.log(dataIndex)
     let query = this.state.searchQuery;
-    console.log(query)
     let exp = "[^&$]*";
     let newQuery = "";
 
@@ -206,12 +187,15 @@ class Home extends React.Component {
       let reg = new RegExp(this.periodFilter.concat(exp));
       newQuery = query.replace(reg, "");
     } else if (dataIndex === "dateStart"){
-      console.log("aquí estoy3")
       let reg = new RegExp(this.dateStartFilter.concat(exp));
       newQuery = query.replace(reg, "");
     } else if (dataIndex === "dateEnd"){
-      console.log("aquí estoy4")
       let reg = new RegExp(this.dateEndFilter.concat(exp));
+      newQuery = query.replace(reg, "");
+    } else if (dataIndex === "dates"){
+      let reg = new RegExp(this.dateStartFilter.concat(exp));
+      newQuery = query.replace(reg, "");
+      reg = new RegExp(this.dateEndFilter.concat(exp));
       newQuery = query.replace(reg, "");
     }
 
@@ -219,10 +203,7 @@ class Home extends React.Component {
       {
         searchQuery: newQuery,
       },
-      () => {
-        this.makeCasesQuery()
-        console.log("6 end set CLEAN \t"+this.state.searchQuery)
-      }
+      () => this.makeCasesQuery()
     );
   };
 
@@ -276,26 +257,30 @@ class Home extends React.Component {
   }
 
   datesOnChange(dates, dateStrings){
-    console.log("datesOnChange")
-    console.log(dateStrings)
-    if (dateStrings[0] === ""){
-      console.log("init empty")
-      this.cleanQuery("dateStart")
-    } else {
-      console.log("init :"+dateStrings[0])
-      this.findCases([dateStrings[0]], "dateStart")
+        if(dateStrings[0] !== this.state.datesStart){
+      if (dateStrings[0] === ""){
+        if(dateStrings[0] === ""){
+          // crearAll
+          this.setState({datesEnd: dateStrings[1]})
+          this.cleanQuery("dates")
+        } else {
+          this.cleanQuery("dateStart")
+        }
+      } else {
+        this.findCases([dateStrings[0]], "dateStart")
+      }
+      this.setState({datesStart: dateStrings[0]})
+    } else if(dateStrings[1] !== this.state.datesEnd){
+      if (dateStrings[1] === ""){
+        this.cleanQuery("dateEnd")
+      } else {
+        let myMoment = dates[1].clone();
+        this.findCases([myMoment.add(1,"d").format("YYYY-MM-DD")], "dateEnd")
+      }
+      this.setState({datesEnd: dateStrings[1]})
     }
-    console.log("MY QUERY: "+this.state.searchQuery)
-
-    if (dateStrings[1] === ""){
-      console.log("end empty")
-      this.cleanQuery("dateEnd")
-    } else {
-      console.log("end :"+dateStrings[1])
-      this.findCases([dates[1].add(1,"d").format("YYYY-MM-DD")], "dateEnd")
-    }
-    console.log("MY QUERY2: "+this.state.searchQuery)
   }
+  
 
 
   render() {
@@ -308,7 +293,8 @@ class Home extends React.Component {
           </Col>
 
           <Col span={3}
-            offset={localStorage.getItem("type") !== "secretary" ? 2 : 0}
+            // offset={localStorage.getItem("type") !== "secretary" ? 2 : 0}
+            offset={2}
           >
             <Button
               block
@@ -356,15 +342,19 @@ class Home extends React.Component {
           }
           
         </Row>
-        <Divider style={{ background: "#ffffff00" }} />
+
         <Row gutter={8}>
-          <Col span={6} offset={14}>
+          <Col span={3} offset={14}>
+            <Title level={4} strong>Filtro por fecha:</Title>
+          </Col>
+          <Col span={6}>
             < DatePicker.RangePicker
               allowEmpty={[true, true]}
               onChange={(dates, dateStrings) => this.datesOnChange(dates, dateStrings)}
             />
           </Col>
         </Row>
+        <Divider style={{ background: "#ffffff00" }} />
         <Row>
           <HomeCaseTable
             updateDataSource={this.updateDataSource}
