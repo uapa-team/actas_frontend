@@ -150,3 +150,8 @@ code {
 .ant-list-split .ant-list-item {
   border-bottom: 1px solid #2d2656 !important;
 }
+
+.ant-picker.ant-picker-range{
+  width: 100%;
+  margin-bottom: 10px;
+}
