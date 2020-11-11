@@ -6,7 +6,7 @@ import {
   PlusOutlined,
   ReloadOutlined,
 } from "@ant-design/icons";
-import { Typography, Row, Divider, Col, Button, message } from "antd";
+import { Typography, Row, Divider, Col, Button, message, DatePicker } from "antd";
 import HomeDrawerDownload from "./HomeDrawerDownload";
 import HomeDrawerCreate from "./HomeDrawerCreate";
 import Backend from "../Basics/Backend";
@@ -30,6 +30,8 @@ class Home extends React.Component {
     this.cmFilter = "&consecutive_minute=";
     this.yearFilter = "&year=";
     this.periodFilter = "&academic_period__icontains=";
+    this.dateStartFilter = "&date__gte=";
+    this.dateEndFilter = "&date__lt=";
     this.state = {
       dataSource: [],
       downloadDrawerVisible: false,
@@ -41,6 +43,8 @@ class Home extends React.Component {
       page: 1,
       pageSize: 10,
       searchQuery: "cases?",
+      datesStart: "",
+      datesEnd: "",
     };
   }
 
@@ -141,11 +145,19 @@ class Home extends React.Component {
       let reg = new RegExp(this.periodFilter.concat(exp));
       newQuery = query.replace(reg, "");
       newQuery = newQuery.concat(this.periodFilter.concat(selectedKeys[0]));
+    } else if (dataIndex === "dateStart"){
+      let reg = new RegExp(this.dateStartFilter.concat(exp));
+      newQuery = query.replace(reg, "");
+      newQuery = newQuery.concat(this.dateStartFilter.concat(selectedKeys[0]));
+    } else if (dataIndex === "dateEnd"){
+      let reg = new RegExp(this.dateEndFilter.concat(exp));
+      newQuery = query.replace(reg, "");
+      newQuery = newQuery.concat(this.dateEndFilter.concat(selectedKeys[0]));
     }
-
     this.setState({
       searchQuery: newQuery,
-    });
+    },
+    () => this.makeCasesQuery())
   };
 
   cleanQuery = (dataIndex) => {
@@ -173,6 +185,17 @@ class Home extends React.Component {
       newQuery = query.replace(reg, "");
     } else if (dataIndex === "academic_period") {
       let reg = new RegExp(this.periodFilter.concat(exp));
+      newQuery = query.replace(reg, "");
+    } else if (dataIndex === "dateStart"){
+      let reg = new RegExp(this.dateStartFilter.concat(exp));
+      newQuery = query.replace(reg, "");
+    } else if (dataIndex === "dateEnd"){
+      let reg = new RegExp(this.dateEndFilter.concat(exp));
+      newQuery = query.replace(reg, "");
+    } else if (dataIndex === "dates"){
+      let reg = new RegExp(this.dateStartFilter.concat(exp));
+      newQuery = query.replace(reg, "");
+      reg = new RegExp(this.dateEndFilter.concat(exp));
       newQuery = query.replace(reg, "");
     }
 
@@ -233,42 +256,73 @@ class Home extends React.Component {
     );
   }
 
+  datesOnChange(dates, dateStrings){
+        if(dateStrings[0] !== this.state.datesStart){
+      if (dateStrings[0] === ""){
+        if(dateStrings[0] === ""){
+          // crearAll
+          this.setState({datesEnd: dateStrings[1]})
+          this.cleanQuery("dates")
+        } else {
+          this.cleanQuery("dateStart")
+        }
+      } else {
+        this.findCases([dateStrings[0]], "dateStart")
+      }
+      this.setState({datesStart: dateStrings[0]})
+    } else if(dateStrings[1] !== this.state.datesEnd){
+      if (dateStrings[1] === ""){
+        this.cleanQuery("dateEnd")
+      } else {
+        let myMoment = dates[1].clone();
+        this.findCases([myMoment.add(1,"d").format("YYYY-MM-DD")], "dateEnd")
+      }
+      this.setState({datesEnd: dateStrings[1]})
+    }
+  }
+  
+
+
   render() {
     return (
       <div>
         <Divider style={{ background: "#ffffff00" }} />
-        {localStorage.getItem("type") !== "secretary" ? ( //When not secretary:
-          <Row gutter={8} className="home-main-row">
-            <Col span={2} />
-            <Col span={10}>
-              <Title className="home-title">Casos Estudiantiles</Title>
-            </Col>
-            <Col span={3}>
-              <Button
-                block
-                type="primary"
-                icon={<ReloadOutlined />}
-                onClick={() => this.updateCases()}
-                disabled={this.state.loading}
-              >
-                Actualizar casos
-              </Button>
-            </Col>
-            <Col span={3}>
-              <Button
-                block
-                type="primary"
-                icon={<PlusOutlined />}
-                onClick={(e) => this.showDrawer("Create")}
-              >
-                Crear nuevo caso
-              </Button>
-              <HomeDrawerCreate
-                visible={this.state.createDrawerVisible}
-                makeCasesQuery={this.makeCasesQuery}
-                onClose={(e) => this.closeDrawer("Create")}
-              />
-            </Col>
+        <Row gutter={8} className="home-main-row">
+          <Col span={10} offset={2}>
+            <Title className="home-title">Casos Estudiantiles</Title>
+          </Col>
+
+          <Col span={3}
+            // offset={localStorage.getItem("type") !== "secretary" ? 2 : 0}
+            offset={2}
+          >
+            <Button
+              block
+              type="primary"
+              icon={<ReloadOutlined />}
+              onClick={() => this.updateCases()}
+              disabled={this.state.loading}
+            >
+              Actualizar casos
+            </Button>
+          </Col>
+          <Col span={3}>
+            <Button
+              block
+              type="primary"
+              icon={<PlusOutlined />}
+              onClick={(e) => this.showDrawer("Create")}
+            >
+              Crear nuevo caso
+            </Button>
+            <HomeDrawerCreate
+              visible={this.state.createDrawerVisible}
+              makeCasesQuery={this.makeCasesQuery}
+              onClose={(e) => this.closeDrawer("Create")}
+            />
+          </Col>
+
+          {localStorage.getItem("type") !== "secretary" ? ( //When not secretary:
             <Col span={3}>
               <Button
                 block
@@ -283,43 +337,23 @@ class Home extends React.Component {
                 onClose={(e) => this.closeDrawer("Download")}
               />
             </Col>
-          </Row>
-        ) : (
-          //When secretary:
-          <Row gutter={8} className="home-main-row">
-            <Col span={2} />
-            <Col span={10}>
-              <Title className="home-title">Casos Estudiantiles</Title>
-            </Col>
-            <Col span={2} />
-            <Col span={3}>
-              <Button
-                block
-                type="primary"
-                icon={<ReloadOutlined />}
-                onClick={() => this.updateCases()}
-                disabled={this.state.loading}
-              >
-                Actualizar casos
-              </Button>
-            </Col>
-            <Col span={3}>
-              <Button
-                block
-                type="primary"
-                icon={<PlusOutlined />}
-                onClick={(e) => this.showDrawer("Create")}
-              >
-                Crear nuevo caso
-              </Button>
-              <HomeDrawerCreate
-                visible={this.state.createDrawerVisible}
-                makeCasesQuery={this.makeCasesQuery}
-                onClose={(e) => this.closeDrawer("Create")}
-              />
-            </Col>
-          </Row>
-        )}
+          ): //When  secretary:
+            <Col span={0} />
+          }
+          
+        </Row>
+
+        <Row gutter={8}>
+          <Col span={3} offset={14}>
+            <Title level={4} strong>Filtro por fecha:</Title>
+          </Col>
+          <Col span={6}>
+            < DatePicker.RangePicker
+              allowEmpty={[true, true]}
+              onChange={(dates, dateStrings) => this.datesOnChange(dates, dateStrings)}
+            />
+          </Col>
+        </Row>
         <Divider style={{ background: "#ffffff00" }} />
         <Row>
           <HomeCaseTable
