@@ -196,7 +196,7 @@ class Home extends React.Component {
       let reg = new RegExp(this.dateStartFilter.concat(exp));
       newQuery = query.replace(reg, "");
       reg = new RegExp(this.dateEndFilter.concat(exp));
-      newQuery = query.replace(reg, "");
+      newQuery = newQuery.replace(reg, "");
     }
 
     this.setState(
@@ -257,9 +257,9 @@ class Home extends React.Component {
   }
 
   datesOnChange(dates, dateStrings){
-        if(dateStrings[0] !== this.state.datesStart){
+    if(dateStrings[0] !== this.state.datesStart){
       if (dateStrings[0] === ""){
-        if(dateStrings[0] === ""){
+        if(dateStrings[1] === ""){
           // crearAll
           this.setState({datesEnd: dateStrings[1]})
           this.cleanQuery("dates")
