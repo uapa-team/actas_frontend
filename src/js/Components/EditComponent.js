@@ -126,7 +126,7 @@ class EditComponent extends React.Component {
         </Col>
       );
     } else if (this.props.metadata.type === "List:String") {
-      if (this.props.metadata.display === "Analisis Extra") {
+      if (this.props.metadata.display === "Análisis Extra") {
         return (
           <Col span={24}>
             <Form.Item
