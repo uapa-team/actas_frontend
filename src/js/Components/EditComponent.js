@@ -148,7 +148,9 @@ class EditComponent extends React.Component {
         var options = [];
         for (let i = 0; i < this.props.metadata.choices.length; i++) {
           options.push(
-            <Option key={i}>{this.props.metadata.choices[i]}</Option>
+            <Option key={this.props.metadata.choices[i]}>
+              {this.props.metadata.choices[i]}
+            </Option>
           );
         }
         return (
