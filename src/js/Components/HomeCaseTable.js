@@ -396,19 +396,8 @@ class HomeCaseTable extends React.Component {
         width: "10%",
         render: (text, record) => (
           <span>
-            <Popconfirm
-              title="¿Desea eliminar el caso?"
-              onConfirm={async () => {
-                await this.markAsRecieved(record.id, false);
-                this.confirmCancel(true, record.id);
-              }}
-              okText="Sí"
-              cancelText="No"
-              placement="left"
-            >
-              {/* eslint-disable-next-line */}
-              <a>Eliminar caso</a>
-            </Popconfirm>
+            {/* eslint-disable-next-line */}
+            <a onClick={() => this.showModal(record.id)}>Archivar caso</a>
           </span>
         ),
       },
