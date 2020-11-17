@@ -56,8 +56,8 @@ class HomeCaseTable extends React.Component {
             if (data.cases[0].hasOwnProperty(key)) {
               const element = data.cases[0][key];
               if (element[0] !== undefined) {
-                if (element[0].cases !== undefined) {
-                  data.cases[0][key] = element[0].cases;
+                if (typeof element[0][0] == "object") {
+                  data.cases[0][key] = element[0];
                 }
               }
             }
