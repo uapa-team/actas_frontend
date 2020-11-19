@@ -231,7 +231,6 @@ class UnalCanvas extends Component {
                   <span className="caret-right" />
                 </div>
                 {(() => {
-                  console.log(this.props.location);
                   if (
                     localStorage.getItem("jwt") ||
                     this.props.location.pathname === "/home"
