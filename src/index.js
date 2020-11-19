@@ -43,6 +43,13 @@ ReactDOM.render(
         <Route exact path="/contact" component={Contact} />
         <PrivateRoute exact path="/home" component={Home} />
         <PrivateRoute exact path="/edit/:id" component={Edit} />
+        <Route path="*" component={() => "404 NOT FOUND"}>
+          {localStorage.getItem("jwt") != null ? (
+            <Redirect to="/home" />
+          ) : (
+            <Redirect to="/" />
+          )}
+        </Route>
       </Switch>
     </UnalCanvas>
   </BrowserRouter>,

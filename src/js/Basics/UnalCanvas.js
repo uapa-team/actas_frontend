@@ -9,6 +9,8 @@ import "../../css/unal.css";
 import "./unal.js";
 import "./jquery.js";
 
+import { withRouter } from "react-router-dom";
+
 class UnalCanvas extends Component {
   constructor(props) {
     super(props);
@@ -229,7 +231,11 @@ class UnalCanvas extends Component {
                   <span className="caret-right" />
                 </div>
                 {(() => {
-                  if (localStorage.getItem("jwt")) {
+                  console.log(this.props.location);
+                  if (
+                    localStorage.getItem("jwt") ||
+                    this.props.location.pathname === "/home"
+                  ) {
                     return (
                       <div className="btn-group">
                         {/*eslint-disable-next-line*/}
@@ -443,4 +449,4 @@ class UnalCanvas extends Component {
   }
 }
 
-export default UnalCanvas;
+export default withRouter(UnalCanvas);

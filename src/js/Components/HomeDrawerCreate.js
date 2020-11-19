@@ -84,14 +84,20 @@ class HomeDrawerCreate extends React.Component {
             this.formRef.current.resetFields();
             let newID = data.inserted_items[0];
             if (localStorage.getItem("type") !== "secretary") {
-              Backend.sendRequest("PATCH", "mark_received?id=".concat(newID));
-            }
-            if (this.state.edit) {
-              this.props.history.push({
-                pathname: "/edit/" + newID,
-              });
-              this.setState({
-                edit: false,
+              Backend.sendRequest(
+                "PATCH",
+                "mark_received?id=".concat(newID)
+              ).then(() => {
+                if (this.state.edit) {
+                  this.props.history.push({
+                    pathname: "/edit/" + newID,
+                  });
+                  this.setState({
+                    edit: false,
+                  });
+                } else {
+                  this.props.makeCasesQuery();
+                }
               });
             } else {
               this.props.makeCasesQuery();

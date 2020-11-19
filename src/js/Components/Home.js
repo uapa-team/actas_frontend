@@ -6,7 +6,15 @@ import {
   PlusOutlined,
   ReloadOutlined,
 } from "@ant-design/icons";
-import { Typography, Row, Divider, Col, Button, message, DatePicker } from "antd";
+import {
+  Typography,
+  Row,
+  Divider,
+  Col,
+  Button,
+  message,
+  DatePicker,
+} from "antd";
 import HomeDrawerDownload from "./HomeDrawerDownload";
 import HomeDrawerCreate from "./HomeDrawerCreate";
 import Backend from "../Basics/Backend";
@@ -61,11 +69,15 @@ class Home extends React.Component {
   };
 
   makeCasesQuery = (callback) => {
+    let queryStatus = 0;
     Backend.sendRequest("POST", this.state.searchQuery, {
       page_number: this.state.page,
       page_size: this.state.pageSize,
     })
-      .then((response) => response.json())
+      .then((response) => {
+        queryStatus = response.status;
+        return response.json();
+      })
       .then((data) => {
         let totalCases = data["total_cases"];
         let casesLoaded = data["cases"];
@@ -84,7 +96,7 @@ class Home extends React.Component {
           }
         }
         this.setState({ dataSource: casesLoaded, loading: false });
-        if (typeof callback === "function") {
+        if (typeof callback === "function" && queryStatus === 200) {
           callback();
         }
       });
@@ -145,19 +157,21 @@ class Home extends React.Component {
       let reg = new RegExp(this.periodFilter.concat(exp));
       newQuery = query.replace(reg, "");
       newQuery = newQuery.concat(this.periodFilter.concat(selectedKeys[0]));
-    } else if (dataIndex === "dateStart"){
+    } else if (dataIndex === "dateStart") {
       let reg = new RegExp(this.dateStartFilter.concat(exp));
       newQuery = query.replace(reg, "");
       newQuery = newQuery.concat(this.dateStartFilter.concat(selectedKeys[0]));
-    } else if (dataIndex === "dateEnd"){
+    } else if (dataIndex === "dateEnd") {
       let reg = new RegExp(this.dateEndFilter.concat(exp));
       newQuery = query.replace(reg, "");
       newQuery = newQuery.concat(this.dateEndFilter.concat(selectedKeys[0]));
     }
-    this.setState({
-      searchQuery: newQuery,
-    },
-    () => this.makeCasesQuery())
+    this.setState(
+      {
+        searchQuery: newQuery,
+      },
+      () => this.makeCasesQuery()
+    );
   };
 
   cleanQuery = (dataIndex) => {
@@ -186,13 +200,13 @@ class Home extends React.Component {
     } else if (dataIndex === "academic_period") {
       let reg = new RegExp(this.periodFilter.concat(exp));
       newQuery = query.replace(reg, "");
-    } else if (dataIndex === "dateStart"){
+    } else if (dataIndex === "dateStart") {
       let reg = new RegExp(this.dateStartFilter.concat(exp));
       newQuery = query.replace(reg, "");
-    } else if (dataIndex === "dateEnd"){
+    } else if (dataIndex === "dateEnd") {
       let reg = new RegExp(this.dateEndFilter.concat(exp));
       newQuery = query.replace(reg, "");
-    } else if (dataIndex === "dates"){
+    } else if (dataIndex === "dates") {
       let reg = new RegExp(this.dateStartFilter.concat(exp));
       newQuery = query.replace(reg, "");
       reg = new RegExp(this.dateEndFilter.concat(exp));
@@ -256,32 +270,30 @@ class Home extends React.Component {
     );
   }
 
-  datesOnChange(dates, dateStrings){
-    if(dateStrings[0] !== this.state.datesStart){
-      if (dateStrings[0] === ""){
-        if(dateStrings[1] === ""){
+  datesOnChange(dates, dateStrings) {
+    if (dateStrings[0] !== this.state.datesStart) {
+      if (dateStrings[0] === "") {
+        if (dateStrings[1] === "") {
           // crearAll
-          this.setState({datesEnd: dateStrings[1]})
-          this.cleanQuery("dates")
+          this.setState({ datesEnd: dateStrings[1] });
+          this.cleanQuery("dates");
         } else {
-          this.cleanQuery("dateStart")
+          this.cleanQuery("dateStart");
         }
       } else {
-        this.findCases([dateStrings[0]], "dateStart")
+        this.findCases([dateStrings[0]], "dateStart");
       }
-      this.setState({datesStart: dateStrings[0]})
-    } else if(dateStrings[1] !== this.state.datesEnd){
-      if (dateStrings[1] === ""){
-        this.cleanQuery("dateEnd")
+      this.setState({ datesStart: dateStrings[0] });
+    } else if (dateStrings[1] !== this.state.datesEnd) {
+      if (dateStrings[1] === "") {
+        this.cleanQuery("dateEnd");
       } else {
         let myMoment = dates[1].clone();
-        this.findCases([myMoment.add(1,"d").format("YYYY-MM-DD")], "dateEnd")
+        this.findCases([myMoment.add(1, "d").format("YYYY-MM-DD")], "dateEnd");
       }
-      this.setState({datesEnd: dateStrings[1]})
+      this.setState({ datesEnd: dateStrings[1] });
     }
   }
-  
-
 
   render() {
     return (
@@ -292,10 +304,7 @@ class Home extends React.Component {
             <Title className="home-title">Casos Estudiantiles</Title>
           </Col>
 
-          <Col span={3}
-            // offset={localStorage.getItem("type") !== "secretary" ? 2 : 0}
-            offset={2}
-          >
+          <Col span={3} offset={2}>
             <Button
               block
               type="primary"
@@ -337,20 +346,24 @@ class Home extends React.Component {
                 onClose={(e) => this.closeDrawer("Download")}
               />
             </Col>
-          ): //When  secretary:
+          ) : (
+            //When  secretary:
             <Col span={0} />
-          }
-          
+          )}
         </Row>
 
         <Row gutter={8}>
           <Col span={3} offset={14}>
-            <Title level={4} strong>Filtro por fecha:</Title>
+            <Title level={4} strong>
+              Filtro por fecha:
+            </Title>
           </Col>
           <Col span={6}>
-            < DatePicker.RangePicker
+            <DatePicker.RangePicker
               allowEmpty={[true, true]}
-              onChange={(dates, dateStrings) => this.datesOnChange(dates, dateStrings)}
+              onChange={(dates, dateStrings) =>
+                this.datesOnChange(dates, dateStrings)
+              }
             />
           </Col>
         </Row>
