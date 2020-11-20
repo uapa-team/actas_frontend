@@ -38,9 +38,7 @@ class EditTabs extends React.Component {
     for (let key in this.state.metadata) {
       if (this.state.metadata.hasOwnProperty(key)) {
         let element = _.cloneDeep(this.state.metadata[key]);
-        element.default = this.state.dataSource[this.currentlyFilling].cases[0][
-          key
-        ];
+        element.default = this.state.dataSource[this.currentlyFilling][0][key];
         auxArray.push([key, element]);
       }
     }

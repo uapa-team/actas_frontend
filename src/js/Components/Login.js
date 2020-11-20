@@ -44,13 +44,11 @@ class NormalLoginForm extends React.Component {
           localStorage.setItem("jwt", res["token"]);
           localStorage.setItem("type", res["group"]);
           this.props.history.push("/home");
-          window.location.reload();
         } else {
           message.error({
             content: "Error realizando el login.",
             key,
           });
-          console.log("Login Error: Backend HTTP code: " + response.status);
         }
       })
       .catch((error) => {
@@ -58,7 +56,6 @@ class NormalLoginForm extends React.Component {
           content: "Error realizando el login.",
           key,
         });
-        console.log("Login Error: " + error);
       });
   };
 
