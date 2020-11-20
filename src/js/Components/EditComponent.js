@@ -126,7 +126,7 @@ class EditComponent extends React.Component {
         </Col>
       );
     } else if (this.props.metadata.type === "List:String") {
-      if (this.props.metadata.display === "Analisis Extra") {
+      if (this.props.metadata.display === "Análisis Extra") {
         return (
           <Col span={24}>
             <Form.Item
@@ -139,6 +139,28 @@ class EditComponent extends React.Component {
               <Select mode="tags" open={false}>
                 {children}
               </Select>
+            </Form.Item>
+          </Col>
+        );
+      } else if (
+        this.props.metadata.display === "Razón pérdida calidad de estudiante"
+      ) {
+        var options = [];
+        for (let i = 0; i < this.props.metadata.choices.length; i++) {
+          options.push(
+            <Option key={this.props.metadata.choices[i]}>
+              {this.props.metadata.choices[i]}
+            </Option>
+          );
+        }
+        return (
+          <Col span={24}>
+            <Form.Item
+              label={this.props.metadata.display}
+              name={this.props.fieldName}
+              initialValue={this.props.metadata.default}
+            >
+              <Select mode="multiple">{options}</Select>
             </Form.Item>
           </Col>
         );

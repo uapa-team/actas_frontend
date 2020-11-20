@@ -46,10 +46,6 @@ class Contact extends React.Component {
     });
   };
 
-  onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
-  };
-
   onChange = ({ target: { value } }) => {
     this.setState({ value });
   };
