@@ -293,7 +293,7 @@ class HomeDrawerCreate extends React.Component {
             <Form.Item
               label="Año"
               name="year"
-              initialValue={2020}
+              initialValue={2021}
               rules={[
                 {
                   type: "number",

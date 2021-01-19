@@ -362,7 +362,7 @@ class UnalCanvas extends Component {
               (+57 1) 316 5000 Ext. 13578
             </p>
             <p className="col-sm-12 col-md-6 derechos">
-              © Copyright 2020
+              © Copyright 2021
               <br /> Algunos derechos reservados.
               <br />
               <a
@@ -373,7 +373,7 @@ class UnalCanvas extends Component {
               </a>
               <br />
               <a href="index.html#">Acerca de este sitio web</a>
-              <br /> Última actualización: 22/09/2020
+              <br /> Última actualización: 21/01/2021
             </p>
           </div>
           <div className="col-md-2 col-lg-2 col-sm-2 col-xs-12 logos">
