@@ -62,11 +62,6 @@ class HomeDrawerCreate extends React.Component {
 
   handleSave = (values) => {
     values.date = values.date.utc().format();
-    if (values.notes !== undefined) {
-      values.notes = values.notes.split("\n");
-    } else {
-      delete values.notes;
-    }
     this.props.onClose("Create");
     const key = "updatable";
     message.loading({ content: "Guardando caso...", key });
