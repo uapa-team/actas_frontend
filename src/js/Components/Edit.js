@@ -37,7 +37,7 @@ class Edit extends React.Component {
       fillIndicator: 0,
       visibleFlag: false,
       return: false,
-      notes: [],
+      notes: "None",
     };
   }
 
@@ -223,7 +223,7 @@ class Edit extends React.Component {
                   {this.state.id}
                 </Text>
                 <br />
-                {this.state.notes.length > 0 ? <b>Notas adicionales:</b> : null}
+                {this.state.notes !== "None" ? <b>Notas adicionales:</b> : null}
               </div>
             ) : null}
           </Col>
@@ -276,12 +276,10 @@ class Edit extends React.Component {
             </Form.Item>
           </Col>
         </Row>
-        {this.state.notes.length > 0 ? (
-          <List
-            size="small"
-            dataSource={this.state.notes}
-            renderItem={(item) => <List.Item>{item}</List.Item>}
-          />
+        {this.state.notes !== "None" ? (
+          <List size="small">
+            <List.Item>{this.state.notes}</List.Item>
+          </List>
         ) : null}
         <Divider style={{ background: "#ffffff00" }} />
         {this.createInputs()}

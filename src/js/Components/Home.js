@@ -46,7 +46,7 @@ class Home extends React.Component {
       createDrawerVisible: false,
       filterByMinute: false,
       minuteSearch: 1,
-      yearSearch: 2020,
+      yearSearch: 2021,
       loading: true,
       page: 1,
       pageSize: 10,
