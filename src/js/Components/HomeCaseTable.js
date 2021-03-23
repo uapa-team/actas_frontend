@@ -194,14 +194,12 @@ class HomeCaseTable extends React.Component {
   };
 
   date_diff_indays = (now, created) => {
-    created = created.replace(/(\d{4})-(\d{1,2})-(\d{1,2})/, function (
-      match,
-      y,
-      m,
-      d
-    ) {
-      return m + "/" + d + "/" + y;
-    });
+    created = created.replace(
+      /(\d{4})-(\d{1,2})-(\d{1,2})/,
+      function (match, y, m, d) {
+        return m + "/" + d + "/" + y;
+      }
+    );
     var dt1 = new Date(now);
     var dt2 = new Date(created);
     return parseInt((dt1 - dt2) / (1000 * 60 * 60 * 24), 10);
@@ -429,40 +427,53 @@ class HomeCaseTable extends React.Component {
             onShowSizeChange: this.props.pagChange,
           }}
           expandedRowRender={(record) => (
-            <Row>
-              <Col span={1} />
-              <Col span={8}>
-                <div>
-                  <b>Fecha de radicación:</b> {record.date.substring(0, 10)}.
-                </div>
-                <div>
-                  <b>Respuesta del Consejo de Facultad:</b>{" "}
-                  {record.approval_status}.
-                </div>
-              </Col>
-              <Col span={8}>
-                <div>
-                  <b>Existe respuesta del Comité Asesor: </b>
-                  {record.advisor_response === "En espera" ? "No" : "Si"}.
-                </div>
-                <div>
-                  <b>Instancia que decide:</b> {record.decision_maker}.
-                </div>
-              </Col>
-              <Col span={7}>
-                <div>
-                  <b>Días desde la radicación:</b>{" "}
-                  {this.date_diff_indays(
-                    moment().format("MM/DD/YYYY"),
-                    record.date
-                  )}
-                  .
-                </div>
-                <div>
-                  <b>ID del caso:</b> {record.id}.
-                </div>
-              </Col>
-            </Row>
+            <>
+              <Row>
+                <Col span={1} />
+                <Col span={8}>
+                  <div>
+                    <b>Fecha de radicación:</b> {record.date.substring(0, 10)}.
+                  </div>
+                  <div>
+                    <b>Respuesta del Consejo de Facultad:</b>{" "}
+                    {record.approval_status}.
+                  </div>
+                </Col>
+                <Col span={8}>
+                  <div>
+                    <b>Existe respuesta del Comité Asesor: </b>
+                    {record.advisor_response === "En espera" ? "No" : "Si"}.
+                  </div>
+                  <div>
+                    <b>Instancia que decide:</b> {record.decision_maker}.
+                  </div>
+                </Col>
+                <Col span={7}>
+                  <div>
+                    <b>Días desde la radicación:</b>{" "}
+                    {this.date_diff_indays(
+                      moment().format("MM/DD/YYYY"),
+                      record.date
+                    )}
+                    .
+                  </div>
+                  <div>
+                    <b>ID del caso:</b> {record.id}.
+                  </div>
+                </Col>
+              </Row>
+
+              {record.notes !== "None" ? (
+                <Row>
+                  <Col span={1} />
+                  <Col span={23}>
+                    <div>
+                      <b>Nota adicionada al caso:</b> {record.notes}
+                    </div>
+                  </Col>
+                </Row>
+              ) : null}
+            </>
           )}
         />
         <Modal
