@@ -8,10 +8,10 @@ export default class Backend {
   // static backEndUrl = "http://168.176.26.91:9900/council_minutes/";
 
   // Deploy env:
-  static backEndUrl = "https://ingenieria.bogota.unal.edu.co/actas-api/";
+  static backEndUrl = "https://ingenieria.unal.edu.co/actas-api/";
 
   // Mailer:
-  static uapappUrl = "https://www.ingenieria.bogota.unal.edu.co/uapapp_api/";
+  static uapappUrl = "https://www.ingenieria.unal.edu.co/uapapp_api/";
 
   static openLink(url) {
     window.open(this.backEndUrl + url, "_blank");
