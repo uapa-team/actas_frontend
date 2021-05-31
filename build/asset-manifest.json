@@ -1,20 +1,20 @@
 {
   "files": {
     "main.css": "/actas/static/css/main.5f7d2f33.chunk.css",
-    "main.js": "/actas/static/js/main.a89e6d6f.chunk.js",
-    "main.js.map": "/actas/static/js/main.a89e6d6f.chunk.js.map",
+    "main.js": "/actas/static/js/main.42ff72de.chunk.js",
+    "main.js.map": "/actas/static/js/main.42ff72de.chunk.js.map",
     "runtime-main.js": "/actas/static/js/runtime-main.4eb23240.js",
     "runtime-main.js.map": "/actas/static/js/runtime-main.4eb23240.js.map",
-    "static/css/2.d77fc2be.chunk.css": "/actas/static/css/2.d77fc2be.chunk.css",
-    "static/js/2.ebe864e5.chunk.js": "/actas/static/js/2.ebe864e5.chunk.js",
-    "static/js/2.ebe864e5.chunk.js.map": "/actas/static/js/2.ebe864e5.chunk.js.map",
+    "static/css/2.407e4e18.chunk.css": "/actas/static/css/2.407e4e18.chunk.css",
+    "static/js/2.20752ddf.chunk.js": "/actas/static/js/2.20752ddf.chunk.js",
+    "static/js/2.20752ddf.chunk.js.map": "/actas/static/js/2.20752ddf.chunk.js.map",
     "index.html": "/actas/index.html",
-    "precache-manifest.cbbcc68d138ffcca46156071b842859f.js": "/actas/precache-manifest.cbbcc68d138ffcca46156071b842859f.js",
+    "precache-manifest.55e0c6c0eb97b3268a7f6ddb07175516.js": "/actas/precache-manifest.55e0c6c0eb97b3268a7f6ddb07175516.js",
     "service-worker.js": "/actas/service-worker.js",
-    "static/css/2.d77fc2be.chunk.css.map": "/actas/static/css/2.d77fc2be.chunk.css.map",
+    "static/css/2.407e4e18.chunk.css.map": "/actas/static/css/2.407e4e18.chunk.css.map",
     "static/css/main.5f7d2f33.chunk.css.map": "/actas/static/css/main.5f7d2f33.chunk.css.map",
-    "static/js/2.ebe864e5.chunk.js.LICENSE.txt": "/actas/static/js/2.ebe864e5.chunk.js.LICENSE.txt",
-    "static/js/main.a89e6d6f.chunk.js.LICENSE.txt": "/actas/static/js/main.a89e6d6f.chunk.js.LICENSE.txt",
+    "static/js/2.20752ddf.chunk.js.LICENSE.txt": "/actas/static/js/2.20752ddf.chunk.js.LICENSE.txt",
+    "static/js/main.42ff72de.chunk.js.LICENSE.txt": "/actas/static/js/main.42ff72de.chunk.js.LICENSE.txt",
     "static/media/unal.css": "/actas/static/media/sealBck.ce38fd1a.png",
     "static/media/escudoUnal.svg": "/actas/static/media/escudoUnal.4da6e3ae.svg",
     "static/media/escudoUnal_black.png": "/actas/static/media/escudoUnal_black.f6381588.png",
@@ -23,9 +23,9 @@
   },
   "entrypoints": [
     "static/js/runtime-main.4eb23240.js",
-    "static/css/2.d77fc2be.chunk.css",
-    "static/js/2.ebe864e5.chunk.js",
+    "static/css/2.407e4e18.chunk.css",
+    "static/js/2.20752ddf.chunk.js",
     "static/css/main.5f7d2f33.chunk.css",
-    "static/js/main.a89e6d6f.chunk.js"
+    "static/js/main.42ff72de.chunk.js"
   ]
 }
